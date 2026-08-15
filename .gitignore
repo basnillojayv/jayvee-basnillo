@@ -1,0 +1,52 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# next.js
+/.next/
+/out/
+/build
+
+# env — .env.example IS tracked, real env files are not
+.env
+.env.*
+!.env.example
+
+# local database + local-disk uploads
+*.db
+*.db-shm
+*.db-wal
+/media
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# misc
+.DS_Store
+Thumbs.db
+desktop.ini
+*.pem
+/coverage
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/.idea/*
+!/.idea/runConfigurations
+
+# local tooling
+.impeccable/
+
+# Migration download cache — 16MB of fetched screenshots. Regenerable,
+# and only useful on the machine that ran the import.
+scripts/.cache/
+
+# Third-party style reference, kept locally as a working document. It is
+# another company documentation of their own design system — fine to read
+# from, not ours to republish in a public repository.
+Design Files/

@@ -25,7 +25,9 @@ export function ProjectCard({ project, priority }: { project: Project; priority?
   const cover = mediaUrl(project.cover, '/media/placeholder-wide.jpg')
 
   return (
-    <article className="pcard">
+    // `reveal` is what the observer keys on; it also staggers by sibling index,
+    // so the grid arrives row by row rather than as one block appearing at once.
+    <article className="pcard reveal">
       <Link className="pcard__link" href={`/projects/${project.slug}`}>
         <div className="pcard__media">
           <Image

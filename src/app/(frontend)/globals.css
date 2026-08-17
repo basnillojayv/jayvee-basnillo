@@ -1195,6 +1195,17 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   .hero__line,.hero__line--outline,.hero__greet,.hero__foot,.hero__actions,
   .hero__line-text,.hero__portrait img{transform:none !important}
   .hero__portrait{transform:translateX(-50%) !important}
+
+  /* The trailing disc is removed rather than stilled: the blanket rule above
+     kills its transition, which would leave it snapping to the pointer at full
+     opacity — more distracting than the animation it replaced. The component
+     also declines to attach its listeners under this setting, so this is the
+     belt to that braces. */
+  .viewcursor{display:none}
+  .pgrid .pcard__link{cursor:pointer}
+
+  /* Pinning is motion too. Released, the sections simply follow one another. */
+  .stack-sections > section{position:static;min-height:0}
 }
 
 /* =========================================================================
@@ -2032,3 +2043,37 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .viewer__nav:hover{background:rgba(255,255,255,.18)}
 .viewer__nav--prev{left:clamp(10px,2vw,24px)}
 .viewer__nav--next{right:clamp(10px,2vw,24px)}
+
+/* =========================================================================
+   13. THE VIEW-PROJECT DISC
+   A label that trails the pointer across the projects grid. It is inert by
+   construction: `pointer-events:none` means it cannot take a click no matter
+   where it sits, which is the difference between this and the cursor that was
+   pulled for making buttons hard to press.
+
+   JS writes `transform` every frame, so the entrance rides `scale` and
+   `opacity` instead — separate properties, so the two never overwrite one
+   another. Only fine pointers get it; nothing here applies on touch.
+   ========================================================================= */
+@media (hover:hover) and (pointer:fine){
+  .viewcursor{position:fixed;top:0;left:0;z-index:80;pointer-events:none;
+    display:flex;align-items:center;gap:9px;white-space:nowrap;
+    padding:14px 22px;border-radius:999px;
+    background:var(--brand-dark);color:#fff;
+    font-size:.7rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+    box-shadow:0 10px 30px rgba(9,9,11,.28);
+    opacity:0;scale:.55;will-change:transform;
+    transition:opacity .24s var(--ease-out-expo),scale .34s var(--ease-out-expo)}
+  .viewcursor[data-on="true"]{opacity:1;scale:1}
+
+  /* The disc replaces the arrow only while over a card. */
+  .pgrid .pcard__link{cursor:none}
+}
+
+/* Dense grids reveal without the blur. The site-wide entrance blurs 6px on the
+   way in, which is fine for a handful of elements and expensive across the
+   eighty-eight tiles on /designs — blur cannot be composited away, so each one
+   costs a real rasterisation while it animates. Travel and fade alone read the
+   same at tile size. */
+.designs__grid > .reveal{filter:none;transform:translateY(18px)}
+.designs__grid > .reveal.is-in{transform:none}

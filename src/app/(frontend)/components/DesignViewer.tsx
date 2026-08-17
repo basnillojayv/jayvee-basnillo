@@ -79,7 +79,7 @@ export function DesignViewer({ shots }: { shots: DesignShot[] }) {
     <>
       <ul className="designs__grid">
         {shots.map((s, i) => (
-          <li key={s.id}>
+          <li key={s.id} className="reveal">
             <button className="designtile" type="button" onClick={() => open(i)}>
               <span className="designtile__media">
                 <Image

@@ -6,6 +6,7 @@ import { Header } from '../components/Header'
 import { Footer } from '../components/Footer'
 import { ProjectCard } from '../components/ProjectCard'
 import { RevealObserver } from '../components/Reveal'
+import { ViewProjectCursor } from '../components/ViewProjectCursor'
 
 export const dynamic = 'force-static'
 export const metadata: Metadata = {
@@ -38,6 +39,7 @@ export default async function ProjectsIndex() {
   return (
     <>
       <RevealObserver />
+      <ViewProjectCursor />
       <Header contactHref={mailto} />
 
       <main id="main">

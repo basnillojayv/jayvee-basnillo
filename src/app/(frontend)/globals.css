@@ -2077,3 +2077,22 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
    same at tile size. */
 .designs__grid > .reveal{filter:none;transform:translateY(18px)}
 .designs__grid > .reveal.is-in{transform:none}
+
+/* =========================================================================
+   "WHAT I DO" KEEPS ITS OWN SPACING WHILE PINNED.
+   The stacking rule above centres every non-hero section inside a
+   viewport-tall pin — `min-height:100svh`, flex centring, and roughly double
+   the padding. That is right for a section built to fill a screen and wrong
+   here: it stretched a four-column row of short items into a full viewport
+   and pushed its padding from 48–88px out to 96–140px.
+
+   Pinning does not require the height. `position:sticky` holds an element of
+   any size at top:0, so the section is returned to its natural block layout
+   and its own padding, and the rail still rises over it exactly as before.
+   Later in the file and one class heavier than the rule it corrects.
+   ========================================================================= */
+@media (min-width:769px){
+  .stack-sections > section.whatido:not(.hero){
+    display:block;min-height:0;
+    padding-block:clamp(48px,7vw,88px)}
+}

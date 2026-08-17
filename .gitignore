@@ -54,3 +54,6 @@ Design Files/
 
 # vercel
 .vercel
+
+# content export artefact (regenerate with scripts/export-content.ts)
+content-export.json

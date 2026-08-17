@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Josefin_Sans } from 'next/font/google'
+import localFont from 'next/font/local'
 import { site } from '@/site.config'
 import './globals.css'
 /* Its own stylesheet rather than a block pasted into globals.css, so updating
@@ -30,11 +30,29 @@ import { EditorMount } from './components/EditorMount'
  *
  * Weights stop at 700, which is both the system's existing rule and the top of
  * Josefin Sans's range.
+ *
+ * SELF-HOSTED, NOT `next/font/google`, AND THAT IS A BUILD FIX
+ * `next/font/google` downloads the font files during the build, which makes
+ * every build depend on `fonts.gstatic.com` answering from the build machine.
+ * It stopped answering on Vercel — three retries, then `Failed to fetch
+ * 'Josefin Sans' from Google Fonts` and a dead deploy. Nothing about the
+ * project had changed. Serving the files from the repo removes the network
+ * from the build entirely; it cannot fail this way again.
+ *
+ * TWO FILES, NOT FOUR. Josefin Sans is a variable font, so Google returns one
+ * file per style covering the whole 100-700 range — the "400" and "700"
+ * downloads were byte-identical (verified by checksum). Hence a weight RANGE
+ * rather than four fixed-weight faces: same rendering, half the bytes, and no
+ * duplicate files to keep in step.
+ *
+ * Licensed under the SIL Open Font License; OFL.txt sits beside the files, as
+ * the licence requires when redistributing them.
  */
-const sans = Josefin_Sans({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  style: ['normal', 'italic'],
+const sans = localFont({
+  src: [
+    { path: './fonts/josefin-sans-normal.woff2', weight: '100 700', style: 'normal' },
+    { path: './fonts/josefin-sans-italic.woff2', weight: '100 700', style: 'italic' },
+  ],
   variable: '--font-sans',
   display: 'swap',
 })
@@ -47,11 +65,11 @@ const sans = Josefin_Sans({
  * in the stylesheet silently falls through to `ui-monospace` and the labels
  * render in the system's monospace instead of Josefin. Declaring it separately
  * is what actually points the token at this family, and next/font serves the
- * same files for both.
+ * same file for both — it is deduplicated by path, so the second binding costs
+ * a CSS variable and no extra download.
  */
-const mono = Josefin_Sans({
-  subsets: ['latin'],
-  weight: ['400'],
+const mono = localFont({
+  src: [{ path: './fonts/josefin-sans-normal.woff2', weight: '100 700', style: 'normal' }],
   variable: '--font-mono-face',
   display: 'swap',
 })

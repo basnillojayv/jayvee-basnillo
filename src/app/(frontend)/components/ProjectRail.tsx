@@ -111,6 +111,7 @@ export function ProjectRail({
     const wide = window.matchMedia('(min-width: 769px)')
     const still = window.matchMedia('(prefers-reduced-motion: reduce)')
     let raf = 0
+    let live = false
 
     const measure = () => {
       const room = track.scrollWidth - track.clientWidth
@@ -127,27 +128,50 @@ export function ProjectRail({
       setPinned(true)
     }
 
-    const onScroll = () => {
-      if (raf || !shift.current) return
-      raf = requestAnimationFrame(() => {
-        raf = 0
-        const room = shift.current
-        if (!room) return
-        // Once the section's top passes 0 the stage is pinned; how far past is
-        // how far through the rail.
+    /**
+     * Read geometry every frame rather than listening for `scroll`.
+     *
+     * The first version of this listened on window and never fired usefully:
+     * Lenis owns the wheel, and a handler waiting to be told that scrolling
+     * happened is at the mercy of whatever is doing the scrolling. Measuring
+     * the section's own position instead asks the only question that matters —
+     * where is this on screen right now — and gets the same answer whether the
+     * scroll came from Lenis, a keyboard, a scrollbar drag or a jump to #work.
+     *
+     * The loop is gated by an IntersectionObserver, so it runs only while the
+     * section is near the viewport rather than for the life of the page.
+     */
+    const frame = () => {
+      const room = shift.current
+      if (room > 0) {
         const past = -section.getBoundingClientRect().top
-        track.scrollLeft = Math.min(Math.max(past, 0), room)
-      })
+        const want = Math.min(Math.max(past, 0), room)
+        // Writing an unchanged value still invalidates scroll state, so only
+        // touch it when it actually moved.
+        if (Math.abs(track.scrollLeft - want) > 0.5) track.scrollLeft = want
+      }
+      raf = live ? requestAnimationFrame(frame) : 0
     }
 
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        live = entry.isIntersecting
+        if (live && !raf) raf = requestAnimationFrame(frame)
+      },
+      // A viewport of slack on each side, so the rail is already tracking by
+      // the time its first pixel arrives.
+      { rootMargin: '100% 0px 100% 0px' },
+    )
+
     measure()
-    window.addEventListener('scroll', onScroll, { passive: true })
+    io.observe(section)
     window.addEventListener('resize', measure)
     wide.addEventListener('change', measure)
     still.addEventListener('change', measure)
 
     return () => {
-      window.removeEventListener('scroll', onScroll)
+      io.disconnect()
+      live = false
       window.removeEventListener('resize', measure)
       wide.removeEventListener('change', measure)
       still.removeEventListener('change', measure)

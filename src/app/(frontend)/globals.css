@@ -815,7 +815,14 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
    Toggle with site.motion.sectionStacking (page.tsx drops the class).
    ========================================================================= */
 @media (min-width:769px){
-  .stack-sections > section{position:sticky;top:0;min-height:100svh}
+  /* Pinning is the whole mechanism; the height is a separate decision.
+     `position:sticky` holds an element of any size at top:0, so a section can
+     be covered without also being stretched to fill a screen. */
+  .stack-sections > section{position:sticky;top:0}
+  /* Sections built to fill the pin do. "What I do" is a single row of short
+     items — stretched to a viewport it is mostly empty space — so it keeps its
+     own height and its own padding below. */
+  .stack-sections > section:not(.whatido){min-height:100svh}
   /* non-hero stacking sections centre their content within the viewport-tall pin */
   .stack-sections > section:not(.hero){display:flex;flex-direction:column;justify-content:center;
     padding-block:clamp(96px,12vh,140px)}
@@ -2080,19 +2087,23 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
 /* =========================================================================
    "WHAT I DO" KEEPS ITS OWN SPACING WHILE PINNED.
-   The stacking rule above centres every non-hero section inside a
-   viewport-tall pin — `min-height:100svh`, flex centring, and roughly double
-   the padding. That is right for a section built to fill a screen and wrong
-   here: it stretched a four-column row of short items into a full viewport
-   and pushed its padding from 48–88px out to 96–140px.
+   The stacking rules centre every non-hero section inside a viewport-tall pin
+   — flex centring and roughly double the padding — which is right for a
+   section built to fill a screen and wrong here: it stretched a four-column
+   row of short items into a full viewport and pushed its padding from 48–88px
+   out to 96–140px.
 
-   Pinning does not require the height. `position:sticky` holds an element of
-   any size at top:0, so the section is returned to its natural block layout
-   and its own padding, and the rail still rises over it exactly as before.
-   Later in the file and one class heavier than the rule it corrects.
+   The height half of that is handled where it originates: `min-height:100svh`
+   now carries `:not(.whatido)` rather than being set and then overridden. This
+   rule undoes the rest — back to block flow and its own padding. It is later
+   in the file and one class heavier than the rule it corrects, so it does not
+   rely on source order alone.
+
+   The pin itself is untouched. `position:sticky` holds an element of any size
+   at top:0, so the rail still rises over it exactly as before.
    ========================================================================= */
 @media (min-width:769px){
   .stack-sections > section.whatido:not(.hero){
-    display:block;min-height:0;
+    display:block;
     padding-block:clamp(48px,7vw,88px)}
 }

@@ -41,8 +41,8 @@ export const site = {
    * work from a project or case-study page as well as from the homepage.
    */
   nav: [
-    { label: 'Work', href: '/projects' },
-    { label: 'Case studies', href: '/case-studies' },
+    { label: 'Projects', href: '/projects' },
+    { label: 'Designs', href: '/designs' },
   ],
 
   /**

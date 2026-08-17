@@ -71,9 +71,13 @@ export function Header({ contactHref }: { contactHref?: string } = {}) {
           </Link>
 
           <div className="header-actions">
-            <a className="header-login" href={cta}>
-              Contact
-            </a>
+            {/* Points at the tools rack rather than at mail: the capsule's
+                filled button already carries the contact action, and two
+                controls doing the same thing beside each other is a wasted
+                slot. */}
+            <Link className="header-login" href="/projects#tools">
+              Tools
+            </Link>
             <a className="btn btn--invert" href={cta}>
               {site.headerCta.label}
             </a>

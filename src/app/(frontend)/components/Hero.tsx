@@ -121,10 +121,10 @@ export function Hero({ data }: { data: Homepage }) {
             is being asked which of two things they came for, and answering
             that with a loud button and a quiet one puts a thumb on the scale. */}
         <div className="hero__actions">
-          <Link className="btn btn--dark btn--lg" href="/projects" data-magnetic>
+          <Link className="btn btn--dark btn--lg" href="/projects">
             See the work
           </Link>
-          <a className="btn btn--outline btn--lg" href={mailto} data-magnetic>
+          <a className="btn btn--outline btn--lg" href={mailto}>
             Start a project
           </a>
         </div>

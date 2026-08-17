@@ -14,6 +14,8 @@ import { Projects } from './collections/Projects'
 import { CaseStudies } from './collections/CaseStudies'
 import { Explorations } from './collections/Explorations'
 import { Homepage } from './globals/Homepage'
+import { WorkPage } from './globals/WorkPage'
+import { Submissions } from './collections/Submissions'
 import { homepageData } from './seed/homepageData'
 
 const filename = fileURLToPath(import.meta.url)
@@ -56,8 +58,8 @@ export default buildConfig({
     importMap: { baseDir: path.resolve(dirname) },
     meta: { titleSuffix: `· ${site.shortName}` },
   },
-  collections: [Users, Media, Projects, CaseStudies, Explorations],
-  globals: [Homepage],
+  collections: [Users, Media, Projects, CaseStudies, Explorations, Submissions],
+  globals: [Homepage, WorkPage],
   editor: lexicalEditor(),
   plugins: storagePlugins,
   secret: process.env.PAYLOAD_SECRET || '',

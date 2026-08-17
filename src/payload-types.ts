@@ -72,6 +72,7 @@ export interface Config {
     projects: Project;
     'case-studies': CaseStudy;
     explorations: Exploration;
+    submissions: Submission;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -84,6 +85,7 @@ export interface Config {
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     'case-studies': CaseStudiesSelect<false> | CaseStudiesSelect<true>;
     explorations: ExplorationsSelect<false> | ExplorationsSelect<true>;
+    submissions: SubmissionsSelect<false> | SubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -95,9 +97,11 @@ export interface Config {
   fallbackLocale: null;
   globals: {
     homepage: Homepage;
+    'work-page': WorkPage;
   };
   globalsSelect: {
     homepage: HomepageSelect<false> | HomepageSelect<true>;
+    'work-page': WorkPageSelect<false> | WorkPageSelect<true>;
   };
   locale: null;
   widgets: {
@@ -405,6 +409,24 @@ export interface Exploration {
   createdAt: string;
 }
 /**
+ * Messages sent from the contact form.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "submissions".
+ */
+export interface Submission {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  /**
+   * Whether the notification email was accepted by the provider.
+   */
+  delivered?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -447,6 +469,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'explorations';
         value: number | Exploration;
+      } | null)
+    | ({
+        relationTo: 'submissions';
+        value: number | Submission;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -706,6 +732,18 @@ export interface ExplorationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "submissions_select".
+ */
+export interface SubmissionsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  message?: T;
+  delivered?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -860,6 +898,138 @@ export interface Homepage {
   createdAt?: string | null;
 }
 /**
+ * The Work page copy, in page order.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "work-page".
+ */
+export interface WorkPage {
+  id: number;
+  /**
+   * Set small, in caps, above the headline.
+   */
+  heroEyebrow?: string | null;
+  /**
+   * Two lines at display size. Keep it to one sentence.
+   */
+  heroTitle?: string | null;
+  heroCtaLabel?: string | null;
+  /**
+   * Drawn through with a rule as it scrolls into view.
+   */
+  statementStruck?: string | null;
+  statementBody?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  projectsEyebrow?: string | null;
+  /**
+   * The closing full stop is coloured in code, not typed here.
+   */
+  projectsTitle?: string | null;
+  projectsLede?: string | null;
+  projectsCtaLabel?: string | null;
+  /**
+   * The words on the two diagonal ribbons. Six to ten reads best — the strip repeats until it fills the screen.
+   */
+  marqueeTerms?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  services?:
+    | {
+        eyebrow: string;
+        title: string;
+        body: string;
+        /**
+         * Two to four. They are scattered rather than stacked, so mixed shapes work better here than matched ones.
+         */
+        images?:
+          | {
+              image: number | Media;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  designerEyebrow?: string | null;
+  /**
+   * Set large. The final full stop is coloured in code, not typed here.
+   */
+  designerHeading?: string | null;
+  designerPoints?:
+    | {
+        title: string;
+        copy: string;
+        icon?: ('window' | 'puzzle' | 'spark' | 'pen' | 'code') | null;
+        id?: string | null;
+      }[]
+    | null;
+  whatEyebrow?: string | null;
+  /**
+   * Five fills the row on a wide screen; they wrap below that.
+   */
+  whatItems?:
+    | {
+        title: string;
+        copy: string;
+        icon?: ('window' | 'puzzle' | 'spark' | 'pen' | 'code') | null;
+        id?: string | null;
+      }[]
+    | null;
+  toolsEyebrow?: string | null;
+  toolsHeading?: string | null;
+  toolsLede?: string | null;
+  tools?:
+    | {
+        name: string;
+        /**
+         * Optional. Overrides the built-in mark — use it for brands with no open icon.
+         */
+        logo?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  galleryEyebrow?: string | null;
+  galleryTitle?: string | null;
+  galleryLede?: string | null;
+  galleryCtaLabel?: string | null;
+  testimonialsEyebrow?: string | null;
+  testimonialsTitle?: string | null;
+  testimonialsBody?: string | null;
+  testimonials?:
+    | {
+        quote: string;
+        name: string;
+        role?: string | null;
+        image?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  faqs?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  ctaTitle?: string | null;
+  ctaLede?: string | null;
+  ctaPrimaryLabel?: string | null;
+  ctaSecondaryLabel?: string | null;
+  /**
+   * Full-bleed behind the closing panel. Landscape, and darkened in code.
+   */
+  ctaImage?: (number | null) | Media;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "homepage_select".
  */
@@ -929,6 +1099,106 @@ export interface HomepageSelect<T extends boolean = true> {
   contactCtaLabel?: T;
   email?: T;
   contactLinkedin?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "work-page_select".
+ */
+export interface WorkPageSelect<T extends boolean = true> {
+  heroEyebrow?: T;
+  heroTitle?: T;
+  heroCtaLabel?: T;
+  statementStruck?: T;
+  statementBody?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  projectsEyebrow?: T;
+  projectsTitle?: T;
+  projectsLede?: T;
+  projectsCtaLabel?: T;
+  marqueeTerms?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
+  services?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        body?: T;
+        images?:
+          | T
+          | {
+              image?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  designerEyebrow?: T;
+  designerHeading?: T;
+  designerPoints?:
+    | T
+    | {
+        title?: T;
+        copy?: T;
+        icon?: T;
+        id?: T;
+      };
+  whatEyebrow?: T;
+  whatItems?:
+    | T
+    | {
+        title?: T;
+        copy?: T;
+        icon?: T;
+        id?: T;
+      };
+  toolsEyebrow?: T;
+  toolsHeading?: T;
+  toolsLede?: T;
+  tools?:
+    | T
+    | {
+        name?: T;
+        logo?: T;
+        id?: T;
+      };
+  galleryEyebrow?: T;
+  galleryTitle?: T;
+  galleryLede?: T;
+  galleryCtaLabel?: T;
+  testimonialsEyebrow?: T;
+  testimonialsTitle?: T;
+  testimonialsBody?: T;
+  testimonials?:
+    | T
+    | {
+        quote?: T;
+        name?: T;
+        role?: T;
+        image?: T;
+        id?: T;
+      };
+  faqs?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  ctaTitle?: T;
+  ctaLede?: T;
+  ctaPrimaryLabel?: T;
+  ctaSecondaryLabel?: T;
+  ctaImage?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

@@ -50,3 +50,7 @@ scripts/.cache/
 # another company documentation of their own design system — fine to read
 # from, not ours to republish in a public repository.
 Design Files/
+.env*
+
+# vercel
+.vercel

@@ -63,7 +63,10 @@
   /* --- Text --- */
   --ink:#18181B;          /* carbon — headings + body on light */
   --muted:#71717A;        /* zinc — secondary copy */
-  --muted-light:#A1A1AA;  /* ash — tertiary / disabled */
+  /* ⚠ 2.56:1 on white — BORDERS AND NON-TEXT ONLY. It reads as "elegant
+     tertiary text" and is a straight WCAG AA failure at any size; every text
+     use of it has been moved to --muted (4.83:1). */
+  --muted-light:#A1A1AA;
 
   /* --- Type. Families are injected by next/font in layout.tsx. ---
      Inter Tight throughout, JetBrains Mono for the 11–13px details. The
@@ -164,13 +167,16 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
    Display and h1 clamp down on narrow screens; their tracking does not
    change with the clamp, which is a deliberate simplification. */
 .t-display{font-family:var(--font-display);font-weight:400;
-  font-size:clamp(2.75rem,7vw,4.125rem);line-height:1;letter-spacing:var(--track-display)}
+  font-size:clamp(3.85rem,9.8vw,5.75rem);line-height:1;letter-spacing:var(--track-display);
+  text-wrap:balance}
 .t-h1{font-family:var(--font-display);font-weight:400;
-  font-size:clamp(2.125rem,4.6vw,2.8125rem);line-height:1.13;letter-spacing:var(--track-h1)}
+  font-size:clamp(2.975rem,6.4vw,3.9375rem);line-height:1.08;letter-spacing:var(--track-h1);
+  text-wrap:balance}
 .t-h2{font-family:var(--font-display);font-weight:400;
-  font-size:clamp(1.5rem,3vw,1.875rem);line-height:1.2;letter-spacing:var(--track-h2)}
+  font-size:clamp(2.1rem,4.2vw,2.625rem);line-height:1.14;letter-spacing:var(--track-h2);
+  text-wrap:balance}
 .t-h3{font-family:var(--font-display);font-weight:400;
-  font-size:1.375rem;line-height:1.25;letter-spacing:var(--track-h3)}
+  font-size:1.925rem;line-height:1.2;letter-spacing:var(--track-h3)}
 .t-lead{font-size:1.0625rem;line-height:1.4;letter-spacing:var(--track-lead)}
 .t-body{font-size:.9375rem;line-height:1.5;letter-spacing:var(--track-body)}
 .t-caption{font-size:.6875rem;line-height:1.5;letter-spacing:var(--track-body)}
@@ -188,10 +194,22 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .eyebrow{font-family:var(--font-mono);font-weight:400;font-size:.6875rem;
   letter-spacing:var(--track-mono);color:var(--muted);display:inline-block;margin-bottom:.75rem}
 .eyebrow--accent{color:var(--accent-600)}
+/* A DIFFERENT CADENCE FOR THE SERVICE BLOCKS.
+   Those three labels carry real information — which discipline the block is
+   about — so unlike the decorative kickers they cannot simply be deleted. But
+   as tracked caps they were three more instances of one device, and a page
+   with an eyebrow over every section has stopped choosing and started
+   following a template. Sentence case, no tracking, at reading size: same
+   information, different reflex. */
+.svc__label{display:inline-block;font-family:var(--font-body);font-weight:700;
+  font-size:1rem;letter-spacing:var(--track-body);color:var(--accent-600);
+  margin-bottom:.6rem}
 .eyebrow--light{color:var(--muted-light)}
 
-.section-title{font-family:var(--font-display);font-weight:400;line-height:1.13;
-  letter-spacing:var(--track-h1);font-size:clamp(2.125rem,4.6vw,2.8125rem);
+/* Line-height comes down as the size goes up — a leading that reads as open
+   at 34px reads as gappy at 63px. */
+.section-title{font-family:var(--font-display);font-weight:400;line-height:1.08;
+  letter-spacing:var(--track-h1);font-size:clamp(2.975rem,6.4vw,3.9375rem);
   color:var(--ink);text-wrap:balance}
 .section-title--light{color:#fff}
 .section-title .accent{color:var(--accent)}
@@ -213,14 +231,20 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   background:var(--_bg);color:var(--_fg);font-family:var(--font-body);font-weight:700;
   letter-spacing:var(--track-body);font-size:.9375rem;padding:.85em 1.5em;
   border-radius:var(--radius-pill);
-  transition:background .18s var(--ease),color .18s var(--ease),opacity .18s var(--ease)}
+  }
 .btn .ico{width:1.1em;height:1.1em}
 /* A plain chevron that nudges. No chip, no circle — the reference pairs the
    arrow directly with the label. */
 .btn .arr{display:inline-block;font-size:.9em;line-height:1;
   transition:transform .28s var(--ease-out-expo)}
 .btn:hover .arr{transform:translateX(3px)}
-.btn:active{transform:scale(.985)}
+/* Presses register. `scale` as its own property rather than inside
+   `transform`, so a button that is also being positioned by a transform keeps
+   both. 160ms is the window where a press reads as acknowledged rather than
+   as animated. */
+.btn{transition:background .18s var(--ease),color .18s var(--ease),
+  opacity .18s var(--ease),scale .16s var(--ease-out-quint)}
+.btn:active{scale:.97}
 .btn--pill{border-radius:var(--radius-pill)}   /* kept for callers; already the default */
 .btn--square{border-radius:var(--radius-sm)}
 .btn--accent{--_bg:var(--accent)}
@@ -470,20 +494,15 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .hero__stats li{display:flex;flex-direction:column;gap:.1rem}
 .hero__stat-value{font-size:.9375rem;letter-spacing:var(--track-body);color:var(--ink)}
 .hero__stat-label{font-family:var(--font-mono);font-size:.6875rem;
-  letter-spacing:var(--track-mono);color:var(--muted-light)}
+  letter-spacing:var(--track-mono);color:var(--muted)}
 
 /* ---------- the actions ----------
    Two of them, the same weight, over the portrait's chest. Not a primary and a
    secondary: the visitor is being asked which of two things they came for, and
    answering that with a loud button and a quiet one puts a thumb on the scale.
-   `--mx/--my` come from PointerFX; the resting value is 0 so this is the plain
-   button on touch and under reduced-motion. */
+   */
 .hero__actions{position:relative;z-index:4;display:flex;flex-wrap:wrap;gap:10px;
   justify-content:center;margin-top:clamp(14px,2.4vh,26px)}
-.hero__actions .btn{transform:translate3d(var(--mx,0),var(--my,0),0)}
-/* The shared rule presses with `transform: scale()`, which would throw the
-   magnetic offset away. `scale` as its own property composes with it instead. */
-.hero__actions .btn:active{transform:translate3d(var(--mx,0),var(--my,0),0);scale:.985}
 
 /* =========================================================================
    4c. THE MARK
@@ -499,9 +518,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 /* The lockup is stacked — mark over wordmark — so it needs roughly twice the
    height the mark alone did before the word under it is legible at all. It
    steps down with the capsule so it never crowds the 56px pill. */
-.logo-lockup{display:block;width:auto;height:54px;
-  transition:height .38s var(--ease-out-expo)}
-.site-header[data-state="pill"] .logo-lockup{height:40px}
+/* Scaled, not resized. Animating `height` relayouts the header grid every
+   time the bar collapses; `scale` is a compositor transform and leaves the box
+   — and the columns either side of it — alone. */
+.logo-lockup{display:block;width:auto;height:54px;transform-origin:center;
+  transition:scale .38s var(--ease-out-expo)}
+.site-header[data-state="pill"] .logo-lockup{scale:.74}
 
 /* =========================================================================
    4d. THE ENTRANCE
@@ -602,32 +624,18 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .intro ~ .site-header{animation:riseIn .8s var(--ease-out-expo) calc(var(--hero-t0) + .1s) both}
 
 /* =========================================================================
-   4e. THE POINTER — cursor, magnetics, drift.
-   PointerFX.tsx supplies the numbers (`--px/--py` on :root, `--mx/--my` per
-   magnet) and nothing else; every decision about how far anything actually
-   moves is made here.
+   4e. THE POINTER — drift only.
 
-   `.has-cursor` is added by that component and only by that component, which
-   is what makes hiding the real cursor safe: it cannot be hidden on a device
-   that was never given a replacement.
+   The custom cursor and the magnetic buttons that used to live here are gone.
+   Both made the page harder to use than a page with no effects at all: the
+   cursor lagged behind the real pointer at exactly the moment you were aiming,
+   and the magnets moved the target toward the cursor, so aiming at a button
+   moved the button. Pointing is a closed loop between hand and eye; nothing
+   decorative is worth opening it.
+
+   `--px/--py` come from PointerFX and are read only by layers that no one has
+   to hit: the hero's type and portrait. How far each travels is decided here.
    ========================================================================= */
-.has-cursor,.has-cursor a,.has-cursor button,.has-cursor [data-cursor]{cursor:none}
-.cursor{position:fixed;top:0;left:0;z-index:400;pointer-events:none;
-  border-radius:50%;opacity:0;
-  transition:opacity .25s var(--ease),scale .3s var(--ease-out-expo),
-    background-color .3s var(--ease),border-color .3s var(--ease)}
-.has-cursor--live .cursor{opacity:1}
-/* Sized with a negative margin rather than a translate, because the transform
-   is written every frame by the loop and centring must survive it. */
-.cursor--dot{width:6px;height:6px;margin:-3px 0 0 -3px;background:var(--ink)}
-.cursor--ring{width:34px;height:34px;margin:-17px 0 0 -17px;
-  border:1px solid color-mix(in srgb,var(--ink) 38%,transparent)}
-/* Over anything clickable the two swap roles: the ring opens up and takes the
-   fill, the dot disappears into it. `scale` is its own property here so it can
-   transition independently of the transform the loop owns. */
-.is-hovering .cursor--dot{scale:0}
-.is-hovering .cursor--ring{scale:1.75;background:color-mix(in srgb,var(--accent) 16%,transparent);
-  border-color:var(--accent)}
 
 /* ---------- the display line that changes under the pointer ----------
    Geometry and timing live in MorphLine.tsx; everything about how it looks is
@@ -650,21 +658,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 /* The entrance belongs to the visible line only. Left in, the hidden copy
    would still be mid-slide inside the disc if anyone hovered early. */
 .morph__alt{animation:none !important}
-/* Two pointers on screen at once is one too many: over the line, the disc is
-   the cursor. */
-body:has(.morph:hover) .cursor{opacity:0}
-
 /* No pointer, no effect — and the base line must still be readable, so the
    disc is removed rather than merely stopped. */
 @media (hover:none){.morph__disc{display:none}}
-/* =========================================================================
-   4c. SERVICES — heading + arrow controls over a snap-scrolling card rail
-   ========================================================================= */
-.services{background:var(--surface-100)}
-.services__head{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:end;margin-bottom:3.4rem}
-.services__head-side{max-width:440px;justify-self:end}
-.services__head-side p{color:var(--muted);font-size:1.02rem}
-.services__nav{display:flex;gap:.7rem;margin-top:1.6rem}
 .round-btn{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;
   border:1.5px solid var(--surface-200);color:var(--brand-dark);transition:all .2s var(--ease)}
 .round-btn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -672,10 +668,6 @@ body:has(.morph:hover) .cursor{opacity:0}
 .round-btn--active{background:var(--accent);border-color:var(--accent);color:#fff}
 .round-btn--active:hover{background:var(--accent-600);border-color:var(--accent-600)}
 .round-btn:disabled{opacity:.4;cursor:default;transform:none}
-
-.services__rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(300px,1fr);gap:1.3rem;
-  overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:1rem;scrollbar-width:none}
-.services__rail::-webkit-scrollbar{display:none}
 .svc-card{scroll-snap-align:start;background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);
   padding:2.2rem 2rem;display:flex;flex-direction:column;gap:.7rem;min-height:340px;
   box-shadow:var(--shadow-sm);transition:transform .24s var(--ease),box-shadow .24s var(--ease)}
@@ -697,102 +689,21 @@ body:has(.morph:hover) .cursor{opacity:0}
 .svc-card--feature .svc-card__ico{background:rgba(255,255,255,.1);color:var(--accent-400)}
 .svc-card--feature .svc-card__link{color:#fff}
 .svc-card--feature:hover .svc-card__ico{background:var(--accent);color:#fff}
-
-/* =========================================================================
-   4d. PARALLAX DIVIDER BANDS
-   .divider          — statement + numbered stats, scroll-driven drift
-   .divider--callout — high-contrast CTA band, fixed-attachment parallax
-   Background image comes from the inline --img custom property.
-   ========================================================================= */
-.divider{position:relative;isolation:isolate;overflow:hidden;color:#fff;
-  padding-block:clamp(90px,13vw,190px)}
-.divider__bg{position:absolute;inset:0;z-index:-2;background-image:var(--img);
-  background-size:cover;background-position:center}
-.divider::after{content:"";position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(180deg,rgba(9,20,32,.86),rgba(9,20,32,.7) 55%,rgba(9,20,32,.9))}
-.divider--callout::after{background:linear-gradient(90deg,
-  color-mix(in srgb,var(--accent-600) 88%,#000) ,
-  color-mix(in srgb,var(--accent-600) 66%,transparent) 60%,rgba(9,20,32,.72))}
-/* The callout band uses classic fixed-attachment parallax instead of the
-   scroll-driven kind — it reads as a hard "stop and look" beat. */
-.divider--callout .divider__bg{inset:0 !important;animation:none !important;background-attachment:fixed}
-@media (hover:none){.divider--callout .divider__bg{background-attachment:scroll}}
-.divider__inner{position:relative}
-.divider__title{font-family:var(--font-display);font-weight:400;line-height:.98;letter-spacing:-.02em;
-  font-size:clamp(2.6rem,6.4vw,5.6rem);text-wrap:balance}
-.divider__title em{font-style:normal;color:var(--accent-400)}
-.divider--callout .divider__title em{color:#fff;text-decoration:underline;text-underline-offset:.12em;text-decoration-thickness:.06em}
-.divider__lede{margin-top:1.4rem;font-size:1.18rem;color:rgba(255,255,255,.92);max-width:58ch;line-height:1.6}
-.divider__inner--split{display:flex;align-items:flex-end;justify-content:space-between;gap:2.5rem;flex-wrap:wrap}
-.divider__inner--split>div{max-width:680px}
-
-.divider__stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-top:clamp(3rem,6vw,5rem);
-  border-top:1px solid rgba(255,255,255,.2);padding-top:2.4rem}
-.divider__stats li{display:flex;flex-direction:column;gap:.35rem}
 .divider__stats .num{font-family:var(--font-cond);font-weight:700;color:var(--accent-400);font-size:1rem;letter-spacing:.05em;margin-bottom:.5rem}
-.divider__stats strong{font-family:var(--font-display);font-weight:500;font-size:clamp(1.4rem,2.4vw,2rem);line-height:1.05}
 .divider__stats .lbl{color:rgba(255,255,255,.72);font-size:.92rem;line-height:1.4}
 
 /* =========================================================================
    4e. WHY US — dark band, ghosted background photo, 4-up feature grid
    ========================================================================= */
 .why{position:relative;background:var(--brand-dark);color:#fff;isolation:isolate;overflow:hidden}
-.why__bg{position:absolute;inset:0;z-index:-2}
-.why__bg img{width:100%;height:100%;object-fit:cover;opacity:.12;filter:grayscale(.3)}
-.why::before{content:"";position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(180deg,var(--brand-dark),color-mix(in srgb,var(--brand-dark) 90%,transparent) 50%,var(--brand-dark))}
-.why__head{max-width:820px}
-.why__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2.2rem;margin-top:clamp(2.6rem,5vw,4rem)}
-/* hover: the top rule and the icon chip both pick up the accent */
-.why__item{display:flex;flex-direction:column;gap:.8rem;padding-top:1.8rem;border-top:2px solid rgba(255,255,255,.16);position:relative;transition:border-color .3s}
-.why__item:hover{border-top-color:var(--accent-400)}
-.why__ico{width:58px;height:58px;border-radius:15px;display:grid;place-items:center;background:rgba(255,255,255,.07);color:var(--accent-400);transition:background .3s,color .3s}
-.why__ico svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.why__item:hover .why__ico{background:var(--accent);color:#fff}
-.why__item h3{font-family:var(--font-display);font-weight:700;font-size:1.32rem}
-.why__item p{color:rgba(255,255,255,.76);font-size:.98rem;line-height:1.55}
-.why__cta{margin-top:clamp(2.6rem,5vw,3.6rem)}
-
-/* =========================================================================
-   4f. COVERAGE / SERVICE AREA — chip list beside a pinned photo
-   ========================================================================= */
-.area{background:var(--surface)}
-.area__grid{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(2rem,5vw,5rem);align-items:center}
-.area__list{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin:2.2rem 0 1.8rem;max-width:560px}
-.area__list li{background:#fff;border:1px solid var(--line);border-radius:10px;padding:.75rem 1rem;
-  font-weight:600;font-size:.98rem;color:var(--brand-dark);display:flex;align-items:center;gap:.55rem;transition:border-color .2s,transform .2s}
-.area__list li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0}
 /* hover: nudge right + accent border — cheap, and makes a static list feel live */
 .area__list li:hover{border-color:var(--accent);transform:translateX(3px)}
-.area__note{color:var(--muted);font-size:1rem;max-width:46ch;margin-bottom:1.8rem}
-.area__media{position:relative;border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-lg);aspect-ratio:4/3.2}
-.area__media img{width:100%;height:100%;object-fit:cover}
-.area__media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,24,38,.05),rgba(11,24,38,.32))}
-.area__pin{position:absolute;left:22px;bottom:22px;z-index:2;display:flex;align-items:center;gap:.8rem;
-  background:rgba(255,255,255,.97);padding:.85rem 1.2rem;border-radius:14px;box-shadow:var(--shadow-md)}
 .area__pin .ico{width:26px;height:26px;color:var(--accent);fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
-.area__pin span{display:flex;flex-direction:column;line-height:1.25;font-size:.82rem;color:var(--muted)}
-.area__pin strong{font-family:var(--font-display);font-weight:700;color:var(--brand-dark);font-size:1.02rem}
 
 /* =========================================================================
    4g. TESTIMONIALS — one big serif quote, cross-faded, numbered
    ========================================================================= */
 .reviews{background:var(--surface-100);padding-block:clamp(76px,10vw,150px)}
-.reviews__grid{display:grid;grid-template-columns:.72fr 1.28fr;gap:clamp(2.5rem,6vw,6rem);align-items:start}
-/* min-width:0 lets the columns shrink so long quotes wrap instead of overflowing */
-.reviews__grid > *{min-width:0}
-.reviews__aside{display:flex;flex-direction:column;gap:1.8rem;min-width:0}
-.reviews__thumb{position:relative;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-md);aspect-ratio:4/3.4;max-width:320px}
-.reviews__thumb img{width:100%;height:100%;object-fit:cover}
-.reviews__thumb figcaption{position:absolute;left:16px;bottom:14px;font-family:var(--font-display);font-weight:700;
-  color:#fff;font-size:1.1rem;letter-spacing:.05em;text-shadow:0 2px 12px rgba(0,0,0,.5)}
-.reviews__thumb figcaption span{color:var(--accent-400);font-size:1.4rem}
-.reviews__nav{display:flex;gap:.7rem}
-
-.reviews__stage{position:relative;min-height:340px}
-.reviews__quotemark{position:absolute;top:-.55em;left:-.06em;font-family:var(--font-display);font-weight:500;
-  font-size:12rem;line-height:1;color:var(--surface-200);z-index:0;pointer-events:none}
-.reviews__list{position:relative;z-index:1}
 /* inactive slides are absolutely positioned and hidden; the active one takes
    flow so the stage height follows the current quote */
 .review{position:absolute;inset:0;display:flex;flex-direction:column;gap:1.6rem;opacity:0;visibility:hidden;
@@ -806,59 +717,34 @@ body:has(.morph:hover) .cursor{opacity:0}
 .review footer{display:flex;flex-direction:column;margin-top:.4rem}
 .review footer strong{font-family:var(--font-display);font-weight:700;color:var(--brand-dark);font-size:1.15rem}
 .review footer span{color:var(--muted);font-size:.92rem}
-
-/* =========================================================================
-   4h. CONTACT — intro column + card form
-   ========================================================================= */
-.contact{background:var(--surface)}
-.contact__grid{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(2.4rem,5vw,5rem);align-items:start}
 .contact__intro .section-lede{margin-bottom:2rem}
-.contact__phone{display:inline-flex;align-items:center;gap:.7rem;font-family:var(--font-display);font-weight:500;
-  font-size:clamp(1.6rem,3vw,2.3rem);color:var(--brand-dark)}
 .contact__phone .ico{width:1em;height:1em;color:var(--accent);fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.contact__phone:hover{color:var(--accent)}
-.contact__form{background:#fff;border-radius:var(--radius-lg);padding:clamp(1.8rem,3vw,2.8rem);box-shadow:var(--shadow-md);display:flex;flex-direction:column;gap:1.1rem}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
 .field{display:flex;flex-direction:column;gap:.4rem}
 .field label{font-family:var(--font-cond);font-weight:600;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
 .field input,.field select,.field textarea{font:inherit;font-size:1rem;color:var(--brand-dark);background:var(--surface-100);
   border:1.5px solid var(--line);border-radius:11px;padding:.85rem 1rem;transition:border-color .18s,background .18s,box-shadow .18s;width:100%}
 .field textarea{resize:vertical;min-height:104px}
-.field input::placeholder,.field textarea::placeholder{color:var(--muted-light)}
+/* Placeholders need the same 4.5:1 as body text — in an empty field they are
+   the only instruction present. */
+.field input::placeholder,.field textarea::placeholder{color:var(--muted)}
 /* focus: accent ring + white fill, so the active field is unmistakable */
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);background:#fff;
   box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 12%,transparent);outline:none}
-.contact__form .select-wrap{position:relative}
-.contact__form select{appearance:none;-webkit-appearance:none;padding-right:2.6rem;cursor:pointer}
 .contact__form .select-chevron{position:absolute;right:1rem;top:50%;transform:translateY(-50%);width:20px;height:20px;fill:none;stroke:var(--muted);stroke-width:2;pointer-events:none}
 .form-status{font-size:.94rem;font-weight:600;min-height:1.2em;text-align:center;color:var(--accent)}
 .form-status[data-ok="true"]{color:#1c7c4a}
 
 /* =========================================================================
-   4i. FOOTER — serif headline, detail columns, social stack
+   4i. FOOTER — see section 8/9. The starter's footer (background photograph,
+   serif headline, definition-list columns, a vertical social stack) is gone
+   with the markup that used it. It is worth noting why it was deleted rather
+   than left harmless: `.footer__social a` is class-plus-element, which beats
+   the new `.footer__icon` on specificity, so the dead block was still winning
+   — the social buttons rendered as 48px rounded squares stacked vertically
+   instead of 44px circles in a row. Dead CSS is not inert when it is more
+   specific than the CSS that replaced it.
    ========================================================================= */
-.site-footer{position:relative;isolation:isolate;overflow:hidden;background:var(--brand-dark-900);color:#fff;padding-top:clamp(72px,9vw,120px)}
-.footer__bg{position:absolute;inset:0;z-index:-2}
-.footer__bg img{width:100%;height:100%;object-fit:cover;opacity:.28;filter:grayscale(.15)}
-.site-footer::before{content:"";position:absolute;inset:0;z-index:-1;
-  background:linear-gradient(180deg,rgba(10,22,34,.45) 0%,rgba(10,22,34,.72) 60%,rgba(10,22,34,.92) 100%)}
-.footer__top{display:grid;grid-template-columns:1.5fr 1fr auto;gap:clamp(2.4rem,5vw,5rem);align-items:start;padding-bottom:clamp(3rem,6vw,5rem)}
-.footer__title{font-family:var(--font-display);font-weight:400;line-height:1.04;letter-spacing:-.015em;
-  font-size:clamp(2.4rem,5vw,4.4rem);margin:.4rem 0 1.3rem}
-.footer__title em{font-style:italic;color:var(--accent-400)}
-.footer__sub{color:rgba(255,255,255,.72);max-width:42ch;margin-bottom:2rem;font-size:1.04rem}
-.footer__cols{display:grid;gap:1.8rem}
-.footer__cols dt{font-family:var(--font-cond);text-transform:uppercase;letter-spacing:.12em;font-size:.74rem;font-weight:700;color:var(--accent-400);margin-bottom:.45rem}
-.footer__cols dd{color:rgba(255,255,255,.9);font-size:1rem;line-height:1.5}
-.footer__cols dd a:hover{color:var(--accent-400)}
-.footer__social{display:flex;flex-direction:column;gap:.7rem}
-.footer__social a{width:48px;height:48px;border-radius:13px;display:grid;place-items:center;
-  background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);transition:background .2s,transform .2s}
-.footer__social a svg{width:22px;height:22px;fill:#fff}
-.footer__social a:hover{background:var(--accent);transform:translateY(-2px)}
-.footer__base{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;
-  padding-block:1.8rem;border-top:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.55);font-size:.86rem}
-.footer__logo{height:55.9px;width:auto}
 .footer__legal a:hover{color:#fff}
 
 /* floating call button — mobile only, gently pulses to stay noticeable */
@@ -867,7 +753,6 @@ body:has(.morph:hover) .cursor{opacity:0}
   box-shadow:0 10px 26px color-mix(in srgb,var(--accent) 42%,transparent);
   animation:fabPulse 2.6s ease-in-out infinite}
 .call-fab .ico{width:24px;height:24px}
-.call-fab:hover{background:var(--accent-600)}
 @keyframes fabPulse{
   0%,100%{box-shadow:0 10px 26px color-mix(in srgb,var(--accent) 42%,transparent)}
   50%{box-shadow:0 10px 26px color-mix(in srgb,var(--accent) 42%,transparent),0 0 0 12px transparent}
@@ -897,13 +782,6 @@ body:has(.morph:hover) .cursor{opacity:0}
     animation:px-media linear both;animation-timeline:view();animation-range:cover}
   .why__bg img,.footer__bg img{height:118% !important;top:-9% !important;
     animation:px-media linear both;animation-timeline:view();animation-range:cover}
-  .area__media img,.reviews__thumb img{height:120% !important;top:-10% !important;
-    animation:px-media linear both;animation-timeline:view();animation-range:cover}
-  .divider__bg{inset:-10% 0 !important;
-    animation:px-media linear both;animation-timeline:view();animation-range:cover}
-  /* text-only section: a gentle content lift */
-  .contact__grid{
-    animation:px-lift linear both;animation-timeline:view();animation-range:cover}
 }
 
 /* =========================================================================
@@ -983,52 +861,7 @@ body:has(.morph:hover) .cursor{opacity:0}
   color:var(--ink)}
 .stat__label{font-family:var(--font-mono);font-size:.6875rem;
   letter-spacing:var(--track-mono);color:var(--muted);margin-top:.5rem}
-
-/* =========================================================================
-   5c. PORTFOLIO SECTIONS
-   ========================================================================= */
-
-/* ---------- how it works ----------
-   The one centred heading on the page: it marks the section as explanatory
-   rather than as a list of things. */
-.how__head{text-align:center;max-width:44rem;margin-inline:auto;
-  margin-bottom:clamp(28px,4vw,44px)}
-.how__title{margin-bottom:.5rem}
-.how__lede{color:var(--muted);font-size:1.0625rem;line-height:1.4;letter-spacing:var(--track-lead)}
-.how__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}
-.how__step{display:flex;flex-direction:column}
-/* The number sits on the image; the words sit under the card. Moving the text
-   inside would turn a row of four into four separate tiles. */
-.how__card{position:relative;border-radius:var(--radius);overflow:hidden;
-  background:var(--surface);aspect-ratio:4/5;margin-bottom:1rem}
-.how__card img{width:100%;height:100%;object-fit:cover}
-.how__num{position:absolute;top:10px;left:10px;width:22px;height:22px;
-  border-radius:var(--radius-sm);display:grid;place-items:center;
-  background:rgba(24,24,27,.45);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
-  color:#fff;font-size:.6875rem;letter-spacing:var(--track-mono)}
-.how__step-title{font-family:var(--font-display);font-weight:400;
-  font-size:1.375rem;line-height:1.25;letter-spacing:var(--track-h3);color:var(--ink);
-  margin-bottom:.3rem}
-.how__step-copy{color:var(--muted);font-size:.9375rem;line-height:1.5;
-  letter-spacing:var(--track-body)}
-
-/* ---------- thumbnail strip ---------- */
-.strip{display:flex;flex-direction:column;gap:14px;margin-top:1.75rem}
-.strip__stage{border-radius:var(--radius);overflow:hidden;background:var(--surface);
-  border:1px solid var(--line);aspect-ratio:16/10}
-.strip__img{width:100%;height:100%;object-fit:cover;
-  animation:strip-in .45s var(--ease-out-expo) both}
 @keyframes strip-in{from{opacity:0;transform:scale(1.012)}to{opacity:1;transform:none}}
-.strip__meta{display:flex;align-items:baseline;justify-content:space-between;gap:1rem}
-.strip__title{font-size:1.0625rem;letter-spacing:var(--track-lead);color:var(--ink)}
-.strip__cat{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:var(--track-mono);
-  color:var(--muted);margin-top:.15rem}
-.strip__thumbs{display:flex;gap:8px;flex-wrap:wrap}
-.strip__thumb{width:100px;aspect-ratio:16/10;border-radius:var(--radius-sm);overflow:hidden;
-  background:var(--surface);border:2px solid transparent;padding:0;
-  transition:border-color .18s var(--ease),opacity .18s var(--ease);opacity:.6}
-.strip__thumb img{width:100%;height:100%;object-fit:cover}
-.strip__thumb:hover,.strip__thumb:focus-visible{opacity:1}
 .strip__thumb.is-active{border-color:var(--accent);opacity:1}
 
 /* ---------- ghost text link ----------
@@ -1036,58 +869,19 @@ body:has(.morph:hover) .cursor{opacity:0}
 .link-ghost{font-size:.8125rem;letter-spacing:var(--track-body);color:var(--muted);
   white-space:nowrap;border-bottom:1px solid transparent;transition:color .18s var(--ease),border-color .18s var(--ease)}
 .link-ghost:hover{color:var(--ink);border-bottom-color:currentColor}
-
-/* ---------- offer: card + checked list ---------- */
-.offer__grid{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);
-  gap:clamp(24px,5vw,60px);align-items:start}
 /* The one place the coral gradient token is used, and it is type on colour
    rather than artwork. */
 .offer__card{background:var(--gradient-coral);border-radius:var(--radius);
   padding:var(--card-pad);min-height:200px;display:flex;flex-direction:column;
   justify-content:space-between;gap:1.5rem;box-shadow:var(--shadow-sm);color:#fff}
-.offer__card-mark{font-family:var(--font-mono);font-size:.6875rem;
-  letter-spacing:var(--track-mono);opacity:.85}
-.offer__card-lede{font-size:1.0625rem;line-height:1.4;letter-spacing:var(--track-lead)}
-.offer__card-foot{display:flex;align-items:center;gap:.5rem}
-.offer__card-label{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:var(--track-mono);
-  background:rgba(255,255,255,.22);border-radius:var(--radius-pill);padding:.3em .8em}
-
-.offer__body{display:flex;flex-direction:column;gap:1.75rem}
 .feature-list{display:flex;flex-direction:column;gap:11px}
-.feature{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;align-items:start}
 /* Solid coral in a soft squircle, not an outline. */
 .feature__check{width:22px;height:22px;border-radius:var(--radius-icon);background:var(--accent);
   color:#fff;display:grid;place-items:center;flex:0 0 auto;margin-top:.15rem}
-.feature__title{font-size:1.1875rem;line-height:1.4;letter-spacing:var(--track-lead);color:var(--ink)}
-.feature__copy{font-size:.9375rem;line-height:1.5;letter-spacing:var(--track-body);color:var(--muted);
-  margin-top:.15rem}
 
 /* ---------- read-more list ----------
    Whitespace and type size only: no boxes, no borders, no dividers. */
 .readmore__title{margin-bottom:clamp(24px,4vw,40px)}
-.readmore__list{display:flex;flex-direction:column;gap:11px}
-.readmore__item{display:flex;align-items:baseline;justify-content:space-between;gap:1.5rem;
-  padding-block:14px}
-.readmore__heading{font-family:var(--font-display);font-weight:400;
-  font-size:clamp(1.5rem,3.2vw,1.875rem);line-height:1.2;letter-spacing:var(--track-h2);
-  color:var(--ink)}
-.readmore__meta{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:var(--track-mono);
-  color:var(--muted);margin-top:.3rem}
-
-/* ---------- about ---------- */
-.about{background:var(--surface)}
-.about__grid{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:clamp(24px,5vw,64px);
-  align-items:start}
-.about__portrait{border-radius:var(--radius);overflow:hidden;background:var(--surface-200);margin-top:.5rem}
-.about__portrait img{width:100%;height:auto}
-.about__body{display:flex;flex-direction:column;gap:2rem}
-.about__lede{color:var(--ink);text-wrap:balance}
-.about__prose{display:flex;flex-direction:column;gap:1rem;color:var(--muted);max-width:68ch}
-.about__pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;
-  padding-top:.5rem}
-.about__pillar-title{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:var(--track-mono);
-  color:var(--muted);margin-bottom:.4rem}
-.about__pillar-copy{color:var(--muted)}
 
 /* ---------- stats: the page's one carbon band ---------- */
 .stats{background:var(--brand-dark);color:#fff;padding-block:var(--section-gap)}
@@ -1100,68 +894,29 @@ body:has(.morph:hover) .cursor{opacity:0}
   color:rgba(255,255,255,.72);max-width:56ch}
 
 /* ---------- capabilities ---------- */
-.capabilities__groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;
-  margin-top:1.5rem}
-.capabilities__group{display:flex;flex-direction:column;gap:.9rem}
+/* Rows on hairlines, not a grid of five identical bordered cards — which is
+   the shape this section had, and the shape that reads as generated. The rule
+   in this system is that a surface is defined by its hairline and its radius,
+   never by repetition: a list of disciplines is a list, so it is set as one.
+   The name sits in a fixed column beside its tools, so the eye can run down
+   the disciplines without reading the tools, which is how anyone scanning for
+   "Elementor" or "Payload" actually reads it. */
+.capabilities__groups{display:flex;flex-direction:column;margin-top:1.75rem}
+.capabilities__group{display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);
+  gap:clamp(16px,3vw,48px);align-items:start;
+  padding-block:clamp(20px,2.6vw,30px);border-top:1px solid var(--line)}
+.capabilities__groups > li:last-child{border-bottom:1px solid var(--line)}
+@media (max-width:720px){
+  .capabilities__group{grid-template-columns:1fr;gap:.85rem}
+}
 .capabilities__title{color:var(--ink)}
 .capabilities__tags{display:flex;flex-wrap:wrap;gap:6px}
-
-/* ---------- work strips ---------- */
-.work__head{display:flex;align-items:flex-end;justify-content:space-between;gap:1.5rem;
-  margin-bottom:1.75rem;flex-wrap:wrap}
-.work + .work{padding-top:0}
-
-/* ---------- showcase ---------- */
-.showcase{background:var(--surface)}
-.showcase__grid{margin-top:1.5rem}
-.showcase__item{list-style:none}
-.showcase__frame{border-radius:var(--radius);overflow:hidden;background:var(--white);
-  border:1px solid var(--line);position:relative}
-.showcase__frame img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;display:block}
-.showcase__caption{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:var(--track-mono);
-  color:var(--muted);padding:.6rem var(--card-pad) .75rem}
-
-/* ---------- carousel ----------
-   The rail is padded so the cards either side stay visible. That peek is what
-   says "there is more" without a control saying it. */
-.carousel{background:var(--surface);padding-bottom:clamp(32px,4vw,44px)}
-.carousel__head{max-width:46rem;margin-bottom:clamp(24px,4vw,40px)}
-.carousel__eyebrow{font-size:.8125rem;letter-spacing:var(--track-body);color:var(--muted);
-  margin-bottom:.75rem}
-.carousel__title{margin-bottom:.75rem}
-.carousel__lede{color:var(--muted);font-size:.9375rem;line-height:1.5;
-  letter-spacing:var(--track-body);max-width:56ch}
-
-.carousel__rail{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;
-  padding-inline:max(var(--gutter),calc((100vw - var(--wrap)) / 2));
-  scrollbar-width:none;-ms-overflow-style:none}
-.carousel__rail::-webkit-scrollbar{display:none}
-.carousel__card{flex:0 0 min(600px,82vw);scroll-snap-align:center;
-  padding-inline:clamp(16px,2.4vw,28px);
-  opacity:.42;transition:opacity .32s var(--ease)}
-.carousel__card + .carousel__card{border-left:1px solid var(--line)}
 .carousel__card.is-active{opacity:1}
-.carousel__link{display:block}
-.carousel__media{border-radius:var(--radius);overflow:hidden;background:var(--surface-200);
-  aspect-ratio:16/10;margin-bottom:1rem}
-.carousel__media img{width:100%;height:100%;object-fit:cover}
-.carousel__name{font-size:.9375rem;letter-spacing:var(--track-body);color:var(--muted);
-  margin-bottom:.5rem}
-.carousel__quote{font-size:1.0625rem;line-height:1.4;letter-spacing:var(--track-lead);
-  color:var(--ink);margin-bottom:.5rem;
-  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.carousel__caption{font-size:.9375rem;letter-spacing:var(--track-body);color:var(--muted-light)}
 
 /* Segments, not a thumb: one per card, so position and total are both legible. */
 .carousel__foot{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;
   margin-top:clamp(20px,3vw,32px)}
-.carousel__progress{display:flex;gap:6px;flex:1;max-width:440px}
-.carousel__progress li{flex:1}
-.carousel__progress button{display:block;width:100%;height:3px;border-radius:2px;
-  background:var(--surface-200);transition:background .28s var(--ease)}
 .carousel__progress button.is-on{background:var(--ink)}
-.carousel__count{font-size:.8125rem;letter-spacing:var(--track-body);color:var(--muted);
-  flex:0 0 auto}
 
 /* ---------- closing dark band ----------
    Bottom padding is deliberate dead space: the footer card sits over it. */
@@ -1183,37 +938,53 @@ body:has(.morph:hover) .cursor{opacity:0}
 .cta__check{display:grid;place-items:center;color:#fff}
 .cta__actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:.5rem}
 
-/* ---------- footer: a white card laid over the band above ---------- */
-.site-footer{background:transparent;padding-inline:var(--gutter);
-  /* Pulls itself up over the dark section. The section above carries matching
-     bottom padding so nothing is covered that should be read. */
-  margin-top:clamp(-200px,-16vh,-120px);position:relative;z-index:2}
-.footer__card{max-width:var(--wrap);margin-inline:auto;background:var(--white);
-  border-radius:var(--radius);padding:clamp(28px,4vw,56px) clamp(20px,3vw,44px)}
-.footer__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);
-  gap:clamp(28px,5vw,64px)}
-.footer__lead{display:flex;flex-direction:column;align-items:flex-start;gap:1rem}
-.footer__mark{font-family:var(--font-display);font-weight:700;font-size:1.25rem;
-  letter-spacing:var(--track-h3);color:var(--ink)}
-.footer__invite{color:var(--muted);font-size:.9375rem;line-height:1.5;
-  letter-spacing:var(--track-body);max-width:42ch}
-.footer__invite strong{color:var(--ink);font-weight:700}
+/* ---------- footer: three columns on carbon, ending on the ask ----------
+   Was a white card of link columns — a site map with a button in it. This
+   ends the page the way the page argues: who, where, and then a direct
+   invitation with its own heading, which is the last thing anyone reads. */
+.site-footer{position:relative;isolation:isolate;overflow:clip;margin-top:0;
+  background:var(--brand-dark-900);color:#fff;
+  padding-block:clamp(56px,8vw,96px) 0}
+/* A wash rather than a photograph: an image here would be a fourth thing
+   competing with the ask, and this costs no request. */
+.footer__glow{position:absolute;right:-10%;bottom:-30%;width:min(70vw,760px);
+  aspect-ratio:1;border-radius:50%;z-index:-1;pointer-events:none;
+  background:radial-gradient(circle,color-mix(in srgb,var(--accent) 34%,transparent) 0%,transparent 68%)}
 
-.footer__cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-  gap:clamp(20px,3vw,32px)}
-.footer__col-head{font-size:.9375rem;letter-spacing:var(--track-body);color:var(--muted-light);
-  margin-bottom:.6rem}
-.footer__col li + li{margin-top:.4rem}
-.footer__col a{font-size:.9375rem;letter-spacing:var(--track-body);color:var(--ink);
-  transition:opacity .18s var(--ease)}
-.footer__col a:hover{opacity:.62}
+.footer__grid{display:grid;
+  grid-template-columns:minmax(0,1.25fr) minmax(0,.7fr) minmax(0,1.15fr);
+  gap:clamp(32px,5vw,72px);align-items:start}
+.footer__logo{height:36px;color:#fff}
+.footer__blurb{margin-top:1.25rem;max-width:34ch;color:rgba(255,255,255,.66);
+  font-size:.9375rem;line-height:1.62;letter-spacing:var(--track-body);text-wrap:pretty}
+.footer__social{display:flex;gap:.6rem;margin-top:1.5rem}
+/* 44px: the smallest targets on the page, and the closest to its edge — the
+   two conditions under which an undersized target actually gets missed. */
+.footer__icon{width:44px;height:44px;border-radius:var(--radius-pill);display:grid;
+  place-items:center;color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.24);
+  transition:background .18s var(--ease),box-shadow .18s var(--ease)}
+.footer__icon:hover{background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.5)}
+.footer__icon svg{width:17px;height:17px}
+
+.footer__nav ul{margin-top:1.1rem;display:flex;flex-direction:column;gap:.65rem}
+.footer__nav a{font-size:1rem;letter-spacing:var(--track-body);color:rgba(255,255,255,.82);
+  transition:color .18s var(--ease)}
+.footer__nav a:hover{color:#fff}
+
+.footer__ask-title{margin-top:1.1rem;font-family:var(--font-display);
+  font-weight:var(--hero-weight);font-size:clamp(1.75rem,3.2vw,2.5rem);line-height:1.06;
+  letter-spacing:-.008em;color:#fff}
+.footer__ask-copy{margin-top:.9rem;max-width:38ch;color:rgba(255,255,255,.66);
+  font-size:.9375rem;line-height:1.62;letter-spacing:var(--track-body);text-wrap:pretty}
+.footer__ask .btn{margin-top:1.5rem}
 
 .footer__base{display:flex;flex-wrap:wrap;gap:.5rem 1.5rem;justify-content:space-between;
-  margin-top:clamp(28px,4vw,48px);padding-top:20px;border-top:1px solid var(--line);
-  color:var(--muted-light)}
+  margin-top:clamp(44px,6vw,76px);padding-block:24px;
+  border-top:1px solid rgba(255,255,255,.14);
+  font-size:.8125rem;letter-spacing:var(--track-body);color:rgba(255,255,255,.5)}
 
-@media (max-width:820px){
-  .footer__grid{grid-template-columns:1fr}
+@media (max-width:900px){
+  .footer__grid{grid-template-columns:1fr;gap:2.5rem}
 }
 
 /* ---------- index and detail pages ---------- */
@@ -1279,8 +1050,6 @@ body:has(.morph:hover) .cursor{opacity:0}
   color:var(--muted);padding:.6rem var(--card-pad) .75rem;background:var(--white)}
 
 @media (max-width:820px){
-  .about__grid{grid-template-columns:1fr}
-  .about__portrait{width:min(260px,60vw)}
   .hero__marks{display:none}   /* at this width they crowd the name rather than frame it */
   .cs-type__row{grid-template-columns:1fr}
 }
@@ -1344,6 +1113,7 @@ body:has(.morph:hover) .cursor{opacity:0}
      is already correct here: fitting to a 375px column is the same instruction
      as fitting to a 1200px one. */
   .hero__line{--fit:clamp(2.25rem,13.5vw,4.5rem)}
+  .whero__title{max-width:none}
   .hero__inner{padding-top:clamp(96px,14vh,128px)}
   .hero__actions{width:100%}
   .hero__actions .btn{flex:1;justify-content:center}
@@ -1357,22 +1127,14 @@ body:has(.morph:hover) .cursor{opacity:0}
   .hero__bar-field{padding:0}
   .hero__bar-field+.hero__bar-field{border-left:none;border-top:1px solid var(--line);padding-left:0;padding-top:.9rem}
   .hero__bar-btn{width:100%;padding-block:.9em}
-  .services__rail{grid-auto-columns:82%}
-  .why__grid{grid-template-columns:1fr}
-  .area__list{grid-template-columns:1fr 1fr}
-  .divider__stats{grid-template-columns:1fr 1fr;gap:1.4rem}
-  .divider__inner--split{flex-direction:column;align-items:flex-start}
   /* testimonials: stack aside items, give the thumb a real width so its
      fill-image doesn't collapse, and drop the oversized quote mark */
   .reviews__aside{flex-direction:column;align-items:flex-start;gap:1.2rem}
-  .reviews__thumb{flex:none;width:150px;max-width:150px}
-  .reviews__quotemark{display:none}
   .field-row{grid-template-columns:1fr}
   .footer__top{grid-template-columns:1fr}
   .footer__social{flex-direction:row}
   .footer__base{flex-direction:column;align-items:flex-start;gap:.6rem}
 }
-@media (max-width:400px){.area__list{grid-template-columns:1fr}}
 
 /* =========================================================================
    7. REDUCED MOTION — the accessibility contract.
@@ -1400,3 +1162,549 @@ body:has(.morph:hover) .cursor{opacity:0}
   .hero__line-text,.hero__portrait img{transform:none !important}
   .hero__portrait{transform:translateX(-50%) !important}
 }
+
+/* =========================================================================
+   8. THE WORK PAGE
+   Ten sections, in page order. Everything here is scoped to a class that
+   appears on no other page, so this block can be read — or deleted — as one
+   unit without auditing the rest of the file.
+   ========================================================================= */
+
+/* ---------- 8a. hero: one sentence, centred ---------- */
+.whero{padding-block:clamp(150px,20vh,230px) clamp(40px,6vh,72px);text-align:center}
+.whero__inner{display:flex;flex-direction:column;align-items:center;gap:1.25rem}
+.whero__eyebrow{letter-spacing:.2em;text-transform:uppercase;margin-bottom:0}
+/* On the type scale rather than measured to the column: this is a sentence and
+   it should break where the sentence breaks, which a fitted line decides for
+   it. Weight matches the homepage's display lines so the two pages read as one
+   system. */
+.whero__title{font-family:var(--font-display);font-weight:var(--hero-weight);
+  font-size:clamp(2.5rem,6.2vw,5rem);line-height:1.02;letter-spacing:-.01em;
+  color:var(--ink);max-width:15ch;text-wrap:balance}
+.whero__action{margin-top:.75rem}
+
+/* ---------- 8b. the sliding band of screens ---------- */
+.shotstrip{overflow:clip;padding-block:clamp(20px,4vh,44px);
+  /* Fades at both edges so the band leaves the page rather than stopping at
+     it. Masked rather than overlaid with a gradient, because the page behind
+     is not always the same white — the section above and below differ. */
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.shotstrip__track{display:flex;gap:16px;width:max-content;align-items:center;
+  /* 118s, not 64. At the old width and speed the band read as a conveyor;
+     larger shots travelling this slowly read as a drift you can actually look
+     at, which is the point of showing the work at all. */
+  animation:strip-slide 118s linear infinite}
+.shotstrip:hover .shotstrip__track{animation-play-state:paused}
+.shotstrip__shot{width:clamp(280px,32vw,520px);border-radius:var(--radius);
+  overflow:hidden;border:1px solid var(--line);background:var(--surface);flex:none}
+.shotstrip__shot img{width:100%;height:auto;display:block}
+/* Staggered rather than aligned, so it reads as a pile of work and not a table
+   of it. Four offsets, cycling. */
+.shotstrip__shot:nth-child(4n+1){transform:translateY(-14px)}
+.shotstrip__shot:nth-child(4n+2){transform:translateY(16px)}
+.shotstrip__shot:nth-child(4n+3){transform:translateY(-6px)}
+.shotstrip__shot:nth-child(4n+4){transform:translateY(10px)}
+/* Exactly half, because the list is rendered twice — see ShotStrip.tsx. */
+@keyframes strip-slide{to{transform:translateX(-50%)}}
+
+/* ---------- 8b-2. the designer: claim left, person right ---------- */
+.designer{padding-block:clamp(56px,8vw,104px);overflow:clip}
+.designer__inner{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);
+  gap:clamp(36px,6vw,96px);align-items:center}
+
+.designer__heading{font-family:var(--font-display);font-weight:var(--hero-weight);
+  font-size:clamp(2rem,3.9vw,3.1rem);line-height:1.1;letter-spacing:-.01em;
+  color:var(--ink);max-width:15ch;text-wrap:balance;margin-top:1.1rem}
+
+.designer__points{display:flex;flex-direction:column;gap:1.6rem;
+  margin-top:clamp(28px,3.5vw,44px);padding-top:clamp(24px,3vw,36px);
+  border-top:1px solid var(--line);max-width:46ch}
+.designer__points li{display:grid;grid-template-columns:44px minmax(0,1fr);
+  gap:1.1rem;align-items:start}
+/* Filled well, not an outlined ring. At 44px a ring around an outlined glyph
+   is two competing strokes at the same weight and the glyph loses. */
+.designer__well{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
+  background:var(--surface);color:var(--ink)}
+.designer__well svg{width:21px;height:21px}
+.designer__point-title{font-family:var(--font-body);font-weight:700;font-size:.9375rem;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--ink);margin-bottom:.35rem}
+.designer__point-copy{font-size:1rem;line-height:1.6;letter-spacing:var(--track-body);
+  color:var(--muted);text-wrap:pretty}
+
+.designer__who{display:flex;flex-direction:column;align-items:center;text-align:center}
+/* The one circle in a system built on 15px radii, which is why it reads as a
+   person and not another card. `cover` on a square well, so any portrait
+   uploaded later lands right without being prepared as a round asset. */
+.designer__portrait{width:min(100%,380px);aspect-ratio:1;border-radius:50%;
+  overflow:hidden;background:var(--surface)}
+.designer__portrait img{width:100%;height:100%;object-fit:cover;display:block;
+  filter:grayscale(1) contrast(1.05)}
+.designer__name{font-family:var(--font-display);font-weight:var(--hero-weight);
+  font-size:clamp(1.9rem,3.1vw,2.6rem);line-height:1;letter-spacing:-.005em;
+  color:var(--ink);margin-top:1.6rem;text-transform:uppercase;text-wrap:balance}
+.designer__rule{display:block;width:56px;height:1px;background:var(--accent-600);
+  margin:1.1rem auto}
+/* Split on the pipe rather than left to wrap: as one string it broke
+   mid-title into four ragged lines. */
+.designer__roles{display:flex;flex-direction:column;gap:.3rem;
+  font-family:var(--font-mono);font-size:.75rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--accent-600);line-height:1.5}
+
+@media (max-width:860px){
+  .designer__inner{grid-template-columns:1fr;gap:2.5rem}
+  .designer__who{order:-1;align-items:flex-start;text-align:left}
+  .designer__rule{margin-inline:0}
+  .designer__roles{align-items:flex-start}
+  .designer__portrait{width:min(60vw,260px)}
+  .designer__heading{max-width:none}
+}
+
+/* ---------- 8c. the struck line and its correction ---------- */
+.struck__inner{max-width:46rem;margin-inline:auto}
+.struck__line{font-family:var(--font-display);font-weight:var(--hero-weight);
+  font-size:clamp(2.45rem,5vw,3.85rem);line-height:1.04;letter-spacing:-.008em;
+  color:var(--ink);margin-bottom:2rem;text-wrap:balance}
+.struck__text{position:relative;display:inline-block}
+/* `text-decoration: line-through` has no length to interpolate, so it cannot
+   be drawn — it is on or off. A rule scaling from zero is the only way to make
+   the strike happen while the line is being read, which is the entire device:
+   pre-struck, it is just a line with a rule through it. */
+.struck__text::after{content:"";position:absolute;left:-.06em;right:-.06em;top:56%;
+  height:.07em;background:var(--accent);border-radius:2px;
+  transform:scaleX(0);transform-origin:left center;
+  transition:transform .75s var(--ease-out-expo) .15s}
+.struck__line.is-in .struck__text::after{transform:scaleX(1)}
+.struck__body{display:flex;flex-direction:column;gap:1rem}
+.struck__body p{font-size:1.0625rem;line-height:1.55;letter-spacing:var(--track-lead);
+  color:var(--muted)}
+.struck__body p:last-child{color:var(--ink)}
+
+/* ---------- 8d. the dark rail of projects ---------- */
+.rail{background:var(--brand-dark);color:#fff;
+  padding-block:clamp(56px,8vw,96px);overflow:clip}
+.rail__head{display:flex;align-items:center;justify-content:space-between;gap:2rem;
+  margin-bottom:clamp(24px,3.5vw,40px)}
+.rail__title{font-family:var(--font-display);font-weight:var(--hero-weight);
+  font-size:clamp(2.45rem,5vw,3.85rem);line-height:1.04;letter-spacing:-.008em;color:#fff;
+  text-wrap:balance}
+.rail__nav{display:flex;gap:.6rem;flex:none}
+.rail__arrow{width:46px;height:46px;border-radius:var(--radius-pill);display:grid;place-items:center;
+  color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.28);
+  transition:background .18s var(--ease),box-shadow .18s var(--ease),opacity .18s var(--ease)}
+.rail__arrow:hover{background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.5)}
+/* Dimmed, not hidden. A control that vanishes at the end moves the one beside
+   it, and the pair stops being a fixed target. */
+.rail__arrow:disabled{opacity:.3;cursor:not-allowed}
+.rail__arrow:disabled:hover{background:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.28)}
+
+.rail__track{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding-inline:var(--gutter);scrollbar-width:none;
+  /* MUST match `padding-inline`, and the rail is broken without it.
+     `scroll-snap-align:start` snaps a card's start edge to the *snapport*
+     edge, and by default the snapport is the container's padding box — so on
+     load the browser scrolls the first card to x=0, throwing away exactly the
+     padding that was aligning it with the heading. `scroll-padding` insets the
+     snapport by the same amount, which puts the resting position back at 0. */
+  scroll-padding-inline:var(--gutter);
+  /* The rail is full-bleed but its first card lines up with the heading above,
+     which is inside the wrap. Padding on the track rather than a margin, so the
+     last card can still scroll clear of the right edge. */
+  padding-bottom:4px}
+.rail__track::-webkit-scrollbar{display:none}
+.rail__track > li{flex:none;scroll-snap-align:start;width:clamp(260px,30vw,380px)}
+@media (min-width:1300px){
+  /* Centre the rail on wide screens instead of letting it start at the window
+     edge, so it stays aligned with the wrap above it. */
+  .rail__track{padding-inline:max(var(--gutter),calc((100vw - var(--wrap)) / 2 + var(--gutter)));
+    scroll-padding-inline:max(var(--gutter),calc((100vw - var(--wrap)) / 2 + var(--gutter)))}
+}
+
+.railcard{display:block;position:relative;border-radius:var(--radius);overflow:hidden;
+  aspect-ratio:3/4;background:var(--brand-dark-700)}
+.railcard__media{position:absolute;inset:0}
+.railcard__media img{width:100%;height:100%;object-fit:cover;
+  transition:transform .6s var(--ease-out-expo)}
+.railcard:hover .railcard__media img{transform:scale(1.04)}
+/* The gradient is on the body, not a separate layer: the text needs it and
+   nothing else does, so they travel together. */
+.railcard__body{position:absolute;inset:auto 0 0 0;padding:var(--card-pad);
+  display:flex;flex-direction:column;gap:.3rem;
+  background:linear-gradient(0deg,rgba(0,0,0,.82) 0%,rgba(0,0,0,.5) 55%,transparent 100%);
+  padding-top:3.5rem}
+.railcard__title{font-family:var(--font-display);font-weight:var(--hero-weight);
+  font-size:1.75rem;line-height:1.12;letter-spacing:var(--track-h3);color:#fff}
+.railcard__copy{font-size:.9375rem;line-height:1.45;letter-spacing:var(--track-body);
+  color:rgba(255,255,255,.76);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* ---------- 8e. the crossing ribbons ---------- */
+.ribbons{position:relative;overflow:clip;isolation:isolate;
+  padding-block:clamp(70px,11vw,140px)}
+.ribbon{position:absolute;left:50%;top:50%;width:132vw;overflow:hidden}
+/* Rotated in opposite senses so the two strips cross rather than run parallel.
+   The translate has to come first — rotating about the element's own centre
+   after centring it is what keeps the tilt symmetrical. */
+.ribbon--outline{transform:translate(-50%,-50%) rotate(-4.5deg);z-index:1}
+.ribbon--solid{transform:translate(-50%,-50%) rotate(3.5deg);z-index:2}
+.ribbon__track{display:flex;width:max-content;white-space:nowrap;
+  font-family:var(--font-display);font-weight:var(--hero-weight);
+  font-size:clamp(2.25rem,6.4vw,5rem);line-height:1.15;letter-spacing:-.006em;
+  animation:ribbon-run 34s linear infinite}
+/* The second strip runs the other way. Two ribbons travelling together read as
+   one wide ribbon that has been split. */
+.ribbon__track--back{animation-direction:reverse}
+.ribbon--solid .ribbon__track{color:var(--ink)}
+.ribbon--outline .ribbon__track{color:transparent}
+@supports (-webkit-text-stroke: 1px black){
+  .ribbon--outline .ribbon__track{-webkit-text-stroke:1.2px var(--muted-light)}
+}
+@keyframes ribbon-run{to{transform:translateX(-50%)}}
+
+/* ---------- 8f. the service blocks ---------- */
+.svc{padding-block:clamp(48px,7vw,88px);overflow:clip}
+.svc__inner{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:clamp(28px,5vw,72px);align-items:center}
+.svc__copy{max-width:34rem}
+/* Artwork is optional, so the two-column grid has to cope with there being
+   nothing in its second column. Left as a grid it strands the copy in a
+   half-width well beside a void; collapsed to one column and given a longer
+   measure, it reads as a deliberate text block until the images arrive. */
+.svc__inner:not(:has(.svc__cluster)){grid-template-columns:minmax(0,1fr)}
+.svc__inner:not(:has(.svc__cluster)) .svc__copy{max-width:44rem}
+.svc__copy .section-title{margin-bottom:.75rem}
+/* Odd blocks put the copy on the right. Ordering the grid items rather than
+   reversing the source keeps the heading before its pictures in the document,
+   which is the order they should be read in regardless of which side they are
+   painted on. */
+.svc[data-flip="true"] .svc__copy{order:2}
+.svc[data-flip="true"] .svc__cluster{order:1}
+
+/* Scattered, not gridded: a tidy grid of finished pieces reads as a contact
+   sheet. Positions are per-child and fixed, because a cluster that reshuffles
+   on every render is not a composition anyone can approve. */
+.svc__cluster{position:relative;min-height:clamp(280px,34vw,440px)}
+.svc__shot{position:absolute;border-radius:var(--radius);overflow:hidden;
+  background:var(--surface);box-shadow:0 18px 44px rgba(24,24,27,.13);
+  transition:transform .5s var(--ease-out-expo)}
+.svc__shot img{width:100%;height:auto;display:block}
+.svc__shot:hover{transform:translateY(-6px) rotate(0deg) !important;z-index:5}
+.svc__shot:nth-child(1){width:56%;left:0;top:4%;transform:rotate(-3deg);z-index:2}
+.svc__shot:nth-child(2){width:44%;right:2%;top:0;transform:rotate(2.5deg);z-index:3}
+.svc__shot:nth-child(3){width:38%;left:12%;bottom:0;transform:rotate(4deg);z-index:4}
+.svc__shot:nth-child(4){width:34%;right:6%;bottom:6%;transform:rotate(-5deg);z-index:1}
+
+/* ---------- 8g. the gallery wall ---------- */
+.gallery{position:relative;isolation:isolate;overflow:clip;background:var(--brand-dark)}
+.gallery__grid{position:absolute;inset:0;display:grid;
+  grid-template-columns:repeat(4,1fr);gap:8px;padding:8px}
+.gallery__cell{overflow:hidden;border-radius:var(--radius-sm)}
+.gallery__cell img{width:100%;height:100%;object-fit:cover;display:block}
+/* Fixed rather than derived from the images: these are arbitrary uploads, and
+   a pale poster and a dark photograph both land here. This is what lets the
+   panel be white without anyone checking each one. */
+.gallery__scrim{position:absolute;inset:0;
+  background:radial-gradient(ellipse at center,rgba(9,9,11,.94) 0%,rgba(9,9,11,.86) 45%,rgba(9,9,11,.72) 100%)}
+.gallery__panel{position:relative;z-index:1;text-align:center;
+  padding-block:clamp(88px,14vw,180px);
+  display:flex;flex-direction:column;align-items:center;gap:.9rem}
+.gallery__lede{color:rgba(255,255,255,.8);font-size:1.0625rem;line-height:1.5;
+  letter-spacing:var(--track-lead);max-width:46ch}
+.gallery__panel .btn{margin-top:.6rem}
+
+/* ---------- 8h. the deck of quotes ---------- */
+.quotes__inner{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:clamp(32px,6vw,80px);align-items:center}
+.quotes__stage{position:relative;min-height:clamp(320px,40vw,440px);display:grid;place-items:center}
+.quotecard{position:absolute;width:min(100%,420px);border-radius:var(--radius);
+  overflow:hidden;background:var(--brand-dark);color:#fff;aspect-ratio:4/5;
+  box-shadow:0 24px 60px rgba(24,24,27,.22);
+  transition:transform .5s var(--ease-out-expo),opacity .5s var(--ease-out-expo)}
+.quotecard__media{position:absolute;inset:0}
+.quotecard__media img{width:100%;height:100%;object-fit:cover}
+.quotecard__body{position:absolute;inset:auto 0 0 0;padding:var(--card-pad);padding-top:4rem;
+  background:linear-gradient(0deg,rgba(0,0,0,.86) 0%,rgba(0,0,0,.55) 60%,transparent 100%)}
+.quotecard__quote{font-size:1.0625rem;line-height:1.45;letter-spacing:var(--track-lead);color:#fff}
+.quotecard__who{margin-top:.7rem;font-size:.8125rem;letter-spacing:var(--track-body);
+  color:rgba(255,255,255,.72)}
+/* Depth in the deck. The two behind are turned and pushed back so the stack
+   reads as "there are more of these" without printing a count. */
+.quotecard[data-depth="0"]{transform:none;opacity:1;z-index:3}
+.quotecard[data-depth="1"]{transform:translate(6%,3%) rotate(4deg) scale(.94);opacity:.55;z-index:2}
+.quotecard[data-depth="2"]{transform:translate(-6%,5%) rotate(-5deg) scale(.9);opacity:.32;z-index:1}
+/* 46px, not 42. Below 44 these fail the minimum touch target, and they are
+   the only way through the deck. */
+.quotes__arrow{position:absolute;top:50%;z-index:4;width:46px;height:46px;
+  border-radius:var(--radius-pill);display:grid;place-items:center;
+  background:var(--white);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line);
+  transform:translateY(-50%);transition:background .18s var(--ease)}
+.quotes__arrow:hover{background:var(--surface)}
+.quotes__arrow--prev{left:-14px}
+.quotes__arrow--next{right:-14px}
+.quotes__copy .section-title{margin-bottom:.75rem}
+
+/* ---------- 8i. the questions ---------- */
+.faq__list{display:flex;flex-direction:column}
+.faq__item{border-top:1px solid var(--line)}
+.faq__list > li:last-child .faq__item{border-bottom:1px solid var(--line)}
+.faq__q{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;
+  padding-block:clamp(18px,2.4vw,28px);cursor:pointer;list-style:none}
+/* Safari draws its own disclosure triangle and ignores `list-style` for it. */
+.faq__q::-webkit-details-marker{display:none}
+.faq__q-text{font-family:var(--font-display);font-weight:var(--hero-weight);
+  font-size:clamp(1.575rem,3.3vw,2.45rem);line-height:1.14;letter-spacing:-.007em;
+  color:var(--ink);transition:opacity .18s var(--ease)}
+.faq__q:hover .faq__q-text{opacity:.62}
+.faq__mark{flex:none;width:40px;height:40px;border-radius:var(--radius-pill);
+  display:grid;place-items:center;background:var(--brand-dark);color:#fff;
+  transition:transform .35s var(--ease-out-expo)}
+.faq__item[open] .faq__mark{transform:rotate(90deg)}
+/* `<details>` will not animate its own height, so the answer fades and lifts
+   instead. Trading the element away for a height transition would cost the
+   free keyboard, screen-reader and find-in-page behaviour it brings. */
+.faq__a{padding-bottom:clamp(18px,2.4vw,28px);max-width:60ch;
+  color:var(--muted);font-size:1.0625rem;line-height:1.55;letter-spacing:var(--track-lead);
+  animation:faq-in .4s var(--ease-out-expo) both}
+@keyframes faq-in{from{opacity:0;transform:translateY(-6px)}}
+
+/* ---------- 8j. the closing panel ---------- */
+.book{position:relative;isolation:isolate;overflow:clip;background:var(--brand-dark)}
+.book__media{position:absolute;inset:0;z-index:-1}
+.book__media img{width:100%;height:100%;object-fit:cover}
+/* Much heavier than it looks like it needs to be, and deliberately so: the
+   image behind this is whatever is first in the media pool, and the one that
+   landed there is a pale full-page screenshot. White display type over an
+   unknown image needs the scrim to carry the contrast on its own rather than
+   relying on the picture being dark. */
+.book__scrim{position:absolute;inset:0;
+  background:linear-gradient(0deg,rgba(9,9,11,.93) 0%,rgba(9,9,11,.82) 50%,rgba(9,9,11,.9) 100%)}
+.book__inner{text-align:center;padding-block:clamp(96px,15vw,190px);
+  display:flex;flex-direction:column;align-items:center;gap:.9rem}
+.book__title{font-family:var(--font-display);font-weight:var(--hero-weight);
+  font-size:clamp(2.65rem,6.1vw,4.55rem);line-height:1.02;letter-spacing:-.01em;color:#fff;
+  text-wrap:balance}
+.book__lede{color:rgba(255,255,255,.82);font-size:1.0625rem;line-height:1.5;
+  letter-spacing:var(--track-lead);max-width:48ch}
+.book__actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:.7rem}
+
+/* ---------- 8k. responsive ---------- */
+@media (max-width:860px){
+  /* Both two-column sections become one. The clusters lose their absolute
+     scatter with them — overlapping artwork in a 340px column is a pile, not
+     a composition. */
+  .svc__inner,.quotes__inner{grid-template-columns:1fr}
+  .svc[data-flip="true"] .svc__copy,.svc[data-flip="true"] .svc__cluster{order:0}
+  .svc__cluster{position:static;min-height:0;display:grid;
+    grid-template-columns:1fr 1fr;gap:12px;margin-top:1.75rem}
+  .svc__shot{position:static;width:auto !important;transform:none !important}
+  .quotes__stage{order:2;margin-top:1.5rem}
+  .quotes__arrow--prev{left:0}
+  .quotes__arrow--next{right:0}
+  .gallery__grid{grid-template-columns:repeat(3,1fr)}
+  .rail__head{align-items:flex-start;flex-direction:column;gap:1.25rem}
+}
+@media (max-width:640px){
+  .gallery__grid{grid-template-columns:repeat(2,1fr)}
+  .whero__title{max-width:none}
+  .book__actions{width:100%}
+  .book__actions .btn{flex:1;justify-content:center}
+}
+
+/* ---------- 8l. reduced motion ---------- */
+@media (prefers-reduced-motion:reduce){
+  /* The two marquees are the only things on this page that move on their own.
+     The blanket rule at the end of this file collapses their duration to a
+     millisecond, which for an infinite linear translate means it snaps to the
+     end and sits there — so they are stopped outright instead. */
+  .shotstrip__track,.ribbon__track{animation:none !important;transform:none !important}
+  .struck__text::after{transform:scaleX(1) !important}
+  .faq__a{animation:none !important}
+}
+
+/* =========================================================================
+   9. THE SUPPLIED DIRECTION
+   The kicker, the coloured full stop, and the sections built to the comps.
+
+   NOTE ON THE KICKER: the audit cut these back because an eyebrow over every
+   section is the saturated generated-design tell. The supplied designs use
+   them deliberately and consistently — a coral tracked label, sometimes with
+   a leading rule — so they are back, as ONE component with one definition
+   rather than eight ad-hoc copies. A device used the same way everywhere is a
+   system; the thing worth avoiding was eight slightly different ones.
+   ========================================================================= */
+.kicker{display:flex;align-items:center;gap:.85rem;
+  font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--accent-600)}
+.kicker--centre{justify-content:center;text-align:center}
+.kicker__rule{display:block;width:44px;height:1px;background:var(--accent-600);flex:none}
+/* The last full stop of a display heading. Set in code, never typed into the
+   CMS — an editor who forgets it loses the device silently. */
+.accent-stop{color:var(--accent)}
+
+/* ---------- 9a. what I do: four columns on hairlines ----------
+   Four bordered boxes each holding an icon and a heading is the most
+   generated-looking shape on the web. The same four divided by rules is a
+   table of contents, which is what this is. */
+.whatido{padding-block:clamp(48px,7vw,88px)}
+.whatido .kicker{margin-bottom:clamp(28px,3.5vw,44px)}
+/* Five now, not four. The columns are tighter than the comp's, so the copy
+   gets a shorter measure — hence the reduced padding: at five across, generous
+   side padding is what turns each cell into a two-word-per-line column. */
+.whatido__grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+.whatido__item{display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:0 clamp(10px,1.5vw,22px)}
+.whatido__item + .whatido__item{border-left:1px solid var(--line)}
+.whatido__icon{width:34px;height:34px;color:var(--accent);margin-bottom:1.1rem}
+.whatido__title{font-family:var(--font-body);font-weight:700;font-size:.9375rem;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--ink);
+  margin-bottom:.6rem;text-wrap:balance}
+.whatido__copy{font-size:.875rem;line-height:1.6;letter-spacing:var(--track-body);
+  color:var(--muted);text-wrap:pretty}
+
+/* ---------- 9b. tools: copy left, a ruled rack right ----------
+   Divided by hairlines rather than spaced apart, which is what makes fifteen
+   of them read as one rack instead of fifteen floating logos. The dividers are
+   borders on the cells, so they wrap with them instead of stranding. */
+.tools{padding-block:clamp(48px,7vw,88px);background:var(--surface-100)}
+.tools__inner{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);
+  gap:clamp(28px,5vw,72px);align-items:center}
+.tools__title{font-family:var(--font-display);font-weight:var(--hero-weight);
+  font-size:clamp(1.6rem,2.7vw,2.15rem);line-height:1.12;letter-spacing:-.008em;
+  color:var(--ink);margin-top:1rem;text-wrap:balance}
+.tools__lede{margin-top:.9rem;font-size:.9375rem;line-height:1.6;
+  letter-spacing:var(--track-body);color:var(--muted);max-width:34ch;text-wrap:pretty}
+
+.tools__rack{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+.tools__cell{display:flex;flex-direction:column;align-items:center;gap:.75rem;
+  padding:clamp(18px,2.4vw,28px) .5rem;text-align:center;
+  border-left:1px solid var(--line);border-bottom:1px solid var(--line)}
+.tools__cell:nth-child(5n+1){border-left:none}
+.tools__name{font-size:.8125rem;letter-spacing:var(--track-body);color:var(--muted);
+  line-height:1.35}
+/* Monochrome. Fifteen brand palettes in one row is a fruit salad, and this
+   page has exactly one accent colour. */
+.toolmark{width:38px;height:38px;display:grid;place-items:center;color:var(--ink)}
+.toolmark svg{width:100%;height:100%}
+.toolmark img{width:100%;height:100%;object-fit:contain}
+/* The fallback for brands with no openly licensed mark — initials in this
+   site's own face, which is unmistakably not a logo. */
+.toolmark--letters{font-family:var(--font-mono);font-size:.9375rem;letter-spacing:.06em;
+  color:var(--muted);border:1px solid var(--line);border-radius:50%}
+
+/* ---------- 9c. the rail head, chips and dots ---------- */
+.rail__head{align-items:flex-end}
+.rail__intro{max-width:44ch}
+.rail__intro .rail__title{margin-top:1rem}
+.rail__lede{margin-top:1rem;font-size:1rem;line-height:1.6;
+  letter-spacing:var(--track-body);color:rgba(255,255,255,.68);max-width:40ch}
+.rail__all{flex:none;white-space:nowrap}
+
+.railcard{aspect-ratio:4/5}
+.railcard__veil{position:absolute;inset:0;
+  background:linear-gradient(0deg,rgba(0,0,0,.72) 0%,rgba(0,0,0,.18) 52%,rgba(0,0,0,.35) 100%)}
+/* The one piece of metadata a visitor sorts by before clicking. */
+.railcard__chip{position:absolute;top:14px;left:14px;z-index:2;
+  font-family:var(--font-mono);font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;
+  color:#fff;background:rgba(0,0,0,.55);-webkit-backdrop-filter:blur(6px);
+  backdrop-filter:blur(6px);padding:.45em .8em;border-radius:var(--radius-sm)}
+.railcard__foot{position:absolute;inset:auto 0 0 0;z-index:2;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding:var(--card-pad)}
+.railcard__name{font-family:var(--font-body);font-weight:700;font-size:1rem;
+  letter-spacing:var(--track-body);color:#fff}
+.railcard__go{flex:none;width:30px;height:30px;border-radius:var(--radius-pill);
+  display:grid;place-items:center;color:#fff;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.34);
+  transition:background .2s var(--ease),transform .3s var(--ease-out-expo)}
+.railcard:hover .railcard__go{background:rgba(255,255,255,.16);transform:translateX(3px)}
+
+.rail__controls{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;
+  margin-top:clamp(24px,3vw,36px)}
+/* Buttons, not decoration. A row of dots that only reports position looks
+   pressable, so people press it. */
+.rail__dots{display:flex;gap:.5rem}
+.rail__dot{width:9px;height:9px;border-radius:50%;padding:0;
+  background:rgba(255,255,255,.28);transition:background .2s var(--ease),width .2s var(--ease)}
+.rail__dot[data-on="true"]{background:var(--accent);width:24px;border-radius:var(--radius-pill)}
+/* The hit area is 32px even though the mark is 9 — a 9px target is unusable
+   and inflating the dot itself would wreck the row. */
+.rail__dots li{display:grid;place-items:center;min-width:32px;min-height:32px}
+
+@media (max-width:1100px){
+  .whatido__grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:2.25rem 0}
+  .whatido__item:nth-child(3n+1){border-left:none}
+  .whatido__item:nth-child(n+4){padding-top:2.25rem;border-top:1px solid var(--line)}
+}
+@media (max-width:1000px){
+  .tools__rack{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .tools__cell:nth-child(5n+1){border-left:1px solid var(--line)}
+  .tools__cell:nth-child(3n+1){border-left:none}
+}
+@media (max-width:860px){
+  .tools__inner{grid-template-columns:1fr;gap:2rem}
+  .whatido__grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:2rem 0}
+  .whatido__item:nth-child(odd){border-left:none}
+  .whatido__item:nth-child(n+3){padding-top:2rem;border-top:1px solid var(--line)}
+  .rail__head{flex-direction:column;align-items:flex-start;gap:1.5rem}
+}
+@media (max-width:560px){
+  .tools__rack{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tools__cell:nth-child(3n+1){border-left:1px solid var(--line)}
+  .tools__cell:nth-child(2n+1){border-left:none}
+  .whatido__grid{grid-template-columns:1fr}
+  .whatido__item{border-left:none !important;padding-inline:0}
+  .whatido__item + .whatido__item{border-top:1px solid var(--line);padding-top:2rem}
+}
+
+/* ---------- 9d. the contact form (replaced the FAQ) ---------- */
+.contact{padding-block:clamp(52px,7.5vw,96px)}
+.contact__inner{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);
+  gap:clamp(32px,6vw,80px);align-items:start}
+.contact__title{margin-top:1.1rem;font-family:var(--font-display);
+  font-weight:var(--hero-weight);font-size:clamp(1.9rem,3.6vw,2.9rem);line-height:1.06;
+  letter-spacing:-.01em;color:var(--ink);max-width:14ch;text-wrap:balance}
+.contact__lede{margin-top:1.1rem;max-width:42ch;font-size:1.0625rem;line-height:1.62;
+  letter-spacing:var(--track-lead);color:var(--muted);text-wrap:pretty}
+
+.contact__form{display:flex;flex-direction:column;gap:1.1rem}
+.field__err{font-size:.8125rem;letter-spacing:var(--track-body);color:var(--accent-600)}
+/* The invalid state is a colour AND the message beside it. Colour alone is not
+   a signal anyone who cannot distinguish it can act on. */
+.field input[aria-invalid="true"],.field textarea[aria-invalid="true"]{
+  border-color:var(--accent-600);background:#fff}
+/* The honeypot. Positioned away rather than `display:none`, which some bots
+   skip — and skipping it defeats the trap. `aria-hidden` plus tabindex -1
+   keeps it away from anyone real. */
+.field--trap{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+.contact__foot{display:flex;flex-wrap:wrap;align-items:center;gap:1rem;margin-top:.4rem}
+.contact__status{font-size:.9375rem;letter-spacing:var(--track-body);color:var(--muted)}
+.contact__status[data-state="ok"]{color:var(--ink)}
+.contact__status[data-state="bad"]{color:var(--accent-600)}
+.contact__form button[disabled]{opacity:.6;cursor:progress}
+
+@media (max-width:860px){
+  .contact__inner{grid-template-columns:1fr;gap:2.25rem}
+  .contact__title,.contact__lede{max-width:none}
+}
+
+/* ---------- 9e. the designs index ---------- */
+.designs__title{margin-top:1rem;font-family:var(--font-display);
+  font-weight:var(--hero-weight);font-size:clamp(2.1rem,4.4vw,3.4rem);line-height:1.05;
+  letter-spacing:-.01em;color:var(--ink);max-width:16ch;text-wrap:balance}
+.designs__lede{margin-top:1rem;font-size:1.0625rem;line-height:1.6;
+  letter-spacing:var(--track-lead);color:var(--muted)}
+.designs__group{padding-top:0}
+.designs__heading{font-family:var(--font-display);font-weight:var(--hero-weight);
+  font-size:clamp(1.3rem,2.2vw,1.75rem);line-height:1.2;letter-spacing:-.006em;
+  color:var(--ink);padding-bottom:.9rem;margin-bottom:clamp(20px,2.6vw,32px);
+  border-bottom:1px solid var(--line)}
+/* auto-fit, so the count of pieces in a group never has to be known here */
+.designs__grid{display:grid;gap:clamp(14px,2vw,22px);
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+/* No border, no chip, no hover arrow: these have no page to go to, and a card
+   that looks clickable and is not is a broken promise. */
+.designtile{display:flex;flex-direction:column;gap:.7rem}
+.designtile img{width:100%;height:auto;display:block;border-radius:var(--radius);
+  background:var(--surface)}
+.designtile figcaption{font-size:.875rem;letter-spacing:var(--track-body);color:var(--muted)}

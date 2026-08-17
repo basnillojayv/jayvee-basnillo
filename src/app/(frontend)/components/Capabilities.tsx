@@ -16,11 +16,9 @@ export function Capabilities({ data }: { data: Homepage }) {
   return (
     <section className="section capabilities" id="capabilities">
       <div className="wrap">
-        {data.capabilitiesEyebrow && <p className="eyebrow">{data.capabilitiesEyebrow}</p>}
-
         <ul className="capabilities__groups">
           {groups.map((g, i) => (
-            <li key={g.id ?? i} className="card capabilities__group reveal">
+            <li key={g.id ?? i} className="capabilities__group reveal">
               <h3 className="t-h3 capabilities__title">{g.title}</h3>
               <ul className="capabilities__tags">
                 {(g.tags ?? []).map((t, j) => (

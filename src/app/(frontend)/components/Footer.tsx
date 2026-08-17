@@ -1,102 +1,120 @@
 import Link from 'next/link'
 import type { Homepage } from '@/payload-types'
 import { site } from '@/site.config'
+import { LogoMark } from './LogoMark'
 
 /**
- * A WHITE CARD SITTING ON THE DARK BAND ABOVE IT.
+ * THREE COLUMNS ON CARBON, AND THE LAST ONE IS AN ASK.
  *
- * The footer is not a strip at the bottom of the page — it is a panel laid
- * over the closing dark section, inset from the window edges with a large
- * radius on its top corners. That overlap is the whole effect, and it is why
- * this pulls itself upward with a negative margin rather than the section
- * above pushing it.
+ * The footer used to be a white card of link columns — a site map with a
+ * button in it. This one ends the page the way the page has been arguing:
+ * the mark and who he is, the routes, and then a direct invitation with its
+ * own heading, which is the last thing anyone reads.
  *
- * Left: the mark, an invitation, and the one action. Right: columns of links
- * under grey headings.
+ * WHY THE GLOW IS A GRADIENT AND NOT AN IMAGE
+ * A photograph here would be a fourth thing competing with the ask. A warm
+ * wash bled in from the corner picks up the accent without adding a subject,
+ * and it costs no request.
  *
- * What the reference has here that this does not: a newsletter signup, an app
- * badge and a QR code. Building an email capture for a list that does not
- * exist would be furniture pretending to be a product, so the left column
- * carries a direct invitation and a mailto instead.
+ * The social buttons are 44px because they are the smallest targets on the
+ * page and sit closest to its edge — the two conditions under which an
+ * undersized target actually gets missed.
  */
 export function Footer({ data }: { data: Homepage }) {
   const year = new Date().getFullYear()
   const email = data.email
   const linkedin = data.contactLinkedin
 
-  const columns = [
-    {
-      heading: 'Work',
-      links: [
-        { label: 'All projects', href: '/projects' },
-        { label: 'Case studies', href: '/case-studies' },
-        { label: 'Design showcase', href: '/#showcase' },
-      ],
-    },
-    {
-      heading: 'About',
-      links: [
-        { label: 'How I work', href: '/#how' },
-        { label: 'Skills and tools', href: '/#capabilities' },
-      ],
-    },
-    {
-      heading: 'Connect',
-      links: [
-        ...(email ? [{ label: 'Email', href: `mailto:${email}` }] : []),
-        ...(linkedin ? [{ label: 'LinkedIn', href: linkedin }] : []),
-      ],
-    },
+  const links = [
+    { label: 'Projects', href: '/projects' },
+    { label: 'Designs', href: '/designs' },
+    { label: 'About', href: '/projects#about' },
+    { label: 'Tools', href: '/projects#tools' },
   ]
 
   return (
     <footer className="site-footer" id="footer">
-      <div className="footer__card">
-        <div className="footer__grid">
-          <div className="footer__lead">
-            <p className="footer__mark">{site.name}</p>
-            <p className="footer__invite">
-              <strong>Starting something?</strong> Tell me what the site has to do and who it has
-              to convince, and I will tell you what it would take.
-            </p>
+      <div className="footer__glow" aria-hidden="true" />
+
+      <div className="wrap footer__grid">
+        <div className="footer__brand">
+          <LogoMark className="logo-mark footer__logo" />
+          <p className="footer__blurb">
+            I help businesses and organisations bring their ideas to life through thoughtful
+            design and clean, functional websites.
+          </p>
+          <div className="footer__social">
+            {linkedin && (
+              <a
+                className="footer__icon"
+                href={linkedin}
+                rel="noreferrer noopener"
+                aria-label="LinkedIn"
+              >
+                <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true">
+                  <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.4c0-1.29-.02-2.95-1.8-2.95-1.8 0-2.07 1.4-2.07 2.85V21H9z" />
+                </svg>
+              </a>
+            )}
             {email && (
-              <a className="btn btn--dark" href={`mailto:${email}`}>
-                {data.contactCtaLabel || 'Get in touch'}
-                <span className="arr" aria-hidden="true">
-                  →
-                </span>
+              <a className="footer__icon" href={`mailto:${email}`} aria-label="Email">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="17"
+                  height="17"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.7"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="3" y="5" width="18" height="14" rx="2" />
+                  <path d="m3.5 6.5 8.5 6 8.5-6" />
+                </svg>
               </a>
             )}
           </div>
+        </div>
 
-          <nav className="footer__cols" aria-label="Footer">
-            {columns.map((col) => (
-              <div key={col.heading} className="footer__col">
-                <p className="footer__col-head">{col.heading}</p>
-                <ul>
-                  {col.links.map((l) => (
-                    <li key={l.href}>
-                      {l.href.startsWith('http') || l.href.startsWith('mailto:') ? (
-                        <a href={l.href} rel="noreferrer noopener">
-                          {l.label}
-                        </a>
-                      ) : (
-                        <Link href={l.href}>{l.label}</Link>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+        <nav className="footer__nav" aria-label="Footer">
+          <p className="kicker">Quick links</p>
+          <ul>
+            {links.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href}>{l.label}</Link>
+              </li>
             ))}
-          </nav>
-        </div>
+          </ul>
+        </nav>
 
-        <div className="footer__base">
-          <p className="t-mono--sm">
-            © {year} {site.name}
+        <div className="footer__ask">
+          <p className="kicker">Let&rsquo;s work together</p>
+          <h2 className="footer__ask-title">
+            {data.contactHeadlineLead || 'Have a project'}
+            <br />
+            {data.contactHeadlineAccent || 'in mind?'}
+          </h2>
+          <p className="footer__ask-copy">
+            Tell me what it has to do and who it has to convince, and I will tell you what it
+            would take.
           </p>
-          <p className="t-mono--sm">Built with Next.js and Payload</p>
+          {email && (
+            <a className="btn btn--white" href={`mailto:${email}`}>
+              {data.contactCtaLabel || 'Get in touch'}
+              <span className="arr" aria-hidden="true">
+                →
+              </span>
+            </a>
+          )}
         </div>
+      </div>
+
+      <div className="wrap footer__base">
+        <p>
+          © {year} {site.name}. All rights reserved.
+        </p>
+        <p>Built with intent, not templates.</p>
       </div>
     </footer>
   )

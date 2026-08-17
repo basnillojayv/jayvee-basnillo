@@ -2077,3 +2077,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
    same at tile size. */
 .designs__grid > .reveal{filter:none;transform:translateY(18px)}
 .designs__grid > .reveal.is-in{transform:none}
+
+/* The projects grid is the layer that travels over the pinned headline, so it
+   has to be opaque — a transparent section would let the h1 read straight
+   through the cards. It also drops the head's top padding, since the headline
+   above it is already holding a full viewport. */
+.pgrid-section{padding-top:0;background:var(--white)}

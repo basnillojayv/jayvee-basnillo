@@ -7,6 +7,7 @@ import { Footer } from '../components/Footer'
 import { ProjectCard } from '../components/ProjectCard'
 import { RevealObserver } from '../components/Reveal'
 import { ViewProjectCursor } from '../components/ViewProjectCursor'
+import { site } from '@/site.config'
 
 export const dynamic = 'force-static'
 export const metadata: Metadata = {
@@ -43,28 +44,43 @@ export default async function ProjectsIndex() {
       <Header contactHref={mailto} />
 
       <main id="main">
-        <section className="section page-head">
-          <div className="wrap">
-            <p className="kicker reveal">
-              <span className="kicker__rule" aria-hidden="true" />
-              Selected projects
-            </p>
-            <h1 className="designs__title reveal">Websites built to be taken seriously.</h1>
-            <p className="designs__lede reveal">
-              {projects.totalDocs} sites designed and built for businesses, nonprofits and
-              organisations.
-            </p>
-          </div>
-        </section>
+        {/* THE TITLE HOLDS WHILE THE WORK COVERS IT.
+            Both sections pin at top:0; the grid carries the higher z-index, so
+            it travels up over the standing headline instead of pushing it off.
 
-        <section className="section" style={{ paddingTop: 0 }}>
-          <div className="wrap pgrid">
-            {projects.docs.map((p, i) => (
-              <ProjectCard key={p.id} project={p} priority={i < 4} />
-            ))}
-          </div>
-        </section>
+            This works because sticky is bounded by its container. The head has
+            the whole wrapper to stay pinned across, so it holds. The grid's
+            bottom IS the wrapper's bottom, leaving it no room to stick, so it
+            scrolls normally — which is what makes it read as the moving layer
+            rather than a second frozen one.
 
+            Scoped to this page. It suits an index whose headline is a standing
+            claim; it does not suit the services page, where the sections are
+            argument to be read in sequence. Off below 769px and under
+            prefers-reduced-motion. */}
+        <div className={site.motion.sectionStacking ? 'stack-sections' : undefined}>
+          <section className="section page-head">
+            <div className="wrap">
+              <p className="kicker reveal">
+                <span className="kicker__rule" aria-hidden="true" />
+                Selected projects
+              </p>
+              <h1 className="designs__title reveal">Websites built to be taken seriously.</h1>
+              <p className="designs__lede reveal">
+                {projects.totalDocs} sites designed and built for businesses, nonprofits and
+                organisations.
+              </p>
+            </div>
+          </section>
+
+          <section className="section pgrid-section">
+            <div className="wrap pgrid">
+              {projects.docs.map((p, i) => (
+                <ProjectCard key={p.id} project={p} priority={i < 4} />
+              ))}
+            </div>
+          </section>
+        </div>
       </main>
 
       <Footer data={home} />

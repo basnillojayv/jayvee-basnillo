@@ -17,7 +17,6 @@ import { PointerFX } from '../components/PointerFX'
 import { SmoothScroll } from '../components/SmoothScroll'
 import { RefreshRouteOnSave } from '../components/RefreshRouteOnSave'
 import { mediaUrl } from '../components/util'
-import { site } from '@/site.config'
 
 export const dynamic = 'force-static'
 export const metadata: Metadata = {
@@ -98,32 +97,15 @@ export default async function WorkPageRoute() {
       <Header contactHref={mailto} />
 
       <main id="main">
-        {/* THE OPENING SEQUENCE PINS AND COVERS ITSELF.
-            Each section sticks at top:0 with a rising z-index, so the next one
-            slides up over the last instead of pushing it away. The CSS for this
-            has existed since the rebuild and the config switch was already set
-            to true — nothing ever applied the class, so it rendered as an
-            ordinary scrolling page.
-
-            Only the opening five stack. The rail, tools and testimonials below
-            are for reading and comparing, and pinning a section you want to
-            scan is a fight with the reader rather than an effect. Disabled
-            under 769px and under prefers-reduced-motion, both in the CSS.
-
-            ShotStrip and Ribbons are <div>s, so they do not pin — they travel
-            up over the pinned section beneath them, which is what makes the
-            covering read as depth rather than as a slideshow. */}
-        <div className={site.motion.sectionStacking ? 'stack-sections' : undefined}>
-          <WorkHero data={work} ctaHref={mailto} />
-          <ShotStrip shots={explorationArt.slice(0, 10)} />
-          {/* Reads from the `homepage` global, not `work-page`: this copy was
-              already written and has been rendering nowhere since the homepage
-              was cut to one screen. Duplicating it into a second global would
-              give him two places to keep the same paragraphs current. */}
-          <DesignerBand data={home} work={work} />
-          <Ribbons data={work} />
-          <WhatIDo data={work} />
-        </div>
+        <WorkHero data={work} ctaHref={mailto} />
+        <ShotStrip shots={explorationArt.slice(0, 10)} />
+        {/* Reads from the `homepage` global, not `work-page`: this copy was
+            already written and has been rendering nowhere since the homepage
+            was cut to one screen. Duplicating it into a second global would
+            give him two places to keep the same paragraphs current. */}
+        <DesignerBand data={home} work={work} />
+        <Ribbons data={work} />
+        <WhatIDo data={work} />
         <ProjectRail
           eyebrow={work.projectsEyebrow}
           title={work.projectsTitle}

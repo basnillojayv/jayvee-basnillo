@@ -36,13 +36,27 @@ const db = isPostgres
   : sqliteAdapter({ client: { url: DATABASE_URI } })
 
 /**
- * Uploads go to Vercel Blob when a token is present, because serverless
- * filesystems are ephemeral. Without one, Payload writes to local disk — fine
- * for development, never for production.
+ * Uploads go to Vercel Blob, because serverless filesystems are ephemeral.
+ * Locally they stay on disk, which is what makes a fresh clone work with no
+ * external setup.
+ *
+ * THE GATE IS THE DATABASE, NOT THE TOKEN, AND THAT DISTINCTION IS A BUG FIX.
+ * This used to switch on whenever `BLOB_READ_WRITE_TOKEN` existed. Then
+ * `vercel env pull` wrote that token into `.env.local` — which Next loads
+ * automatically — and every image on the local site broke: the plugin started
+ * resolving uploads from Blob while the local SQLite rows still said
+ * `/api/media/file/…` on disk. 404 on every photo, 500 from next/image, and
+ * nothing in the code had changed.
+ *
+ * Where the media rows live and where the files live have to agree. Tying the
+ * storage adapter to the database adapter makes that structural: SQLite rows
+ * point at disk, Postgres rows point at Blob, and pulling production
+ * credentials can no longer reach across and break development.
  */
-const storagePlugins = BLOB_TOKEN
-  ? [vercelBlobStorage({ enabled: true, collections: { media: true }, token: BLOB_TOKEN })]
-  : []
+const storagePlugins =
+  isPostgres && BLOB_TOKEN
+    ? [vercelBlobStorage({ enabled: true, collections: { media: true }, token: BLOB_TOKEN })]
+    : []
 
 // No credentials are ever hardcoded. If both are supplied via the environment a
 // first admin is auto-created (handy for CI); otherwise Payload's normal

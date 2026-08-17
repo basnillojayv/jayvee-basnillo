@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter_Tight, JetBrains_Mono } from 'next/font/google'
+import { Josefin_Sans } from 'next/font/google'
 import { site } from '@/site.config'
 import './globals.css'
 /* Its own stylesheet rather than a block pasted into globals.css, so updating
@@ -9,33 +9,47 @@ import './editor.css'
 import { EditorMount } from './components/EditorMount'
 
 /**
- * TWO FAMILIES ONLY. globals.css reads --font-sans and --font-mono-face, so
- * re-typing the site is these two imports and nothing else.
+ * ONE FAMILY. Josefin Sans carries the whole site.
  *
- * WHY INTER TIGHT
- * The design this is built on uses NB International Pro, which is commercial.
- * Inter Tight is the first fallback that system itself names, and it is the
- * right substitution for a reason beyond availability: what carries the look
- * is the tracking — negative and scaling with size — and Inter Tight is drawn
- * tight enough to take it without the counters closing up.
+ * This replaces the Inter Tight / JetBrains Mono pairing the template shipped
+ * with, and the swap is not neutral — it is worth writing down what moved:
  *
- * Weights stop at 700. There is no 800 or 900 here on purpose: display type
- * in this system is set at 400, and having the heavy weights available is how
- * that slips.
+ * · TRACKING. Inter Tight was chosen because it is drawn tight enough to take
+ *   the aggressive negative tracking this system applies at display sizes.
+ *   Josefin Sans is geometric and already narrow-set; the same negative values
+ *   close its counters and turn the display lines into a smear. The tracking
+ *   scale in globals.css was eased off to suit it.
+ * · X-HEIGHT. Josefin's is markedly small with long ascenders, so it reads
+ *   smaller than its point size suggests. Body copy is set at the same value
+ *   as before and simply looks quieter.
+ * · THE MONO ROLE IS GONE. `--font-mono-face` now points at Josefin too, so
+ *   the eyebrows, stat labels and the intro's name line are no longer
+ *   monospaced. That was a deliberate texture in the original design and this
+ *   removes it — restoring it is re-adding the JetBrains import and pointing
+ *   the variable back at it, nothing more.
+ *
+ * Weights stop at 700, which is both the system's existing rule and the top of
+ * Josefin Sans's range.
  */
-const sans = Inter_Tight({
+const sans = Josefin_Sans({
   subsets: ['latin'],
-  // Two weights, which is what the design files specify: 400 for everything
-  // set large, 700 for small labels and button text. The middle weights are
-  // absent so they cannot be reached for.
   weight: ['400', '700'],
   style: ['normal', 'italic'],
   variable: '--font-sans',
   display: 'swap',
 })
 
-/** The 11–13px details: labels, meta, eyebrows. */
-const mono = JetBrains_Mono({
+/**
+ * The same family again, bound to the *second* variable.
+ *
+ * Not `const mono = sans` — that alias publishes `--font-sans` twice and
+ * leaves `--font-mono-face` undefined, at which point every `var(--font-mono)`
+ * in the stylesheet silently falls through to `ui-monospace` and the labels
+ * render in the system's monospace instead of Josefin. Declaring it separately
+ * is what actually points the token at this family, and next/font serves the
+ * same files for both.
+ */
+const mono = Josefin_Sans({
   subsets: ['latin'],
   weight: ['400'],
   variable: '--font-mono-face',

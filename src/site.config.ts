@@ -32,8 +32,8 @@ export const site = {
   /** Browser UI colour — keep in sync with --brand-dark in globals.css. */
   themeColor: '#18181B',
 
-  /** Favicon / app icon. */
-  icon: '/media/logo.png',
+  /** Favicon / app icon — the same mark the header carries, as SVG. */
+  icon: '/media/logo-mark.svg',
 
   /**
    * Primary navigation: in-page anchors matching the section `id`s in
@@ -41,14 +41,19 @@ export const site = {
    * work from a project or case-study page as well as from the homepage.
    */
   nav: [
-    { label: 'Work', href: '/#work' },
+    { label: 'Work', href: '/projects' },
     { label: 'Case studies', href: '/case-studies' },
-    { label: 'About', href: '/#about' },
-    { label: 'Skills', href: '/#capabilities' },
   ],
 
-  /** The persistent button in the header pill and mobile drawer. */
-  headerCta: { label: 'Get in touch', href: '#footer' },
+  /**
+   * The persistent button in the header pill and mobile drawer.
+   *
+   * `#footer` was right when the homepage ended in one. It does not any more —
+   * the homepage is the header and the hero — so the page passes the contact
+   * address down from Payload instead, and this is only the fallback for a
+   * page that does not (and for a database with no address in it yet).
+   */
+  headerCta: { label: 'Get in touch', href: '/case-studies' },
 
   hero: {
     /**

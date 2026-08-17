@@ -1,90 +1,134 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import type { Homepage } from '@/payload-types'
 import { mediaUrl } from './util'
+import { MorphLine } from './MorphLine'
 
 /**
- * FULL-BLEED DARK, CONTENT LEFT, STATS ALONG THE FOOT.
+ * THE WHOLE HOMEPAGE, NOW. Header and this.
  *
- * The composition is specific and I had it wrong twice: content sits in the
- * lower-left of the frame, not centred, and the section closes with a row of
- * three claims separated by vertical rules — the last thing in the viewport
- * before the page turns white.
+ * Three layers stacked in one frame, and the order of them is the composition:
  *
- * Two actions, not one: a filled white primary and a translucent secondary
- * that borrows the image behind it. The secondary is not an outline — the
- * design rules forbid ghost variants of the primary action, and a washed
- * translucent fill is what sits there instead.
+ *   1. two display lines, one solid and one outlined, each set to the full
+ *      width of the column
+ *   2. the cut-out portrait, over the type, breaking both lines
+ *   3. the copy and the actions, over the portrait
  *
- * The bottom corners are rounded, so the dark block reads as a panel laid on
- * the page rather than as the page's own background.
+ * The portrait is what makes it work, and it only works because the asset has
+ * a real alpha channel — the head crosses the first line and the shoulders
+ * cross the second. A rectangular photograph in that slot is a photograph
+ * sitting on top of some words, which is a different and much worse picture.
+ *
+ * WHY THE SECOND LINE IS OUTLINED
+ * It is doing two jobs. It carries the second half of the sentence, and it
+ * gives the portrait something to be legible against — solid type behind a
+ * dark jacket would swallow the shoulders. Outlined, the shoulders read and
+ * the line still reads.
+ *
+ * WHY THE LINES ARE MEASURED RATHER THAN CLAMPED
+ * See FitLine. Both lines meeting the margins is the effect; a viewport-based
+ * clamp cannot promise that once the words are editable.
+ *
+ * WHAT THE CMS FIELDS MEAN NOW
+ * The old dark hero used `heroWatermark*` for the oversized words *behind* the
+ * content. Here those same two fields are the content — they are the display
+ * lines. Nothing was renamed, because renaming a field name is a migration and
+ * these two already meant "the big words".
  */
 export function Hero({ data }: { data: Homepage }) {
-  const portrait = mediaUrl(data.heroPortrait, '/media/placeholder-hero.jpg')
-  const stats = data.statsItems ?? []
+  const portrait = mediaUrl(data.heroPortrait, '/media/placeholder-portrait.jpg')
+  const stats = (data.statsItems ?? []).slice(0, 4)
+  // The old hero pointed its second action at #footer. The homepage has no
+  // footer any more, so it goes where the footer was going to send them.
+  const mailto = data.email ? `mailto:${data.email}` : '/case-studies'
 
   return (
     <section className="hero" id="top">
-      <div className="hero__media" aria-hidden="true">
-        <Image
-          src={portrait}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          data-edit-key="homepage.heroPortrait"
-        />
-        <div className="hero__scrim" />
-      </div>
+      <div className="hero__inner wrap">
+        {/* The greeting. Each CMS value is a whole text node — the inline
+            editor matches on text nodes, so interpolating the name into the
+            sentence is what keeps both halves of it click-to-edit. The nested
+            spans are a casing trick: the stored values are upper case, and
+            `capitalize` alone will not pull "JAYVEE" back down. */}
+        <p className="hero__greet">
+          <span className="hero__wave" aria-hidden="true">
+            👋
+          </span>
+          , my name is{' '}
+          <span className="hero__name">
+            <span className="hero__name-inner">{data.heroNameFirst}</span>
+          </span>{' '}
+          <span className="hero__name">
+            <span className="hero__name-inner">{data.heroNameLast}</span>
+          </span>{' '}
+          and I&rsquo;m a
+        </p>
 
-      <div className="wrap hero__inner">
-        <div className="hero__copy">
-          <p className="hero__eyebrow reveal">
-            <span className="hero__check" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="11" height="11">
-                <path
-                  d="M4 12.5l5 5L20 6.5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
-            Available for freelance and contract work
-          </p>
+        {/* One heading, two lines. The h1 holds both because they are one
+            sentence — splitting them into an h1 and a div would read as a
+            heading followed by a stray phrase to anything not looking at it. */}
+        {/* Each line reveals the OTHER one under the pointer. That is a content
+            decision as much as a visual one: the two lines are two halves of
+            what he does, so trading them is the line answering "and what
+            else?" — and it needs no new CMS field, which means no migration
+            and nothing extra for him to keep filled in. Pass a literal here
+            instead if you want a fixed second word. */}
+        <h1 className="hero__display">
+          <span className="hero__line" data-parallax>
+            <MorphLine
+              text={data.heroWatermarkLeft ?? ''}
+              hoverText={data.heroWatermarkRight ?? ''}
+            />
+          </span>
+          <span className="hero__line hero__line--outline" data-parallax>
+            <MorphLine
+              text={data.heroWatermarkRight ?? ''}
+              hoverText={data.heroWatermarkLeft ?? ''}
+            />
+          </span>
+        </h1>
 
-          <h1 className="hero__headline reveal">
-            {data.heroNameFirst}
-            <br />
-            {data.heroNameLast}
-          </h1>
+        {/* Over the type, under the copy. */}
+        <div className="hero__portrait" data-parallax>
+          <Image
+            src={portrait}
+            alt=""
+            width={900}
+            height={900}
+            priority
+            sizes="(max-width: 900px) 92vw, 620px"
+            data-edit-key="homepage.heroPortrait"
+          />
+        </div>
 
-          <p className="hero__subhead reveal">{data.heroTagline}</p>
+        <div className="hero__foot">
+          <p className="hero__tagline">{data.heroTagline}</p>
 
-          <div className="hero__actions reveal">
-            <a className="btn btn--white btn--lg" href="#work">
-              See the work
-            </a>
-            <a className="btn btn--wash btn--lg" href="#how">
-              How I work
-            </a>
-          </div>
+          {stats.length > 0 && (
+            <ul className="hero__stats">
+              {stats.map((s, i) => (
+                <li key={s.id ?? i}>
+                  <span className="hero__stat-value">{s.value}</span>
+                  <span className="hero__stat-label">{s.label}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        {/* Two actions, and they are the reference's two: not a primary and a
+            secondary, but a fork. Both are the same weight because the visitor
+            is being asked which of two things they came for, and answering
+            that with a loud button and a quiet one puts a thumb on the scale. */}
+        <div className="hero__actions">
+          <Link className="btn btn--dark btn--lg" href="/projects" data-magnetic>
+            See the work
+          </Link>
+          <a className="btn btn--outline btn--lg" href={mailto} data-magnetic>
+            Start a project
+          </a>
         </div>
       </div>
-
-      {stats.length > 0 && (
-        <div className="wrap hero__facts">
-          <ul>
-            {stats.map((s, i) => (
-              <li key={s.id ?? i}>
-                <span className="hero__fact-label">{s.label}</span>
-                <span className="hero__fact-value">{s.value}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
     </section>
   )
 }

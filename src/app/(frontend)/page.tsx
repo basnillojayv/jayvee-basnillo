@@ -3,79 +3,49 @@ import config from '@payload-config'
 
 import { Header } from './components/Header'
 import { Hero } from './components/Hero'
-import { HowItWorks } from './components/HowItWorks'
-import { FeatureList } from './components/FeatureList'
-import { WorkShowcase } from './components/WorkShowcase'
-import { WorkCarousel } from './components/WorkCarousel'
-import { toCarouselItem } from './components/carouselItem'
-import { CtaBand } from './components/CtaBand'
-import { ReadMoreList } from './components/ReadMoreList'
-import { Capabilities } from './components/Capabilities'
-import { Showcase } from './components/Showcase'
-import { Footer } from './components/Footer'
-import { RevealObserver } from './components/Reveal'
-import { SmoothScroll } from './components/SmoothScroll'
+import { Intro } from './components/Intro'
+import { PointerFX } from './components/PointerFX'
 import { RefreshRouteOnSave } from './components/RefreshRouteOnSave'
 
 /**
- * THE PAGE IS ITS TABLE OF CONTENTS.
+ * THE HOMEPAGE IS ONE SCREEN.
  *
- * Composed on the reference's order rather than the old portfolio's: a
- * full-bleed dark hero the headline sits inside, then the offer as a card and
- * a checked list, then the work as a thumbnail strip you look through in
- * place, then the long pieces as bare headings with a ghost link.
+ * It was eleven sections. It is now the header and the hero, and everything
+ * that was here — how it works, the feature list, the work strip, the case
+ * study rail, capabilities, the showcase, the CTA band, the footer — is moving
+ * to pages of its own.
  *
- * The surface rhythm is white → fog → white, with carbon at both ends — the
- * hero and the footer. Three surfaces, and the dark one bookends rather than
- * interrupts.
+ * Nothing was deleted to do that. Every one of those components is still in
+ * ./components, still typed against the same globals, and still renders from
+ * the same Payload data; they are simply not composed here. Rebuilding any of
+ * them into `/about` or `/services` is an import, not a rewrite.
+ *
+ * WHAT THAT CHANGES ABOUT THE DATA
+ * Only the hero's fields are read now, so the four collection queries this
+ * page used to fan out are gone with the sections that consumed them. The page
+ * is still `force-static`; it just has far less to build.
  */
 export const dynamic = 'force-static'
 
 export default async function HomePage() {
   const payload = await getPayload({ config })
-
-  const [data, projects, caseStudies, explorations] = await Promise.all([
-    payload.findGlobal({ slug: 'homepage', depth: 1 }),
-    payload.find({ collection: 'projects', sort: 'order', limit: 8, depth: 1 }),
-    payload.find({ collection: 'case-studies', sort: 'order', limit: 6, depth: 1 }),
-    payload.find({ collection: 'explorations', sort: 'order', limit: 12, depth: 1 }),
-  ])
+  const data = await payload.findGlobal({ slug: 'homepage', depth: 1 })
 
   return (
     <>
-      <SmoothScroll />
-      <RevealObserver />
+      {/* Server-rendered and CSS-driven, so it covers the first paint rather
+          than arriving after it. See Intro. */}
+      <Intro />
+      {/* Cursor, magnetics and pointer parallax — one frame loop, and it
+          declines to run on touch or under reduced-motion. */}
+      <PointerFX />
       <RefreshRouteOnSave />
 
-      <Header />
+      <Header contactHref={data.email ? `mailto:${data.email}` : undefined} />
 
       <main id="main">
         <Hero data={data} />
-        <HowItWorks data={data} />
-        <FeatureList data={data} />
-        <WorkShowcase data={data} items={projects.docs} />
-
-        {/* The scroll rail carries the long pieces, where each card has a
-            standfirst worth reading. Projects stay in the strip above — a
-            one-line category does not fill a card this size. */}
-        <WorkCarousel
-          eyebrow={data.caseStudiesEyebrow}
-          title={data.caseStudiesTitle || 'The work, and the thinking behind it'}
-          lede={data.statsStatement}
-          items={caseStudies.docs.map((c) => toCarouselItem(c, 'caseStudies'))}
-        />
-
-        <ReadMoreList
-          eyebrow="More"
-          title="Everything else"
-          items={caseStudies.docs}
-        />
-        <Capabilities data={data} />
-        <Showcase data={data} items={explorations.docs} />
       </main>
-
-      <CtaBand data={data} />
-      <Footer data={data} />
     </>
   )
 }

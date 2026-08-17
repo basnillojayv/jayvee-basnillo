@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { site } from '@/site.config'
+import { LogoLockup } from './LogoLockup'
 
 /**
  * TWO STATES, AND THE TRANSITION BETWEEN THEM IS THE POINT.
@@ -20,9 +21,12 @@ import { site } from '@/site.config'
  * mean nothing happens on a short viewport, and the transform is the first
  * thing the page does.
  */
-export function Header() {
+export function Header({ contactHref }: { contactHref?: string } = {}) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  // The homepage hands down the address from Payload; every other page falls
+  // back to the config. Neither points at `#footer` any more — see site.config.
+  const cta = contactHref || site.headerCta.href
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -58,15 +62,19 @@ export function Header() {
             ))}
           </nav>
 
+          {/* The full lockup, mark over wordmark. Inlined rather than an <img>
+              so `currentColor` carries it through the bar → capsule inversion
+              on the same transition as everything else in here. The link keeps
+              the accessible name, so the artwork itself stays decorative. */}
           <Link className="brand" href="/" aria-label={`${site.name} — home`}>
-            <span className="brand-mark">{site.shortName}</span>
+            <LogoLockup className="logo-lockup brand-mark" />
           </Link>
 
           <div className="header-actions">
-            <a className="header-login" href="#footer">
+            <a className="header-login" href={cta}>
               Contact
             </a>
-            <a className="btn btn--invert" href={site.headerCta.href}>
+            <a className="btn btn--invert" href={cta}>
               {site.headerCta.label}
             </a>
             {/* The nine-dot mark from the reference: a square button that opens
@@ -97,7 +105,7 @@ export function Header() {
           ))}
         </nav>
         <div className="mobile-menu__cta">
-          <a className="btn btn--accent btn--block" href={site.headerCta.href} onClick={close}>
+          <a className="btn btn--accent btn--block" href={cta} onClick={close}>
             {site.headerCta.label}
           </a>
         </div>

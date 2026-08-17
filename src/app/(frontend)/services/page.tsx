@@ -17,6 +17,7 @@ import { PointerFX } from '../components/PointerFX'
 import { SmoothScroll } from '../components/SmoothScroll'
 import { RefreshRouteOnSave } from '../components/RefreshRouteOnSave'
 import { mediaUrl } from '../components/util'
+import { site } from '@/site.config'
 
 export const dynamic = 'force-static'
 export const metadata: Metadata = {
@@ -105,14 +106,34 @@ export default async function WorkPageRoute() {
             give him two places to keep the same paragraphs current. */}
         <DesignerBand data={home} work={work} />
         <Ribbons data={work} />
-        <WhatIDo data={work} />
-        <ProjectRail
-          eyebrow={work.projectsEyebrow}
-          title={work.projectsTitle}
-          lede={work.projectsLede}
-          ctaLabel={work.projectsCtaLabel}
-          items={projects.docs.slice(0, 9)}
-        />
+        {/* THE WORK COVERS "WHAT I DO", THE WAY THE REFERENCE'S SERVICES COVER
+            ITS HERO.
+            Both pin at top:0 and the rail carries the higher z-index, so it
+            travels up over the standing section instead of pushing it away.
+
+            Sticky is bounded by its container, and that asymmetry is the whole
+            effect: WhatIDo has the rest of the wrapper to stay pinned across,
+            so it holds; the rail's bottom IS the wrapper's bottom, so it has no
+            room to stick and scrolls normally. One held layer, one moving
+            layer, from the same rule applied to both.
+
+            `.rail` is already `--brand-dark`, so the covering layer is opaque
+            without adding anything — the dark work section rising over the
+            light one is what makes the pass read.
+
+            Just this pair. The sections above are an argument read in order and
+            fought the reader when every one of them pinned. Off below 769px and
+            under prefers-reduced-motion. */}
+        <div className={site.motion.sectionStacking ? 'stack-sections' : undefined}>
+          <WhatIDo data={work} />
+          <ProjectRail
+            eyebrow={work.projectsEyebrow}
+            title={work.projectsTitle}
+            lede={work.projectsLede}
+            ctaLabel={work.projectsCtaLabel}
+            items={projects.docs.slice(0, 9)}
+          />
+        </div>
         {/* `Capabilities` used to sit here. With the tools rack above it, the
             two listed the same names — WordPress, Elementor, Crocoblock,
             Figma, Canva, Photoshop — within a single screen, which reads as

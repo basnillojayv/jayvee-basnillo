@@ -1,11 +1,11 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import type { Metadata } from 'next'
-import Image from 'next/image'
 
 import { Header } from '../components/Header'
 import { Footer } from '../components/Footer'
 import { RevealObserver } from '../components/Reveal'
+import { DesignViewer } from '../components/DesignViewer'
 import { mediaUrl } from '../components/util'
 
 export const dynamic = 'force-static'
@@ -72,24 +72,14 @@ export default async function DesignsPage() {
             <section className="section designs__group" key={key} id={key}>
               <div className="wrap">
                 <h2 className="designs__heading reveal">{heading}</h2>
-                <ul className="designs__grid">
-                  {items.map((e, i) => (
-                    <li key={e.id} className="reveal">
-                      <figure className="designtile">
-                        <Image
-                          src={mediaUrl(e.image, '/media/placeholder-tile.jpg')}
-                          alt={e.title}
-                          width={900}
-                          height={690}
-                          sizes="(max-width: 700px) 92vw, (max-width: 1100px) 46vw, 380px"
-                          priority={i < 3}
-                          data-edit-key={`explorations.${e.id}.image`}
-                        />
-                        <figcaption>{e.title}</figcaption>
-                      </figure>
-                    </li>
-                  ))}
-                </ul>
+                <DesignViewer
+                  shots={items.map((e) => ({
+                    id: e.id,
+                    src: mediaUrl(e.image, '/media/placeholder-tile.jpg'),
+                    title: e.title,
+                    editKey: `explorations.${e.id}.image`,
+                  }))}
+                />
               </div>
             </section>
           )

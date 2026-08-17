@@ -41,9 +41,12 @@ export const site = {
    * work from a project or case-study page as well as from the homepage.
    */
   nav: [
-    { label: 'Projects', href: '/projects' },
+    { label: 'Services', href: '/services' },
     { label: 'Designs', href: '/designs' },
   ],
+
+  /** Sits on the right of the bar, beside the contact button. */
+  navRight: [{ label: 'Projects', href: '/projects' }],
 
   /**
    * The persistent button in the header pill and mobile drawer.
@@ -53,7 +56,7 @@ export const site = {
    * address down from Payload instead, and this is only the fallback for a
    * page that does not (and for a database with no address in it yet).
    */
-  headerCta: { label: 'Get in touch', href: '/case-studies' },
+  headerCta: { label: 'Get in touch', href: '/contact' },
 
   hero: {
     /**

@@ -44,6 +44,15 @@ export const Homepage: GlobalConfig = {
               ],
             },
             {
+              name: 'heroIntro',
+              type: 'text',
+              defaultValue: 'Designing brands, websites, and digital experiences.',
+              admin: {
+                description:
+                  'The line above the display type. Set in caps by CSS — type it normally.',
+              },
+            },
+            {
               name: 'heroTagline',
               type: 'text',
               required: true,

@@ -28,6 +28,9 @@ export function WhatIDo({ data }: { data: WorkPage }) {
               <LineIcon name={it.icon as IconName} className="whatido__icon" />
               <h3 className="whatido__title">{it.title}</h3>
               <p className="whatido__copy">{it.copy}</p>
+              {/* The stack is set apart from the sentence deliberately: it is
+                  scanned for one name, not read. */}
+              {it.stack && <p className="whatido__stack">{it.stack}</p>}
             </li>
           ))}
         </ul>

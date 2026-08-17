@@ -222,7 +222,7 @@ export const WorkPage: GlobalConfig = {
             {
               name: 'whatItems',
               type: 'array',
-              maxRows: 5,
+              maxRows: 4,
               labels: { singular: 'Item', plural: 'Items' },
               admin: { description: 'Five fills the row on a wide screen; they wrap below that.' },
               defaultValue: [
@@ -250,6 +250,14 @@ export const WorkPage: GlobalConfig = {
               fields: [
                 { name: 'title', type: 'text', required: true },
                 { name: 'copy', type: 'textarea', required: true },
+                {
+                  name: 'stack',
+                  type: 'text',
+                  admin: {
+                    description:
+                      'The tools behind it, separated by · — set apart from the sentence above so it can be skimmed.',
+                  },
+                },
                 {
                   name: 'icon',
                   type: 'select',

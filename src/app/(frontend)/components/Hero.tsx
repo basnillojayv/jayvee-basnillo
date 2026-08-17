@@ -40,29 +40,19 @@ export function Hero({ data }: { data: Homepage }) {
   const stats = (data.statsItems ?? []).slice(0, 4)
   // The old hero pointed its second action at #footer. The homepage has no
   // footer any more, so it goes where the footer was going to send them.
-  const mailto = data.email ? `mailto:${data.email}` : '/case-studies'
+  // "See the work" leads with what he does rather than a bare grid of sites —
+  // the services page argues the case and carries the project rail inside it.
+  const workHref = '/services'
+  const contactHref = '/contact'
 
   return (
     <section className="hero" id="top">
       <div className="hero__inner wrap">
-        {/* The greeting. Each CMS value is a whole text node — the inline
-            editor matches on text nodes, so interpolating the name into the
-            sentence is what keeps both halves of it click-to-edit. The nested
-            spans are a casing trick: the stored values are upper case, and
-            `capitalize` alone will not pull "JAYVEE" back down. */}
-        <p className="hero__greet">
-          <span className="hero__wave" aria-hidden="true">
-            👋
-          </span>
-          , my name is{' '}
-          <span className="hero__name">
-            <span className="hero__name-inner">{data.heroNameFirst}</span>
-          </span>{' '}
-          <span className="hero__name">
-            <span className="hero__name-inner">{data.heroNameLast}</span>
-          </span>{' '}
-          and I&rsquo;m a
-        </p>
+        {/* One statement rather than a greeting built out of the name. It is
+            set in caps by CSS, not typed in caps, so the CMS value stays
+            readable and searchable — and so it can be un-capsed without
+            retyping it. */}
+        <p className="hero__greet">{data.heroIntro}</p>
 
         {/* One heading, two lines. The h1 holds both because they are one
             sentence — splitting them into an h1 and a div would read as a
@@ -121,12 +111,12 @@ export function Hero({ data }: { data: Homepage }) {
             is being asked which of two things they came for, and answering
             that with a loud button and a quiet one puts a thumb on the scale. */}
         <div className="hero__actions">
-          <Link className="btn btn--dark btn--lg" href="/projects">
+          <Link className="btn btn--dark btn--lg" href={workHref}>
             See the work
           </Link>
-          <a className="btn btn--outline btn--lg" href={mailto}>
+          <Link className="btn btn--outline btn--lg" href={contactHref}>
             Start a project
-          </a>
+          </Link>
         </div>
       </div>
     </section>

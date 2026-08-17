@@ -12,7 +12,10 @@ import type { WorkPage } from '@/payload-types'
  * the sentence wants to break where the sentence wants to break, and a fitted
  * line would decide that for it.
  */
-export function WorkHero({ data, ctaHref }: { data: WorkPage; ctaHref: string }) {
+export function WorkHero({ data }: { data: WorkPage; ctaHref?: string }) {
+  // Always the enquiry page: the form left this page, so a mailto or an
+  // in-page anchor would both now point at nothing.
+  const ctaHref = '/contact'
   return (
     <section className="whero" id="top">
       <div className="wrap whero__inner">

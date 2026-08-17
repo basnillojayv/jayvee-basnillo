@@ -409,7 +409,7 @@ export interface Exploration {
   createdAt: string;
 }
 /**
- * Messages sent from the contact form.
+ * Enquiries sent from the contact form.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "submissions".
@@ -418,7 +418,65 @@ export interface Submission {
   id: number;
   name: string;
   email: string;
-  message: string;
+  organisation?: string | null;
+  needs?:
+    | (
+        | 'New website from scratch'
+        | 'Website redesign'
+        | 'WordPress / Elementor development'
+        | 'Landing page'
+        | 'Website updates or improvements'
+        | 'Brand / visual design'
+        | 'Something else'
+      )[]
+    | null;
+  projectDetail: string;
+  hasWebsite?:
+    | (
+        | 'Yes, I want to improve it'
+        | 'Yes, but it needs a complete redesign'
+        | 'No, this will be a new website'
+        | 'Not sure yet'
+      )
+    | null;
+  platform?:
+    | (
+        | 'WordPress / Elementor'
+        | 'WordPress / Other'
+        | 'Wix'
+        | 'Squarespace'
+        | 'Webflow'
+        | 'Custom / Other'
+        | 'No existing website'
+      )
+    | null;
+  goals?:
+    | (
+        | 'Look more professional'
+        | 'Generate more enquiries'
+        | 'Make the business easier to find'
+        | 'Explain our services more clearly'
+        | 'Improve the user experience'
+        | 'Make the site easier to manage'
+        | 'Launch a completely new online presence'
+        | 'Other'
+      )[]
+    | null;
+  timeline?: ('As soon as possible' | 'Within 1 month' | '1–3 months' | '3+ months' | 'No fixed deadline') | null;
+  budget?:
+    ('Under $1,000' | '$1,000–$2,500' | '$2,500–$5,000' | '$5,000+' | 'I’d like to discuss the scope first') | null;
+  materials?:
+    | (
+        | 'Logo / brand identity'
+        | 'Website content'
+        | 'Photos / images'
+        | 'Existing website'
+        | 'Design references'
+        | 'Nothing yet'
+      )[]
+    | null;
+  reference?: string | null;
+  notes?: string | null;
   /**
    * Whether the notification email was accepted by the provider.
    */
@@ -737,7 +795,17 @@ export interface ExplorationsSelect<T extends boolean = true> {
 export interface SubmissionsSelect<T extends boolean = true> {
   name?: T;
   email?: T;
-  message?: T;
+  organisation?: T;
+  needs?: T;
+  projectDetail?: T;
+  hasWebsite?: T;
+  platform?: T;
+  goals?: T;
+  timeline?: T;
+  budget?: T;
+  materials?: T;
+  reference?: T;
+  notes?: T;
   delivered?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -798,6 +866,10 @@ export interface Homepage {
    * The second line, set in the accent treatment.
    */
   heroNameLast: string;
+  /**
+   * The line above the display type. Set in caps by CSS — type it normally.
+   */
+  heroIntro?: string | null;
   /**
    * The one line under the name.
    */
@@ -978,6 +1050,10 @@ export interface WorkPage {
     | {
         title: string;
         copy: string;
+        /**
+         * The tools behind it, separated by · — set apart from the sentence above so it can be skimmed.
+         */
+        stack?: string | null;
         icon?: ('window' | 'puzzle' | 'spark' | 'pen' | 'code') | null;
         id?: string | null;
       }[]
@@ -1036,6 +1112,7 @@ export interface WorkPage {
 export interface HomepageSelect<T extends boolean = true> {
   heroNameFirst?: T;
   heroNameLast?: T;
+  heroIntro?: T;
   heroTagline?: T;
   heroWatermarkLeft?: T;
   heroWatermarkRight?: T;
@@ -1158,6 +1235,7 @@ export interface WorkPageSelect<T extends boolean = true> {
     | {
         title?: T;
         copy?: T;
+        stack?: T;
         icon?: T;
         id?: T;
       };

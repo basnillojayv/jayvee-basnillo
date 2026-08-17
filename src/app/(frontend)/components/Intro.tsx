@@ -1,4 +1,4 @@
-import { LogoMark } from './LogoMark'
+import { LogoLockup } from './LogoLockup'
 
 /**
  * THE ENTRANCE — and it is deliberately not a React component that does anything.
@@ -27,13 +27,14 @@ import { LogoMark } from './LogoMark'
 export function Intro() {
   return (
     <div className="intro" aria-hidden="true">
+      {/* THE LOCKUP, NOT A MARK PLUS A CAPTION.
+          This used to be LogoMark with a separate <p> underneath, and the two
+          never lined up — the wordmark's width, weight and spacing were being
+          approximated in CSS next to artwork that already contains them. The
+          lockup is one drawing with the type set inside it, so alignment is
+          not something this component has to get right. */}
       <div className="intro__mark">
-        <LogoMark className="logo-mark logo-mark--draw" />
-        {/* Set in the stylesheet, not here: the copy is written in its own
-            case so it stays readable in the source and in a diff, and the
-            caps are a typographic decision that belongs with the rest of
-            them. */}
-        <p className="intro__label">Jayvee Basnillo - Designs</p>
+        <LogoLockup className="logo-lockup logo-mark--draw" />
       </div>
     </div>
   )

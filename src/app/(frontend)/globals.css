@@ -40,18 +40,28 @@
   --brand-dark-700:#27272A;
   --brand-dark-600:#3F3F46;
 
-  /* --- Coral. The only chromatic colour on the site. ---
-     ⚠ #FC5F2B on white is about 3.1:1 — right for fills, marks and large
-     type, wrong for body copy. Where coral has to carry small text, use
-     --accent-600, which clears AA. */
-  --accent:#FC5F2B;
-  --accent-600:#D6420F;   /* 4.6:1 on white — coral text, button hover */
-  --accent-400:#FF8B64;   /* lighter — coral on carbon */
-  /* The one gradient in the system, and it appears on exactly one card. Built
-     from the two accent tokens rather than a pasted declaration, so retoning
-     the accent retones this with it. The reference's own card is a marbled
-     artwork — that is theirs; this is the same idea done as a plain wash. */
-  --gradient-coral:linear-gradient(88deg,var(--accent) 0%,var(--accent-400) 88%,#FFD9C9 100%);
+  /* --- Sky. The only chromatic colour on the site. ---
+     #38C2FE is the brand colour and it is a DARK-SURFACE colour: 8.70:1 on
+     carbon, and 2.04:1 on white. That second number is the one that governs
+     everything below — it fails small text (4.5) and large text (3.0) alike,
+     so on a white page it can be a fill or a shape but never a letter.
+
+     Hence two tokens doing two jobs rather than one doing both badly:
+       --accent      the brand colour. Dark surfaces, and fills that carry
+                     DARK text — white on #38C2FE is the same 2.04:1.
+       --accent-600  the same hue taken deep enough to be read on white
+                     (5.67:1). Every kicker, rule, icon and link on a light
+                     background uses this one.
+     Using --accent for text on white is the one mistake this palette invites,
+     and it looks fine on a bright monitor, which is exactly why it is written
+     down here. */
+  --accent:#38C2FE;       /* 8.70:1 on carbon — fills and dark surfaces */
+  --accent-ink:#0B2430;   /* what goes ON an --accent fill: 7.9:1 against it */
+  --accent-600:#0A6E99;   /* 5.67:1 on white — accent text, icons and rules */
+  --accent-400:#8FDCFF;   /* lighter still, for large areas on carbon */
+  /* The one gradient in the system, built from the tokens so retoning the
+     accent retones this with it. */
+  --gradient-accent:linear-gradient(88deg,var(--accent) 0%,var(--accent-400) 88%,#E4F6FF 100%);
 
   /* --- Neutrals: zinc --- */
   --white:#FFFFFF;
@@ -141,7 +151,8 @@ img,video{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
 ul,ol{list-style:none}
-::selection{background:var(--accent);color:#fff}
+/* Dark text on the fill, not white: white on #38C2FE is 2.04:1. */
+::selection{background:var(--accent);color:var(--accent-ink)}
 
 /* Lenis smooth scroll (see SmoothScroll.tsx) */
 html.lenis,html.lenis body{height:auto}
@@ -224,12 +235,14 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
    Hover behaviour is shared: 2px lift, plus a kinetic shift on the .arr chip.
    ========================================================================= */
 /* Pills by default, and sentence case, not caps. The reference's primary
-   action is a coral capsule with white 700 text and — importantly — no
+   action is an accent capsule with white 700 text and — importantly — no
    shadow and no lift. Motion here is colour only; a button that rises off
    the page belongs to a different design language than this one. */
 .btn{--_bg:var(--brand-dark);--_fg:#fff;display:inline-flex;align-items:center;justify-content:center;gap:.5em;
   background:var(--_bg);color:var(--_fg);font-family:var(--font-body);font-weight:700;
-  letter-spacing:var(--track-body);font-size:.9375rem;padding:.85em 1.5em;
+  /* Caps, and the tracking comes with them: capitals set at body spacing close
+     up and read as one block. */
+  text-transform:uppercase;letter-spacing:.06em;font-size:.875rem;padding:.9em 1.6em;
   border-radius:var(--radius-pill);
   }
 .btn .ico{width:1.1em;height:1.1em}
@@ -247,8 +260,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .btn:active{scale:.97}
 .btn--pill{border-radius:var(--radius-pill)}   /* kept for callers; already the default */
 .btn--square{border-radius:var(--radius-sm)}
-.btn--accent{--_bg:var(--accent)}
-.btn--accent:hover{background:var(--accent-600)}
+/* Buttons stay monochrome. The accent is a highlight colour here — it marks
+   kickers, rules and state — and a page whose every call to action is also
+   the accent colour has spent the highlight on the least surprising thing.
+   Kept as a variant so callers do not break; it simply is not blue. */
+.btn--accent{--_bg:var(--brand-dark);--_fg:#fff}
+.btn--accent:hover{background:var(--brand-dark-700)}
 .btn--dark:hover{background:var(--brand-dark-700)}
 .btn--white{--_bg:#fff;--_fg:var(--ink)}
 .btn--white:hover{background:var(--surface)}
@@ -304,14 +321,15 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   transition:color .38s var(--ease-out-expo)}
 
 .nav-primary{display:flex;gap:.15rem;justify-self:start}
-.nav-primary a{font-family:var(--font-body);font-weight:400;font-size:.9375rem;
-  letter-spacing:var(--track-body);color:var(--ink);
+.nav-primary a{font-family:var(--font-body);font-weight:700;font-size:.8125rem;
+  text-transform:uppercase;letter-spacing:.1em;color:var(--ink);
   white-space:nowrap;padding:.45rem .7rem;border-radius:var(--radius-sm);
   transition:color .18s var(--ease),opacity .18s var(--ease)}
 .nav-primary a:hover{opacity:.62}
 
 .header-actions{display:flex;align-items:center;gap:.6rem;justify-self:end}
-.header-login{font-size:.9375rem;letter-spacing:var(--track-body);color:var(--ink);
+.header-login{font-size:.8125rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--ink);
   padding:.45rem .4rem;transition:color .38s var(--ease-out-expo),opacity .18s var(--ease)}
 .header-login:hover{opacity:.62}
 
@@ -350,7 +368,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   transition:transform .34s var(--ease);display:flex;flex-direction:column;gap:2rem;box-shadow:var(--shadow-lg)}
 .mobile-menu[data-open="true"]{transform:translateX(0)}
 .mobile-menu nav{display:flex;flex-direction:column}
-.mobile-menu nav a{font-family:var(--font-display);font-weight:700;font-size:1.6rem;padding:.7rem 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.mobile-menu nav a{font-family:var(--font-display);font-weight:700;font-size:1.6rem;
+  text-transform:uppercase;letter-spacing:.02em;
+  padding:.7rem 0;border-bottom:1px solid rgba(255,255,255,.1)}
 .mobile-menu nav a:hover{color:var(--accent-400)}
 .mobile-menu__cta{display:flex;flex-direction:column;gap:.8rem;margin-top:auto}
 .scrim{position:fixed;inset:0;background:rgba(10,22,34,.55);z-index:220;opacity:0;transition:opacity .3s}
@@ -395,9 +415,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   text-align:center}
 
 /* ---------- the greeting ---------- */
-.hero__greet{font-size:clamp(1rem,1.5vw,1.3125rem);line-height:1.4;
-  letter-spacing:var(--track-lead);color:var(--ink);
-  margin-bottom:clamp(10px,1.8vh,26px)}
+/* A statement now, not a greeting — so it is set as one: caps, tracked, and
+   sized to sit under the display lines rather than beside a wave emoji. */
+.hero__greet{font-size:clamp(.8125rem,1.15vw,1rem);line-height:1.5;
+  text-transform:uppercase;letter-spacing:.16em;font-weight:700;color:var(--ink);
+  max-width:34ch;margin:0 auto clamp(12px,2vh,28px)}
 /* Upper-case in the database, sentence case in a sentence.
    `text-transform` does not stack across a nesting: it is applied by whichever
    element actually holds the text, so wrapping a `capitalize` span in a
@@ -488,12 +510,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .hero__foot{position:relative;z-index:3;width:100%;margin-top:auto;
   display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;
   text-align:left}
-.hero__tagline{max-width:22ch;font-size:.9375rem;line-height:1.5;
+.hero__tagline{max-width:24ch;font-size:1.125rem;line-height:1.5;
   letter-spacing:var(--track-body);color:var(--muted)}
 .hero__stats{display:flex;gap:clamp(14px,2.4vw,34px);text-align:right}
 .hero__stats li{display:flex;flex-direction:column;gap:.1rem}
-.hero__stat-value{font-size:.9375rem;letter-spacing:var(--track-body);color:var(--ink)}
-.hero__stat-label{font-family:var(--font-mono);font-size:.6875rem;
+.hero__stat-value{font-size:1.125rem;font-weight:700;letter-spacing:var(--track-body);color:var(--ink)}
+.hero__stat-label{font-family:var(--font-mono);font-size:.825rem;
   letter-spacing:var(--track-mono);color:var(--muted)}
 
 /* ---------- the actions ----------
@@ -566,17 +588,18 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 /* Big enough to be looked at rather than glimpsed. At 210px this was a
    favicon someone had enlarged; the mark is the only thing on screen for
    three seconds and it should carry that. */
-.intro__mark .logo-mark{width:min(360px,44vw)}
+/* Sized by width and height:auto, and it must beat the header's `.logo-lockup`
+   height rule — same specificity, so this has to come after it in the file,
+   which it does. */
+.intro__mark .logo-lockup{width:min(340px,52vw);height:auto}
 /* Arrives once the mark has finished becoming solid, so the sequence reads
    draw → fill → name rather than everything at once. */
 /* It used to arrive at .95s and start fading at 1.05s — on screen for a tenth
    of a second, which is why it read as missing rather than as fast. It now
    lands while the mark is solid and holds for the best part of a second before
    anything moves. */
-.intro__label{font-family:var(--font-mono);font-size:clamp(.6875rem,1.6vw,.875rem);
-  letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.72);
-  white-space:nowrap;
-  animation:riseIn .55s var(--ease-out-expo) 1.5s both}
+/* `.intro__label` is gone: the wordmark is inside the lockup artwork now, so
+   there is no caption to align. */
 /* Travels a hair past its own height so no seam shows at the bottom edge. */
 @keyframes introLift{to{transform:translateY(-101%)}}
 @keyframes introMarkOut{to{opacity:0;transform:translateY(-14px)}}
@@ -729,7 +752,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
    the only instruction present. */
 .field input::placeholder,.field textarea::placeholder{color:var(--muted)}
 /* focus: accent ring + white fill, so the active field is unmistakable */
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);background:#fff;
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent-600);background:#fff;
   box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 12%,transparent);outline:none}
 .contact__form .select-chevron{position:absolute;right:1rem;top:50%;transform:translateY(-50%);width:20px;height:20px;fill:none;stroke:var(--muted);stroke-width:2;pointer-events:none}
 .form-status{font-size:.94rem;font-weight:600;min-height:1.2em;text-align:center;color:var(--accent)}
@@ -869,13 +892,13 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .link-ghost{font-size:.8125rem;letter-spacing:var(--track-body);color:var(--muted);
   white-space:nowrap;border-bottom:1px solid transparent;transition:color .18s var(--ease),border-color .18s var(--ease)}
 .link-ghost:hover{color:var(--ink);border-bottom-color:currentColor}
-/* The one place the coral gradient token is used, and it is type on colour
+/* The one place the accent gradient token is used, and it is type on colour
    rather than artwork. */
-.offer__card{background:var(--gradient-coral);border-radius:var(--radius);
+.offer__card{background:var(--gradient-accent);border-radius:var(--radius);
   padding:var(--card-pad);min-height:200px;display:flex;flex-direction:column;
   justify-content:space-between;gap:1.5rem;box-shadow:var(--shadow-sm);color:#fff}
 .feature-list{display:flex;flex-direction:column;gap:11px}
-/* Solid coral in a soft squircle, not an outline. */
+/* Solid accent in a soft squircle, not an outline. */
 .feature__check{width:22px;height:22px;border-radius:var(--radius-icon);background:var(--accent);
   color:#fff;display:grid;place-items:center;flex:0 0 auto;margin-top:.15rem}
 
@@ -947,9 +970,20 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   padding-block:clamp(56px,8vw,96px) 0}
 /* A wash rather than a photograph: an image here would be a fourth thing
    competing with the ask, and this costs no request. */
+/* The photograph, and the scrim that makes it usable.
+   Three columns of small text sit on top of this, so the image has to lose
+   every contest with them: heavily darkened, desaturated a touch so it does
+   not fight the accent, and blurred slightly so detail never competes with a
+   link. What survives is the shape and the light — which is all a background
+   is for. */
+.footer__bg{position:absolute;inset:0;z-index:-2;overflow:hidden}
+.footer__bg img{width:100%;height:100%;object-fit:cover;object-position:center 40%;
+  filter:grayscale(.35) brightness(.42) blur(1px);transform:scale(1.04)}
+.footer__bg::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(9,9,11,.88) 0%,rgba(9,9,11,.8) 45%,rgba(9,9,11,.92) 100%)}
 .footer__glow{position:absolute;right:-10%;bottom:-30%;width:min(70vw,760px);
   aspect-ratio:1;border-radius:50%;z-index:-1;pointer-events:none;
-  background:radial-gradient(circle,color-mix(in srgb,var(--accent) 34%,transparent) 0%,transparent 68%)}
+  background:radial-gradient(circle,color-mix(in srgb,var(--accent) 26%,transparent) 0%,transparent 68%)}
 
 .footer__grid{display:grid;
   grid-template-columns:minmax(0,1.25fr) minmax(0,.7fr) minmax(0,1.15fr);
@@ -1271,7 +1305,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
    the strike happen while the line is being read, which is the entire device:
    pre-struck, it is just a line with a rule through it. */
 .struck__text::after{content:"";position:absolute;left:-.06em;right:-.06em;top:56%;
-  height:.07em;background:var(--accent);border-radius:2px;
+  height:.07em;background:var(--accent-600);border-radius:2px;
   transform:scaleX(0);transform-origin:left center;
   transition:transform .75s var(--ease-out-expo) .15s}
 .struck__line.is-in .struck__text::after{transform:scaleX(1)}
@@ -1539,22 +1573,29 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .kicker__rule{display:block;width:44px;height:1px;background:var(--accent-600);flex:none}
 /* The last full stop of a display heading. Set in code, never typed into the
    CMS — an editor who forgets it loses the device silently. */
-.accent-stop{color:var(--accent)}
+.accent-stop{color:var(--accent-600)}
 
 /* ---------- 9a. what I do: four columns on hairlines ----------
    Four bordered boxes each holding an icon and a heading is the most
    generated-looking shape on the web. The same four divided by rules is a
    table of contents, which is what this is. */
+/* Full width, edge to edge. The four columns are the page's clearest answer
+   to "what do you do", so they get the whole viewport rather than the 1200px
+   text measure — the gutters keep them off the edge. */
 .whatido{padding-block:clamp(48px,7vw,88px)}
+.whatido .wrap{max-width:none;padding-inline:clamp(24px,4vw,72px)}
 .whatido .kicker{margin-bottom:clamp(28px,3.5vw,44px)}
 /* Five now, not four. The columns are tighter than the comp's, so the copy
    gets a shorter measure — hence the reduced padding: at five across, generous
    side padding is what turns each cell into a two-word-per-line column. */
-.whatido__grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+/* Four columns for four items. It was five, left over from when there were
+   five — so the row filled four-fifths of the width and sat left of centre,
+   which reads as a centring bug and is really a counting one. */
+.whatido__grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
 .whatido__item{display:flex;flex-direction:column;align-items:center;text-align:center;
   padding:0 clamp(10px,1.5vw,22px)}
 .whatido__item + .whatido__item{border-left:1px solid var(--line)}
-.whatido__icon{width:34px;height:34px;color:var(--accent);margin-bottom:1.1rem}
+.whatido__icon{width:34px;height:34px;color:var(--accent-600);margin-bottom:1.1rem}
 .whatido__title{font-family:var(--font-body);font-weight:700;font-size:.9375rem;
   letter-spacing:.06em;text-transform:uppercase;color:var(--ink);
   margin-bottom:.6rem;text-wrap:balance}
@@ -1631,9 +1672,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .rail__dots li{display:grid;place-items:center;min-width:32px;min-height:32px}
 
 @media (max-width:1100px){
-  .whatido__grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:2.25rem 0}
-  .whatido__item:nth-child(3n+1){border-left:none}
-  .whatido__item:nth-child(n+4){padding-top:2.25rem;border-top:1px solid var(--line)}
+  .whatido__grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:2.5rem 0}
+  .whatido__item:nth-child(odd){border-left:none}
+  .whatido__item:nth-child(n+3){padding-top:2.5rem;border-top:1px solid var(--line)}
 }
 @media (max-width:1000px){
   .tools__rack{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -1708,3 +1749,286 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .designtile img{width:100%;height:auto;display:block;border-radius:var(--radius);
   background:var(--surface)}
 .designtile figcaption{font-size:.875rem;letter-spacing:var(--track-body);color:var(--muted)}
+
+/* ---------- 9f. the tech-stack line under each service ---------- */
+.whatido__stack{margin-top:.7rem;padding-top:.7rem;border-top:1px solid var(--line);
+  font-family:var(--font-mono);font-size:.6875rem;line-height:1.7;letter-spacing:.04em;
+  color:var(--ink);text-wrap:pretty}
+
+/* =========================================================================
+   10. THE ENQUIRY FORM
+   Eighteen fields across five groups. It earns its own page: at three fields
+   a form is a footer, at eighteen it is a task, and a task buried under
+   6,000px of argument is one most people never reach.
+   ========================================================================= */
+.enquiry-page{padding-block:clamp(96px,14vh,150px) clamp(48px,7vw,88px)}
+/* A fixed intro column and the rest to the form, rather than two fractions.
+   Fractions gave the form ~590px while the intro — four short lines — took
+   the same again, so the questions were cramped into half a page with a
+   column of empty white beside them for 2,000px. The intro needs a measure,
+   not a share. */
+.enquiry-page__grid{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);
+  gap:clamp(32px,5vw,72px);align-items:start}
+/* Sticky, because the questions run long enough that the reason for answering
+   them would otherwise be scrolled away by the second group. */
+.enquiry-page__intro{position:sticky;top:calc(72px + clamp(16px,3vh,40px))}
+.enquiry-page__title{margin-top:1.1rem;font-family:var(--font-display);
+  font-weight:var(--hero-weight);font-size:clamp(2rem,3.8vw,3rem);line-height:1.06;
+  letter-spacing:-.01em;color:var(--ink);max-width:14ch;text-wrap:balance}
+.enquiry-page__lede{margin-top:1.2rem;max-width:44ch;font-size:1.0625rem;line-height:1.62;
+  letter-spacing:var(--track-lead);color:var(--muted);text-wrap:pretty}
+.enquiry-page__direct{margin-top:1.4rem;font-size:.9375rem;color:var(--muted)}
+.enquiry-page__direct a{color:var(--accent-600);text-decoration:underline;text-underline-offset:3px}
+
+/* Capped: the inputs would otherwise run the full remaining width, and a
+   700px-wide text field looks like a mistake next to a one-line label. */
+.enquiry{display:flex;flex-direction:column;gap:clamp(44px,6vw,72px);max-width:44rem}
+/* Groups breathe more than the fields inside them, and fields more than the
+   parts of a field. Before this everything sat on one 1.5rem rhythm, so a
+   legend, a label and the gap between two questions all read as the same
+   break — which is why the form looked like one long undifferentiated list. */
+.enquiry__set{display:flex;flex-direction:column;gap:2.1rem;border:0;padding:0}
+.enquiry .field{gap:.5rem}
+.enquiry .field label{margin-bottom:.1rem}
+.enquiry .field input,.enquiry .field textarea{padding:.95em 1.05em;margin-top:.35rem}
+.enquiry .choices{gap:.9rem}
+.enquiry .choices__list{gap:.6rem}
+/* A legend, not a heading: a screen reader announces it with every control
+   inside, which is what turns nine loose checkboxes into one question. */
+.enquiry__legend{font-family:var(--font-mono);font-size:.6875rem;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--accent-600);padding:0 0 1.1rem;width:100%;
+  margin-bottom:.4rem;border-bottom:1px solid var(--line)}
+.field__hint{font-size:.875rem;line-height:1.5;color:var(--muted);margin:-.15rem 0 .1rem}
+
+/* Checkboxes and radios rather than selects: every list here is short and the
+   point is to SEE the range on offer — someone who does not know what they
+   need is being shown the menu. A select hides exactly that. */
+.choices{border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:.7rem}
+.choices > legend{font-size:1rem;font-weight:700;letter-spacing:var(--track-body);
+  color:var(--ink);padding:0}
+.choices__list{display:flex;flex-wrap:wrap;gap:.5rem}
+/* The whole chip is the label, so the hit area is the chip and not a 13px box. */
+.choice{display:inline-flex;align-items:center;gap:.55rem;cursor:pointer;
+  padding:.6em .95em;border-radius:var(--radius-pill);
+  box-shadow:inset 0 0 0 1px var(--line);background:var(--white);
+  font-size:.9375rem;letter-spacing:var(--track-body);color:var(--ink);
+  transition:box-shadow .18s var(--ease),background .18s var(--ease)}
+.choice:hover{background:var(--surface-100)}
+.choice input{width:16px;height:16px;flex:none;accent-color:var(--accent-600);margin:0}
+/* `:has()` so the chip itself shows the state — a ticked box inside an
+   unchanged chip reads as nothing at a glance. */
+.choice:has(input:checked){background:var(--surface);
+  box-shadow:inset 0 0 0 1.5px var(--accent-600)}
+.choice:has(input:focus-visible){outline:3px solid var(--accent-400);outline-offset:3px}
+
+.enquiry__foot{display:flex;flex-wrap:wrap;align-items:center;gap:1rem;
+  padding-top:.5rem;border-top:1px solid var(--line)}
+.enquiry__status{font-size:.9375rem;letter-spacing:var(--track-body);color:var(--muted)}
+.enquiry__status[data-state="ok"]{color:var(--ink);font-weight:700}
+.enquiry__status[data-state="bad"]{color:var(--accent-600)}
+.enquiry__note{font-size:.875rem;line-height:1.6;color:var(--muted-light);max-width:52ch}
+.enquiry button[disabled]{opacity:.6;cursor:progress}
+.field__err{font-size:.8125rem;letter-spacing:var(--track-body);color:var(--accent-600)}
+/* Colour AND a message: colour alone is not a signal everyone can act on. */
+.field input[aria-invalid="true"],.field textarea[aria-invalid="true"]{
+  border-color:var(--accent-600);background:#fff}
+/* The honeypot. Positioned away rather than display:none, which some bots skip
+   — and skipping it defeats the trap. */
+.field--trap{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+@media (max-width:900px){
+  .enquiry-page__grid{grid-template-columns:1fr;gap:2.5rem}
+  .enquiry-page__intro{position:static}
+  .enquiry-page__title,.enquiry-page__lede{max-width:none}
+}
+
+/* ---------- 11. the project grid ----------
+   Two up on desktop, so each cover is large enough to be judged rather than
+   identified. A three-column grid of 17 sites is a contact sheet. */
+.pgrid{display:grid;gap:clamp(20px,3vw,44px);
+  grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr))}
+
+.pcard__link{display:block;color:inherit}
+.pcard__media{position:relative;aspect-ratio:16/11;border-radius:var(--radius);
+  overflow:hidden;background:var(--surface);isolation:isolate}
+.pcard__media img{width:100%;height:100%;object-fit:cover;
+  /* The zoom lives on the image and the lift on the card, so the two compose
+     instead of overwriting one another. */
+  transition:transform .7s var(--ease-out-expo)}
+/* At rest the cover sits under a veil; on hover the veil lifts. Nothing new
+   appears — the card gets clearer, which confirms where you are rather than
+   putting a fresh object under the cursor. */
+.pcard__veil{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(9,9,11,.06) 0%,rgba(9,9,11,.22) 100%);
+  transition:opacity .45s var(--ease)}
+.pcard__chip{position:absolute;z-index:2;top:12px;left:12px;
+  font-family:var(--font-mono);font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;
+  color:#fff;background:rgba(9,9,11,.55);
+  -webkit-backdrop-filter:blur(8px) saturate(1.2);backdrop-filter:blur(8px) saturate(1.2);
+  padding:.45em .8em;border-radius:var(--radius-sm);
+  transform:translateY(-4px);opacity:0;transition:transform .4s var(--ease-out-expo),opacity .4s var(--ease)}
+
+.pcard__body{display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  margin-top:1rem}
+.pcard__title{font-family:var(--font-display);font-weight:var(--hero-weight);
+  font-size:clamp(1.25rem,1.9vw,1.6rem);line-height:1.2;letter-spacing:-.006em;color:var(--ink);
+  transition:transform .45s var(--ease-out-expo)}
+.pcard__go{flex:none;width:34px;height:34px;border-radius:var(--radius-pill);display:grid;
+  place-items:center;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line);
+  transition:transform .45s var(--ease-out-expo),background .3s var(--ease),
+    color .3s var(--ease),box-shadow .3s var(--ease)}
+.pcard__copy{margin-top:.5rem;max-width:52ch;font-size:.9375rem;line-height:1.55;
+  letter-spacing:var(--track-body);color:var(--muted);text-wrap:pretty;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* Hover behaviour is gated: touch devices fire :hover on tap, which would
+   leave a card stuck in its hovered state after the finger lifts. */
+@media (hover:hover) and (pointer:fine){
+  .pcard__link:hover .pcard__media img,
+  .pcard__link:focus-visible .pcard__media img{transform:scale(1.045)}
+  .pcard__link:hover .pcard__veil,
+  .pcard__link:focus-visible .pcard__veil{opacity:0}
+  .pcard__link:hover .pcard__chip,
+  .pcard__link:focus-visible .pcard__chip{transform:none;opacity:1}
+  .pcard__link:hover .pcard__title,
+  .pcard__link:focus-visible .pcard__title{transform:translateX(4px)}
+  .pcard__link:hover .pcard__go,
+  .pcard__link:focus-visible .pcard__go{transform:translateX(4px);
+    background:var(--ink);color:#fff;box-shadow:inset 0 0 0 1px var(--ink)}
+}
+/* Keyboard users get the same answer as the mouse: every rule above is keyed
+   to :focus-visible as well, so tabbing through the grid is not a silent walk
+   past seventeen identical cards. */
+
+/* =========================================================================
+   12. PARALLAX AND GLASS
+
+   PARALLAX IS SCROLL-DRIVEN, NOT SCROLL-LISTENED.
+   `animation-timeline: view()` runs the drift on the compositor, off the main
+   thread, with no listener and nothing to throttle — which is why it stays
+   smooth while the page is still hydrating. Where it is unsupported the
+   element simply sits still; there is no fallback to write and nothing to
+   feature-detect in JS.
+
+   WHAT DOES *NOT* GET PARALLAX: the project covers. Their transform belongs to
+   the hover zoom, and two animations writing one transform means the last one
+   wins — the card would stop responding to the pointer. One owner per
+   property.
+   ========================================================================= */
+@supports (animation-timeline: view()){
+  /* Oversized first, so the drift never exposes an edge. */
+  .footer__bg img,.gallery__cell img,.designtile img{
+    animation:px-media linear both;animation-timeline:view();animation-range:cover}
+  .footer__bg img{height:118% !important;top:-9% !important}
+  .gallery__cell img,.designtile img{transform-origin:center}
+  /* Text-only blocks get the gentler one — a lift, not a slide. */
+  .designs__group .designs__heading,.whatido__grid{
+    animation:px-lift linear both;animation-timeline:view();animation-range:cover}
+}
+
+/* ---------- glass ----------
+   Applied where there is something behind it to refract, and nowhere else.
+   Over a flat white section a backdrop blur produces a grey rectangle: the
+   cost of the filter with none of the effect. These four all sit over
+   photography, over the page, or over a scrim. */
+
+/* The capsule floats over the page once it collapses — the one place on the
+   site where the header genuinely has content moving underneath it. */
+.site-header[data-state="pill"] .pill{
+  background:color-mix(in srgb,var(--brand-dark) 78%,transparent);
+  -webkit-backdrop-filter:blur(16px) saturate(1.6);backdrop-filter:blur(16px) saturate(1.6)}
+
+/* Sits inside the exploration wall. */
+.gallery__panel{position:relative}
+.gallery__panel::before{content:"";position:absolute;inset:clamp(-24px,-3vw,-40px);
+  z-index:-1;border-radius:var(--radius);
+  background:color-mix(in srgb,var(--brand-dark-900) 34%,transparent);
+  -webkit-backdrop-filter:blur(18px) saturate(1.3);backdrop-filter:blur(18px) saturate(1.3)}
+
+/* Over the Dongdaemun photograph. */
+.footer__icon{-webkit-backdrop-filter:blur(10px) saturate(1.4);
+  backdrop-filter:blur(10px) saturate(1.4);background:rgba(255,255,255,.06)}
+
+/* Over the scrim and whatever the page was showing. */
+.mobile-menu{background:color-mix(in srgb,var(--brand-dark) 82%,transparent);
+  -webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5)}
+
+@media (prefers-reduced-motion:reduce){
+  /* Drift is pure decoration and the first thing to go. */
+  .footer__bg img,.gallery__cell img,.designtile img,
+  .designs__group .designs__heading,.whatido__grid{
+    animation:none !important;transform:none !important}
+}
+
+
+/* ---------- 13. the contact band on the services page ----------
+   Same grid and same form component as /contact — one implementation, two
+   placements. A tinted surface separates it from the tools rack above without
+   another full-bleed dark band, which the page already has three of. */
+.contact-band{background:var(--surface-100);border-top:1px solid var(--line)}
+.contact-band .enquiry-page__intro{position:sticky;
+  top:calc(72px + clamp(16px,3vh,40px))}
+@media (max-width:900px){
+  .contact-band .enquiry-page__intro{position:static}
+}
+
+/* ---------- 14. the design viewer ----------
+   Tiles are buttons, not links: there is no page for a design, and a link
+   would be lying about what happens when you click it. */
+.designtile{display:flex;flex-direction:column;gap:.7rem;width:100%;padding:0;
+  text-align:left;background:none;cursor:zoom-in}
+.designtile__media{position:relative;display:block;border-radius:var(--radius);
+  overflow:hidden;background:var(--surface)}
+.designtile__media img{width:100%;height:auto;display:block;
+  transition:transform .6s var(--ease-out-expo)}
+.designtile__zoom{position:absolute;top:12px;right:12px;width:36px;height:36px;
+  border-radius:var(--radius-pill);display:grid;place-items:center;color:#fff;
+  background:rgba(9,9,11,.5);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  opacity:0;transform:translateY(-4px);
+  transition:opacity .35s var(--ease),transform .35s var(--ease-out-expo)}
+.designtile__name{font-size:.875rem;letter-spacing:var(--track-body);color:var(--muted)}
+@media (hover:hover) and (pointer:fine){
+  .designtile:hover .designtile__media img,
+  .designtile:focus-visible .designtile__media img{transform:scale(1.03)}
+  .designtile:hover .designtile__zoom,
+  .designtile:focus-visible .designtile__zoom{opacity:1;transform:none}
+}
+
+/* `<dialog>` renders in the top layer, so no stacking context can clip it and
+   nothing behind it is reachable by pointer or screen reader. */
+.viewer{width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;
+  border:0;padding:0;background:transparent;overflow:hidden}
+.viewer::backdrop{background:rgba(9,9,11,.92);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.viewer__inner{position:relative;height:100dvh;display:flex;flex-direction:column;
+  background:var(--brand-dark-900)}
+.viewer__bar{display:flex;align-items:center;gap:1rem;flex:none;
+  padding:clamp(12px,2vw,20px) clamp(14px,3vw,28px);color:#fff;
+  border-bottom:1px solid rgba(255,255,255,.14)}
+.viewer__title{font-size:.9375rem;letter-spacing:var(--track-body)}
+.viewer__count{margin-left:auto;font-family:var(--font-mono);font-size:.75rem;
+  letter-spacing:.1em;color:rgba(255,255,255,.6)}
+.viewer__x{width:40px;height:40px;border-radius:var(--radius-pill);display:grid;
+  place-items:center;color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.26);
+  transition:background .18s var(--ease)}
+.viewer__x:hover{background:rgba(255,255,255,.12)}
+
+/* Fitted by default; one click swaps to full resolution and hands scrolling
+   back to the browser rather than reimplementing pan and momentum. */
+.viewer__stage{flex:1;min-height:0;overflow:auto;display:grid;place-items:center;
+  padding:clamp(10px,2vw,26px)}
+.viewer__stage img{max-width:100%;max-height:100%;object-fit:contain;cursor:zoom-in;
+  border-radius:var(--radius-sm)}
+.viewer__stage[data-zoom="true"]{place-items:start center}
+.viewer__stage[data-zoom="true"] img{max-width:none;max-height:none;width:auto;
+  cursor:zoom-out}
+
+.viewer__nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2;
+  width:48px;height:48px;border-radius:var(--radius-pill);display:grid;place-items:center;
+  font-size:1.8rem;line-height:1;color:#fff;background:rgba(9,9,11,.55);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.2);transition:background .18s var(--ease)}
+.viewer__nav:hover{background:rgba(255,255,255,.18)}
+.viewer__nav--prev{left:clamp(10px,2vw,24px)}
+.viewer__nav--next{right:clamp(10px,2vw,24px)}

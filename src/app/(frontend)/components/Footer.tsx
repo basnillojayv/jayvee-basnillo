@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import type { Homepage } from '@/payload-types'
 import { site } from '@/site.config'
@@ -34,6 +35,19 @@ export function Footer({ data }: { data: Homepage }) {
 
   return (
     <footer className="site-footer" id="footer">
+      {/* A photograph rather than the gradient wash that was here. It is
+          scrimmed hard in CSS: the footer carries three columns of small text,
+          and an image behind type has to lose every contest with it. */}
+      <div className="footer__bg" aria-hidden="true">
+        <Image
+          src="/media/footer-ddp.jpg"
+          alt=""
+          fill
+          sizes="100vw"
+          quality={70}
+          loading="lazy"
+        />
+      </div>
       <div className="footer__glow" aria-hidden="true" />
 
       <div className="wrap footer__grid">

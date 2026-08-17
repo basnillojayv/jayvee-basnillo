@@ -40,6 +40,9 @@ export function ProjectRail({
   items: Project[]
 }) {
   const rail = useRef<HTMLUListElement>(null)
+  const pin = useRef<HTMLElement>(null)
+  const shift = useRef(0)
+  const [pinned, setPinned] = useState(false)
   const [at, setAt] = useState({ start: true, end: false, index: 0 })
 
   const sync = useCallback(() => {
@@ -77,11 +80,110 @@ export function ProjectRail({
     }
   }, [sync])
 
+  /**
+   * THE PIN: THE SECTION HOLDS THE SCREEN AND SCROLL DRIVES THE CARDS SIDEWAYS.
+   *
+   * The section is given extra height — one viewport plus exactly the distance
+   * the rail has to travel — and a sticky stage inside it holds at the top for
+   * that whole stretch. Vertical distance is then mapped 1:1 onto `scrollLeft`,
+   * so a pixel of page scroll is a pixel of card movement and the release comes
+   * the instant the last card lands. Nothing is intercepted: no `preventDefault`,
+   * no wheel handler, no scroll library. The page scrolls normally the whole
+   * time and the rail is a readout of where it has got to.
+   *
+   * WHY scrollLeft AND NOT A TRANSFORM
+   * The rail already treats scroll position as its source of truth — the dots
+   * and arrows read it. Translating a track instead would leave that machinery
+   * driving a value nothing displays, so the dots would stop matching the cards.
+   *
+   * Snap has to go while this is live. `scroll-snap-type: x mandatory` re-snaps
+   * after every programmatic write, so the browser would fight the scroll for
+   * the position on every frame; the CSS drops it to `none` while pinned.
+   *
+   * The whole thing is off below 769px and under reduced motion, where the rail
+   * stays the ordinary swipeable, snapping carousel it already was.
+   */
+  useEffect(() => {
+    const section = pin.current
+    const track = rail.current
+    if (!section || !track) return
+
+    const wide = window.matchMedia('(min-width: 769px)')
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)')
+    let raf = 0
+
+    const measure = () => {
+      const room = track.scrollWidth - track.clientWidth
+      // Nothing to pin for if the cards already fit, and nothing to pin at all
+      // on narrow screens or for someone who asked for less movement.
+      if (!wide.matches || still.matches || room <= 0) {
+        shift.current = 0
+        section.style.height = ''
+        setPinned(false)
+        return
+      }
+      shift.current = room
+      section.style.height = `${window.innerHeight + room}px`
+      setPinned(true)
+    }
+
+    const onScroll = () => {
+      if (raf || !shift.current) return
+      raf = requestAnimationFrame(() => {
+        raf = 0
+        const room = shift.current
+        if (!room) return
+        // Once the section's top passes 0 the stage is pinned; how far past is
+        // how far through the rail.
+        const past = -section.getBoundingClientRect().top
+        track.scrollLeft = Math.min(Math.max(past, 0), room)
+      })
+    }
+
+    measure()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', measure)
+    wide.addEventListener('change', measure)
+    still.addEventListener('change', measure)
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', measure)
+      wide.removeEventListener('change', measure)
+      still.removeEventListener('change', measure)
+      if (raf) cancelAnimationFrame(raf)
+      section.style.height = ''
+    }
+  }, [items.length])
+
+  /**
+   * While pinned, the controls move the PAGE rather than the rail.
+   *
+   * Scrolling the rail directly would work for one frame and then be overwritten
+   * by the next scroll event, because page position is what decides `scrollLeft`
+   * in this mode. Moving the page to the offset that corresponds to a card gets
+   * there and stays, and leaves one source of truth rather than two arguing.
+   */
+  const goTo = (left: number) => {
+    const el = rail.current
+    const section = pin.current
+    if (!el) return
+    const room = shift.current
+    const target = Math.min(Math.max(left, 0), room || left)
+
+    if (!pinned || !section || !room) {
+      el.scrollTo({ left: target, behavior: 'smooth' })
+      return
+    }
+    const top = section.getBoundingClientRect().top + window.scrollY
+    window.scrollTo({ top: top + target, behavior: 'smooth' })
+  }
+
   const toCard = (i: number) => {
     const el = rail.current
     const card = el?.children[i] as HTMLElement | undefined
     if (!el || !card) return
-    el.scrollTo({ left: card.offsetLeft - el.offsetLeft, behavior: 'smooth' })
+    goTo(card.offsetLeft - el.offsetLeft)
   }
 
   const step = (dir: 1 | -1) => {
@@ -90,13 +192,17 @@ export function ProjectRail({
     const card = el.firstElementChild as HTMLElement | null
     // Read the card width off the DOM so the responsive value lives only in CSS.
     const by = card ? card.offsetWidth + 16 : el.clientWidth * 0.8
-    el.scrollBy({ left: by * dir, behavior: 'smooth' })
+    goTo(el.scrollLeft + by * dir)
   }
 
   if (items.length === 0) return null
 
   return (
-    <section className="rail" id="work">
+    <section className="rail" id="work" ref={pin} data-pinned={pinned}>
+      {/* Everything the section shows lives in the stage, which is what sticks.
+          The section itself only supplies the extra height that the pin is
+          measured against. */}
+      <div className="rail__stage">
       <div className="wrap rail__head">
         <div className="rail__intro">
           {eyebrow && <p className="kicker reveal">{eyebrow}</p>}
@@ -175,6 +281,7 @@ export function ProjectRail({
             <Arrow />
           </button>
         </div>
+      </div>
       </div>
     </section>
   )

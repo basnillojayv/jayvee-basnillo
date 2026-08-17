@@ -2107,3 +2107,36 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     display:block;
     padding-block:clamp(48px,7vw,88px)}
 }
+
+/* =========================================================================
+   THE PINNED RAIL — the work section holds the screen while it plays.
+   The section is given one viewport plus the rail's own travel as height (in
+   JS, since only the browser knows how wide the cards ended up), and the stage
+   inside it sticks for that whole stretch. Page scroll maps 1:1 onto the
+   rail's `scrollLeft`, so it releases exactly as the last card lands.
+
+   `display:contents` when idle: the wrapper is then not in the layout at all,
+   so the unpinned rail — mobile, reduced motion — renders exactly as it did
+   before this existed.
+   ========================================================================= */
+.rail__stage{display:contents}
+
+@media (min-width:769px){
+  /* Height comes from the inline style; the padding moves to the stage, which
+     is the part that is actually a screenful. `overflow` moves with it — the
+     section must not clip, or it would crop the very element sticking inside
+     it. */
+  .rail[data-pinned='true'],
+  .stack-sections > section.rail[data-pinned='true']{
+    display:block;padding-block:0;overflow:visible}
+
+  .rail[data-pinned='true'] .rail__stage{
+    display:flex;flex-direction:column;justify-content:center;
+    position:sticky;top:0;min-height:100svh;
+    padding-block:clamp(56px,8vw,96px);overflow:clip}
+
+  /* Mandatory snap re-snaps after every programmatic write, so the browser and
+     the scroll position would argue once per frame. The rail keeps its snap
+     everywhere it is still swiped by hand. */
+  .rail[data-pinned='true'] .rail__track{scroll-snap-type:none;scroll-behavior:auto}
+}

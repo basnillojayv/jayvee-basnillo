@@ -339,8 +339,18 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
 /* The nine-dot mark. A square button, not a hamburger — it is a launcher in
    the reference, and reads as one. */
-.menu-toggle{width:44px;height:44px;border-radius:var(--radius-pill);
-  display:grid;place-items:center;background:var(--surface);
+.menu-toggle{width:44px;height:44px;
+  /* A rounded square, per the note above: this reads as a launcher, and a
+     circle reads as an avatar. The value used to come from the old hamburger
+     rules, which overrode the `--radius-pill` written here and quietly made
+     the shape a lie — deleting them turned the button into a circle. Stated
+     properly now so the two agree. */
+  border-radius:10px;
+  /* Hidden by default; the 1120px block turns it on when the inline nav goes.
+     This `display:none` used to live in the old hamburger rules further down,
+     which is how deleting them took the desktop default with it. It belongs
+     here, with the rest of the button. */
+  display:none;place-items:center;background:var(--surface);
   transition:background .38s var(--ease-out-expo)}
 .menu-toggle__dots{display:grid;grid-template-columns:repeat(3,3px);gap:3px}
 .menu-toggle__dots i{width:3px;height:3px;border-radius:50%;background:var(--ink);

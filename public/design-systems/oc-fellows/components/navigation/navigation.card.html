@@ -1,0 +1,31 @@
+<!-- @dsCard group="Components" viewport="700x520" name="Navigation" subtitle="NavBar and Footer" -->
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.544.0/dist/umd/lucide.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;font-family:var(--font-sans);background:var(--surface-page)}.wrap{padding:20px 24px;display:flex;flex-direction:column;gap:18px}.row{display:flex;flex-wrap:wrap;align-items:center;gap:12px}.lbl{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}</style></head>
+<body><div id="root"></div>
+<script type="text/babel">
+const { NavBar, Footer } = window.OCFellowsDesignSystem_3dfef0;
+
+const I = (n, s=18) => <i data-lucide={n} style={{width:s,height:s}}/>;
+function Demo(){
+  const items=[{label:'About',href:'/about'},
+    {label:'Our Program',href:'/our-program',children:[{label:'Learning Events',href:'/learning'},{label:'Social Events',href:'/social'},{label:'Community Partners',href:'/community'}]},
+    {label:'Our Fellows',href:'/our-fellows'},{label:'Stories',href:'/stories'},{label:'Our Team',href:'/team'}];
+  return <div style={{display:'flex',flexDirection:'column'}}>
+    <NavBar sticky={false} logo="../../assets/logo-primary.svg" items={items} activeHref="/our-fellows" cta={{label:'Apply',href:'#'}}/>
+    <div style={{padding:'22px 24px',background:'var(--surface-cream)',fontSize:'var(--text-sm)',color:'var(--text-muted)'}}>Page content sits between the two. Hover “Our Program” for the dropdown.</div>
+    <Footer logo="../../assets/logo-white.svg"
+      columns={[{title:'Navigate',links:[{label:'About',href:'#'},{label:'Our Fellows',href:'#'},{label:'Stories',href:'#'},{label:'Our Network',href:'#'}]},
+                {title:'Our Program',links:[{label:'Learning',href:'#'},{label:'Social',href:'#'},{label:'Community',href:'#'}]},
+                {title:'More',links:[{label:'Press',href:'#'},{label:'Apply',href:'#'},{label:'Contact us',href:'#'}]}]}
+      social={[{label:'LinkedIn',href:'#',icon:I('linkedin')}]}
+      legal={[{label:'Privacy Policy',href:'#'}]}/>
+  </div>;
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<Demo/>);
+if (window.lucide) setTimeout(()=>lucide.createIcons(),0);
+</script></body></html>

@@ -1,0 +1,17 @@
+:root{
+--radius-none:0;
+--radius-xs:3px;
+--radius-sm:6px;
+--radius-md:10px;
+--radius-lg:16px;
+--radius-xl:24px;
+--radius-pill:999px;
+--radius-circle:50%;
+/* Semantic */
+--radius-button:var(--radius-pill);
+--radius-input:var(--radius-sm);
+--radius-card:var(--radius-md);
+--radius-media:var(--radius-md);
+--radius-chip:var(--radius-pill);
+--radius-tile:var(--radius-none);
+}

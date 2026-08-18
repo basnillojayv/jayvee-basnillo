@@ -1,0 +1,32 @@
+/* ProSomnus — Spacing, radius & shadow tokens
+   4px base scale. 12px radius on cards, 8px on buttons/inputs.
+   Shadows are subtle only — soft, no harsh borders. */
+:root {
+  /* Spacing — 4px base */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+
+  /* Radius */
+  --radius-sm: 8px;    /* buttons, inputs */
+  --radius-md: 12px;   /* cards */
+  --radius-lg: 16px;   /* large surfaces / modals */
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+
+  /* Shadows — soft & calming */
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 12px 28px rgba(15, 23, 42, 0.10);
+  --shadow-xl: 0 24px 48px rgba(12, 68, 124, 0.12);
+  /* Focus ring */
+  --ring-primary: 0 0 0 3px rgba(34, 97, 174, 0.28);
+  --ring-accent:  0 0 0 3px rgba(251, 191, 36, 0.35);
+}

@@ -1,0 +1,13 @@
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;font-family:var(--font-sans);font-size:var(--type-body-size);line-height:var(--type-body-leading);color:var(--text-body);background:var(--surface-page);-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,h5,h6{margin:0;color:var(--text-heading);font-family:var(--font-sans);letter-spacing:var(--tracking-tight);text-wrap:balance}
+h1{font-size:var(--type-h1-size);font-weight:var(--type-h1-weight);line-height:var(--type-h1-leading)}
+h2{font-size:var(--type-h2-size);font-weight:var(--type-h2-weight);line-height:var(--type-h2-leading)}
+h3{font-size:var(--type-h3-size);font-weight:var(--type-h3-weight);line-height:var(--type-h3-leading)}
+h4{font-size:var(--type-h4-size);font-weight:var(--type-h4-weight);line-height:var(--type-h4-leading)}
+p{margin:0;text-wrap:pretty}
+a{color:var(--text-link);text-decoration:none;transition:color var(--dur-fast) var(--ease-out)}
+a:hover{color:var(--text-link-hover)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:none;box-shadow:var(--ring-focus)}
+img,svg{display:block;max-width:100%}
+button{font:inherit}

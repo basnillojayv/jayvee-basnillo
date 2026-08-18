@@ -1,0 +1,86 @@
+:root{
+/* ---- Brand palette — exact values from Brand Identity Guidelines V2.2, page 13 ---- */
+--oc-ink:#2A2C3B;      /* CMYK 80 73 52 54 · RGB 42 44 59 */
+--oc-navy:#002F4B;     /* CMYK 0 51 75 0 (as printed) · RGB 0 47 75 */
+--oc-teal:#00ACC1;     /* CMYK 100 11 0 24 · RGB 0 172 193 */
+--oc-aqua:#A8DADC;     /* CMYK 33 1 14 0 · RGB 168 218 220 */
+--oc-orange:#FF944D;   /* CMYK 0 51 75 0 · RGB 255 148 77 */
+--oc-slate:#7D8C8C;    /* CMYK 54 37 41 4 · RGB 125 140 140 */
+/* Logo blue: the supplied lockup artwork is drawn in this blue, which appears in the
+   Mini Brand Style Guide strip but not in the V2.2 brand-colour page. Use it only for the
+   mark itself; use --oc-navy for UI. */
+--oc-logo-blue:#01547C;
+--oc-cream:#FAF6F5;    /* light lockup tile background used in the guides */
+
+/* ---- Navy scale (derived from --oc-navy) ---- */
+--navy-50:#E8EFF3;--navy-100:#C4D6E0;--navy-200:#93B4C6;--navy-300:#5288A5;
+--navy-400:#1C5A7C;--navy-500:#002F4B;--navy-600:#00263D;--navy-700:#001E30;
+--navy-800:#001623;--navy-900:#000E16;
+
+/* ---- Ink scale (derived from --oc-ink) ---- */
+--ink-100:#E6E7EA;--ink-300:#9A9CA7;--ink-500:#2A2C3B;--ink-700:#1E202B;--ink-900:#12131A;
+
+/* ---- Orange scale (derived from --oc-orange) ---- */
+--orange-50:#FFF4EC;--orange-100:#FFE3CE;--orange-200:#FFC9A4;
+--orange-300:#FFB07A;--orange-500:#FF944D;--orange-600:#F07B2E;
+--orange-700:#CE6320;--orange-900:#8A3F11;
+
+/* ---- Aqua / teal scales ---- */
+--aqua-50:#F1F9F9;--aqua-100:#E0F1F2;--aqua-200:#C9E7E8;--aqua-500:#A8DADC;--aqua-700:#7FBEC1;
+--teal-100:#CDEFF4;--teal-300:#67CFDC;--teal-500:#00ACC1;--teal-700:#00889A;
+
+/* ---- Neutrals (anchored on --oc-cream and --oc-slate) ---- */
+--neutral-0:#FFFFFF;--neutral-50:#FAF6F5;--neutral-100:#F2F1F0;--neutral-200:#E4E7E7;
+--neutral-300:#C9CFCF;--neutral-400:#A3ADAD;--neutral-500:#7D8C8C;--neutral-600:#5E6B6B;
+--neutral-700:#45504F;--neutral-800:#2E3736;--neutral-900:#1A2120;
+
+/* ---- Semantic: text ---- */
+--text-heading:var(--navy-500);
+--text-body:var(--ink-500);
+--text-muted:var(--neutral-500);
+--text-inverse:var(--neutral-0);
+--text-inverse-muted:var(--aqua-500);
+--text-accent:var(--orange-500);
+--text-link:var(--navy-500);
+--text-link-hover:var(--orange-600);
+
+/* ---- Semantic: surfaces ---- */
+--surface-page:var(--neutral-0);
+--surface-cream:var(--oc-cream);
+--surface-card:var(--neutral-0);
+--surface-subtle:var(--neutral-100);
+--surface-navy:var(--navy-500);
+--surface-navy-deep:var(--navy-700);
+--surface-ink:var(--ink-500);
+--surface-aqua:var(--aqua-500);
+--surface-aqua-soft:var(--aqua-100);
+--surface-orange:var(--orange-500);
+--surface-teal:var(--teal-500);
+
+/* ---- Semantic: borders ---- */
+--border-subtle:var(--neutral-200);
+--border-default:var(--neutral-300);
+--border-strong:var(--navy-500);
+--border-accent:var(--orange-500);
+--border-inverse:rgba(255,255,255,.28);
+
+/* ---- Semantic: interactive ---- */
+--action-primary-bg:var(--orange-500);
+--action-primary-bg-hover:var(--orange-600);
+--action-primary-bg-active:var(--orange-700);
+--action-primary-fg:var(--neutral-0);
+--action-secondary-bg:var(--navy-500);
+--action-secondary-bg-hover:var(--navy-400);
+--action-secondary-fg:var(--neutral-0);
+--action-quiet-fg:var(--navy-500);
+--action-quiet-bg-hover:var(--navy-50);
+--focus-ring:var(--teal-500);
+--disabled-bg:var(--neutral-200);
+--disabled-fg:var(--neutral-400);
+
+/* ---- Status (derived; the supplied brand sources define no status palette) ---- */
+--status-success:#2E8B6F;--status-success-bg:#E6F3EF;
+--status-warning:#C97A16;--status-warning-bg:#FDF1E0;
+--status-danger:#C0453A;--status-danger-bg:#FBEBE9;
+--status-info:var(--teal-700);--status-info-bg:var(--teal-100);
+}

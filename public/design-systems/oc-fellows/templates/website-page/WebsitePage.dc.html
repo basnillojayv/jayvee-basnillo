@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Website page" description="OC Fellows marketing page shell: header, photographic hero, section bands, closing CTA, navy footer." -->
+<helmet><script src="./ds-base.js"></script><link rel="preconnect" href="https://fonts.googleapis.com"><style>body{margin:0}a{text-decoration:none}</style></helmet>
+<div style="font-family:var(--font-sans);color:var(--text-body);background:var(--surface-page)">
+<header style="position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);border-bottom:1px solid var(--border-subtle)">
+<nav style="display:flex;align-items:center;gap:32px;max-width:1180px;margin:0 auto;padding:16px 24px">
+<a href="#" style="display:flex"><img src="../../assets/logo-primary.svg" alt="OC Fellows" style="height:40px"></a>
+<div style="display:flex;align-items:center;gap:24px;margin-left:auto">
+<a href="#" style="font-size:14px;font-weight:600;color:var(--navy-500)">About</a>
+<a href="#" style="font-size:14px;font-weight:600;color:var(--navy-500)">Our Program</a>
+<a href="#" style="font-size:14px;font-weight:600;color:var(--navy-500)">Our Fellows</a>
+<a href="#" style="font-size:14px;font-weight:600;color:var(--navy-500)">Stories</a>
+</div>
+<x-import component-from-global-scope="OCFellowsDesignSystem_3dfef0.Button" size="sm" href="#" hint-size="96px,40px">Apply</x-import>
+</nav>
+</header>
+<section style="position:relative;background:var(--surface-navy);overflow:hidden">
+<img src="../../assets/photography/oc-fellows-group.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+<span style="position:absolute;inset:0;background:var(--scrim-left)"></span>
+<div style="position:relative;max-width:1180px;margin:0 auto;padding:128px 24px">
+<div style="max-width:640px;display:flex;flex-direction:column;gap:24px">
+<p style="margin:0;font-size:14px;font-weight:600;letter-spacing:.34em;text-transform:uppercase;color:var(--aqua-500)">Connect. Grow. Succeed.</p>
+<h1 style="margin:0;color:#fff;font-size:60px;font-weight:700;line-height:1.08;letter-spacing:-.02em;text-wrap:balance">Recognizing and Developing Orange County's Future Business Leaders</h1>
+<p style="margin:0;color:rgba(255,255,255,.88);font-size:18px;line-height:1.7;max-width:52ch;text-wrap:pretty">OC Fellows is a two-year leadership experience designed for early-career professionals ready to lead with purpose and make meaningful impact across industries and communities.</p>
+<div style="display:flex;gap:12px;margin-top:8px">
+<x-import component-from-global-scope="OCFellowsDesignSystem_3dfef0.Button" size="lg" href="#" hint-size="130px,56px">Apply</x-import>
+<x-import component-from-global-scope="OCFellowsDesignSystem_3dfef0.Button" size="lg" variant="inverse" href="#" hint-size="200px,56px">Meet the OC Fellows</x-import>
+</div>
+</div>
+</div>
+</section>
+<section style="background:var(--surface-page);padding-block:96px">
+<div style="max-width:1180px;margin:0 auto;padding-inline:24px;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center">
+<div style="display:flex;flex-direction:column;gap:20px">
+<p style="margin:0;font-size:14px;font-weight:600;letter-spacing:.14em;color:var(--orange-500)">OC Fellows seeks to develop diverse young talent in Orange County, California.</p>
+<h2 style="margin:0;color:var(--text-heading);font-size:36px;font-weight:700;line-height:1.25;letter-spacing:-.02em">What is the OC Fellows?</h2>
+<p style="margin:0;font-size:16px;line-height:1.7;color:var(--text-body);max-width:64ch;text-wrap:pretty">It is a two-year leadership development program for diverse early career professionals working in OC companies and businesses. We provide learning workshops, skill building, networking opportunities, community service and connection across industries.</p>
+<div><x-import component-from-global-scope="OCFellowsDesignSystem_3dfef0.Button" variant="secondary" href="#" hint-size="220px,50px">Meet the OC Fellows</x-import></div>
+</div>
+<img src="../../assets/photography/oc-fellows-networking.png" alt="OC Fellows at a networking event" style="width:100%;border-radius:10px;box-shadow:var(--shadow-md)">
+</div>
+</section>
+<section style="background:var(--surface-cream);padding-block:96px">
+<div style="max-width:1180px;margin:0 auto;padding-inline:24px">
+<div style="display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center;max-width:64ch;margin-inline:auto">
+<p style="margin:0;font-size:14px;font-weight:600;letter-spacing:.14em;color:var(--orange-500)">Leading with Purpose, Impact, and Unity</p>
+<h2 style="margin:0;color:var(--text-heading);font-size:36px;font-weight:700;line-height:1.25;letter-spacing:-.02em">Our Values</h2>
+<p style="margin:4px 0 0;font-size:18px;line-height:1.7;color:var(--text-body);text-wrap:pretty">We foster curiosity, inclusivity, and a sense of interconnectedness, encouraging individuals to grow while contributing to the collective success of Orange County.</p>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:64px">
+<div style="background:#fff;border-radius:10px;box-shadow:var(--shadow-sm);padding:24px;display:flex;flex-direction:column;gap:12px">
+<h4 style="margin:0;font-size:20px;font-weight:600;color:var(--text-heading)">Curiosity Sparks Growth</h4>
+<p style="margin:0;font-size:16px;line-height:1.7;color:var(--text-body)">Our curiosity leads to learning and understanding</p>
+</div>
+<div style="background:#fff;border-radius:10px;box-shadow:var(--shadow-sm);padding:24px;display:flex;flex-direction:column;gap:12px">
+<h4 style="margin:0;font-size:20px;font-weight:600;color:var(--text-heading)">Lead with Empathy</h4>
+<p style="margin:0;font-size:16px;line-height:1.7;color:var(--text-body)">Leading with empathy helps us recognize and include others</p>
+</div>
+<div style="background:#fff;border-radius:10px;box-shadow:var(--shadow-sm);padding:24px;display:flex;flex-direction:column;gap:12px">
+<h4 style="margin:0;font-size:20px;font-weight:600;color:var(--text-heading)">Shared Connection</h4>
+<p style="margin:0;font-size:16px;line-height:1.7;color:var(--text-body)">Working together we reflect our interconnectedness</p>
+</div>
+</div>
+</div>
+</section>
+<section style="background:var(--surface-navy);padding-block:64px">
+<div style="max-width:1180px;margin:0 auto;padding-inline:24px;display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center">
+<p style="margin:0;font-size:14px;font-weight:600;letter-spacing:.14em;color:var(--aqua-500)">Reach out if you are interested in OC Fellows</p>
+<h2 style="margin:0;color:#fff;font-size:36px;font-weight:700;line-height:1.25;letter-spacing:-.02em">Get Involved with OC Fellows</h2>
+<x-import component-from-global-scope="OCFellowsDesignSystem_3dfef0.Button" size="lg" href="#" hint-size="150px,56px">Contact us</x-import>
+</div>
+</section>
+<footer style="background:var(--surface-navy);border-top:1px solid rgba(255,255,255,.28)">
+<div style="max-width:1180px;margin:0 auto;padding:64px 24px 32px;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:48px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:24px">
+<img src="../../assets/logo-white.svg" alt="OC Fellows" style="height:44px">
+<div style="display:flex;flex-direction:column;gap:8px">
+<span style="font-size:12px;letter-spacing:.04em;color:var(--aqua-500)">A program of</span>
+<span style="font-size:14px;font-weight:600;color:#fff">CEO Leadership Alliance of Orange County</span>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<h6 style="margin:0;font-size:14px;font-weight:700;letter-spacing:.04em;color:#fff">Navigate</h6>
+<a href="#" style="font-size:14px;color:rgba(255,255,255,.82)">About</a>
+<a href="#" style="font-size:14px;color:rgba(255,255,255,.82)">Our Fellows</a>
+<a href="#" style="font-size:14px;color:rgba(255,255,255,.82)">Stories</a>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<h6 style="margin:0;font-size:14px;font-weight:700;letter-spacing:.04em;color:#fff">Our Program</h6>
+<a href="#" style="font-size:14px;color:rgba(255,255,255,.82)">Learning</a>
+<a href="#" style="font-size:14px;color:rgba(255,255,255,.82)">Social</a>
+<a href="#" style="font-size:14px;color:rgba(255,255,255,.82)">Community</a>
+</div>
+</div>
+<div style="border-top:1px solid rgba(255,255,255,.28)">
+<div style="max-width:1180px;margin:0 auto;padding:20px 24px;font-size:12px;color:rgba(255,255,255,.7)">© 2026 OC Fellows. All Rights Reserved.</div>
+</div>
+</footer>
+</div>
+
+</x-dc>
+</body>
+</html>

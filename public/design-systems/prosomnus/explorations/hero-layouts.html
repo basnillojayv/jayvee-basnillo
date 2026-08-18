@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="design_doc_mode" content="canvas">
+<title>ProSomnus — Hero layout options</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-body); background: #EEF1F5; }
+  h1,h2 { font-family: var(--font-heading); font-weight: 600; letter-spacing: -0.015em; color: var(--text-heading); margin: 0; }
+  p { margin: 0; }
+
+  .frame { position: absolute; width: 1280px; height: 640px; background: var(--surface-card); border-radius: 20px; overflow: hidden; box-shadow: 0 30px 70px rgba(15,23,42,0.16); }
+  .badge { position: absolute; top: -46px; left: 0; display: flex; align-items: center; gap: 12px; }
+  .badge .id { font-family: var(--font-heading); font-weight: 700; font-size: 20px; color: #fff; background: var(--color-primary); width: 40px; height: 40px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; }
+  .badge .t { font-size: 17px; font-weight: 600; color: var(--text-heading); }
+  .badge .t small { display: block; font-weight: 400; color: var(--text-muted); font-size: 13px; margin-top: 1px; }
+
+  .eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--color-primary); }
+  .lead { font-size: 20px; line-height: 1.6; color: var(--text-body); }
+  .btn { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-body); font-weight: 600; font-size: 16px; border-radius: var(--radius-sm); padding: 14px 26px; border: none; cursor: pointer; white-space: nowrap; }
+  .btn.accent { background: var(--color-accent); color: var(--color-on-accent); box-shadow: var(--shadow-md); }
+  .btn.secondary { background: var(--surface-card); color: var(--color-primary); border: 1px solid var(--border-default); box-shadow: var(--shadow-xs); }
+  .btn.ghostwhite { background: rgba(255,255,255,0.16); color: #fff; border: 1px solid rgba(255,255,255,0.4); }
+  .trust { display: flex; flex-wrap: wrap; gap: 12px 26px; }
+  .trust span { display: flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 500; color: var(--text-body); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--color-secondary); }
+  .ph { background: linear-gradient(155deg,#cfe6f6,#eaf4fc 55%,#dff2fb); display: flex; align-items: center; justify-content: center; color: var(--blue-700); }
+  .ph .lbl { opacity: 0.5; font-size: 14px; }
+  .arrow { font-size: 18px; }
+
+  .note { position: absolute; left: 0; width: 1280px; top: 660px; font-size: 14px; color: var(--gray-600); line-height: 1.5; }
+  .note b { color: var(--text-heading); }
+</style>
+</head>
+<body>
+
+<!-- ============ OPTION A: Centered / symmetric ============ -->
+<div class="frame" style="left: 80px; top: 90px;">
+  <div style="height:100%; display:flex; flex-direction:column; align-items:center; text-align:center; padding:64px 80px 0; background:radial-gradient(120% 90% at 50% -10%, var(--blue-50), var(--surface-card) 60%);">
+    <span class="eyebrow">The CPAP alternative</span>
+    <h1 style="font-size:60px; line-height:1.04; margin-top:16px; max-width:820px;">Sleep Better Without the Machine</h1>
+    <p class="lead" style="margin-top:20px; max-width:560px;">Restful, restorative sleep from a comfortable, custom-fit oral appliance — no masks, no hoses, no noise.</p>
+    <div style="display:flex; gap:14px; margin-top:30px;">
+      <button class="btn accent">Find a Provider <span class="arrow">→</span></button>
+      <button class="btn secondary">▷ See How It Works</button>
+    </div>
+    <div class="trust" style="justify-content:center; margin-top:30px;">
+      <span><span class="dot"></span> FDA cleared</span>
+      <span><span class="dot"></span> Covered by most insurance</span>
+      <span><span class="dot"></span> 100k+ patients</span>
+    </div>
+    <div class="ph" style="margin-top:40px; width:100%; flex:1; border-radius:18px 18px 0 0;"><span class="lbl">Wide, calm patient photo (full-width band)</span></div>
+  </div>
+</div>
+<div class="badge" style="left:80px; top:136px;"><span class="id">A</span><span class="t">Centered &amp; symmetric<small>Calm, balanced — headline is the hero, photo anchors below</small></span></div>
+<div class="note" style="left:80px; top:750px;"><b>A — Centered.</b> Most serene and focused. Works beautifully on mobile (everything already stacks &amp; centers). Photo becomes a reassuring full-width band. Best when the headline + proof do the selling.</div>
+
+<!-- ============ OPTION B: Image left, content right + stat ============ -->
+<div class="frame" style="left: 80px; top: 950px;">
+  <div style="height:100%; display:grid; grid-template-columns: 0.92fr 1.08fr;">
+    <div class="ph" style="border-radius:0;"><span class="lbl">Tall patient portrait</span></div>
+    <div style="padding:72px 72px 0; display:flex; flex-direction:column; background:linear-gradient(180deg,var(--surface-card),var(--cyan-50));">
+      <span class="eyebrow">The CPAP alternative</span>
+      <h1 style="font-size:52px; line-height:1.06; margin-top:16px;">Sleep Better Without the Machine</h1>
+      <p class="lead" style="margin-top:18px; max-width:460px;">A comfortable, custom-fit oral appliance — worn like a retainer. Quiet nights, restful mornings.</p>
+      <div style="display:flex; gap:14px; margin-top:28px;">
+        <button class="btn accent">Find a Provider <span class="arrow">→</span></button>
+        <button class="btn secondary">See How It Works</button>
+      </div>
+      <div style="margin-top:auto; margin-bottom:40px; display:flex; align-items:center; gap:20px; padding:20px 24px; background:var(--surface-card); border-radius:var(--radius-md); box-shadow:var(--shadow-md); align-self:flex-start;">
+        <span style="font-family:var(--font-heading); font-weight:700; font-size:44px; color:var(--color-primary-strong); line-height:1;">96%</span>
+        <span style="font-size:15px; color:var(--text-body); max-width:190px;">of patients prefer ProSomnus over CPAP</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="badge" style="left:80px; top:996px;"><span class="id">B</span><span class="t">Image-forward + proof<small>Portrait leads, content right, stat card embedded</small></span></div>
+<div class="note" style="left:80px; top:1610px;"><b>B — Image-forward.</b> Leads with a human face for immediate warmth; the embedded 96% stat card puts proof above the fold. Strongest emotional pull. On mobile: photo on top, content below.</div>
+
+<!-- ============ OPTION C: Full-bleed immersive with frosted card ============ -->
+<div class="frame" style="left: 80px; top: 1810px;">
+  <div style="height:100%; position:relative; background:linear-gradient(120deg,#0C447C,#16457E 40%,#06618B);">
+    <div style="position:absolute; inset:0; background:radial-gradient(60% 80% at 80% 30%, rgba(0,154,217,0.55), transparent 70%);"></div>
+    <div style="position:absolute; right:60px; top:0; bottom:0; width:46%; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.4); font-size:14px;">Full-bleed lifestyle photo (person resting)</div>
+    <div style="position:relative; height:100%; display:flex; flex-direction:column; justify-content:center; padding:0 80px; max-width:640px;">
+      <span class="eyebrow" style="color:var(--cyan-100);">The CPAP alternative</span>
+      <h1 style="font-size:58px; line-height:1.04; margin-top:16px; color:#fff;">Sleep Better Without the Machine</h1>
+      <p class="lead" style="margin-top:20px; max-width:470px; color:rgba(255,255,255,0.86);">Comfortable, custom-fit, and covered — the modern alternative to CPAP. No masks, no hoses, no noise.</p>
+      <div style="display:flex; gap:14px; margin-top:30px;">
+        <button class="btn accent">Find a Provider <span class="arrow">→</span></button>
+        <button class="btn ghostwhite">▷ See How It Works</button>
+      </div>
+      <div class="trust" style="margin-top:32px;">
+        <span style="color:rgba(255,255,255,0.9);"><span class="dot"></span> FDA cleared</span>
+        <span style="color:rgba(255,255,255,0.9);"><span class="dot"></span> Medicare &amp; VA</span>
+        <span style="color:rgba(255,255,255,0.9);"><span class="dot"></span> 100k+ patients</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="badge" style="left:80px; top:1856px;"><span class="id">C</span><span class="t">Full-bleed immersive<small>Deep-blue lifestyle scene, content over image</small></span></div>
+<div class="note" style="left:80px; top:2470px;"><b>C — Immersive.</b> Boldest and most premium; the deep-blue band feels calm and trustworthy (echoes the provider section). Amber CTA pops hardest here. Needs a strong full-bleed photo to work — highest dependency on real photography.</div>
+
+</body>
+</html>

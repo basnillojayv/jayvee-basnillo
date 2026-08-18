@@ -1,0 +1,71 @@
+<!-- @dsCard group="Pages" viewport="1280x820" name="For Providers" subtitle="Clinician landing: why, tech, join network" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>For Healthcare Providers — ProSomnus</title>
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; font-family: var(--font-body); background: var(--surface-card); color: var(--text-body); }
+  h1,h2,h3 { font-family: var(--font-heading); color: var(--text-heading); margin: 0; letter-spacing: -0.015em; }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 40px; }
+  section { scroll-margin-top: 92px; }
+  .eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--color-primary); }
+  .prv-ghost:hover { background: rgba(255,255,255,0.24) !important; }
+  .skip-link { position: absolute; left: 16px; top: -60px; z-index: 200; background: var(--color-primary); color: #fff; padding: 10px 18px; border-radius: var(--radius-sm); font-size: 15px; font-weight: 600; transition: top var(--duration-base) var(--ease-out); }
+  .skip-link:focus { top: 16px; outline: 3px solid var(--amber-500); outline-offset: 2px; }
+  a:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid var(--color-primary); outline-offset: 2px; border-radius: 4px; }
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity 1s var(--ease-out), transform 1s var(--ease-out); }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } }
+  @media (max-width: 900px) {
+    .wrap { padding: 0 22px; }
+    .desktop-only { display: none !important; }
+    .footer-grid { grid-template-columns: 1fr 1fr !important; }
+    .prv-hero { grid-template-columns: 1fr !important; }
+    .prv-grid { grid-template-columns: 1fr !important; }
+    .prv-tech { grid-template-columns: 1fr !important; }
+    .prv-tech > div { order: 0 !important; }
+    .prv-join { grid-template-columns: 1fr !important; }
+  }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script src="../../_ds_bundle.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="../../shared/PageChrome.jsx"></script>
+<script type="text/babel" src="Providers.jsx"></script>
+<script type="text/babel">
+  function App() {
+    React.useEffect(() => {
+      const io = new IntersectionObserver((es) => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }), { threshold: 0.12 });
+      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+      return () => io.disconnect();
+    }, []);
+    return (
+      <div>
+        <a href="#main" className="skip-link">Skip to content</a>
+        <window.SITE.Header active="providers" />
+        <main id="main">
+          <window.PRV.Hero />
+          <window.PRV.Why />
+          <window.PRV.Tech />
+          <window.PRV.Start />
+          <window.PRV.Join />
+        </main>
+        <window.SITE.Footer />
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

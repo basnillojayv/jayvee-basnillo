@@ -1,0 +1,25 @@
+<!-- @dsCard group="Spacing" viewport="700x160" name="Corner radius" subtitle="8px buttons/inputs · 12px cards · 16px surfaces." -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; font-family: var(--font-body); background: var(--surface-card); padding: 24px; }
+  .row { display: flex; gap: 20px; }
+  .item { text-align: center; }
+  .box { width: 84px; height: 64px; background: var(--blue-50); box-shadow: inset 0 0 0 1.5px var(--color-primary); }
+  .lab { font-size: 13px; color: var(--text-heading); font-weight: 600; margin-top: 10px; }
+  .tok { font-family: ui-monospace, monospace; font-size: 11px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="item"><div class="box" style="border-radius:var(--radius-sm)"></div><div class="lab">8px</div><div class="tok">radius-sm</div></div>
+    <div class="item"><div class="box" style="border-radius:var(--radius-md)"></div><div class="lab">12px</div><div class="tok">radius-md</div></div>
+    <div class="item"><div class="box" style="border-radius:var(--radius-lg)"></div><div class="lab">16px</div><div class="tok">radius-lg</div></div>
+    <div class="item"><div class="box" style="border-radius:var(--radius-xl)"></div><div class="lab">24px</div><div class="tok">radius-xl</div></div>
+    <div class="item"><div class="box" style="border-radius:var(--radius-pill);width:110px"></div><div class="lab">pill</div><div class="tok">radius-pill</div></div>
+  </div>
+</body>
+</html>

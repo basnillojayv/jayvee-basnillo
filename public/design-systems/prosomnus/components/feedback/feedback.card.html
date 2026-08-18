@@ -1,0 +1,45 @@
+<!-- @dsCard group="Components" viewport="700x340" name="Feedback" subtitle="Alert banners & modal Dialog" -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<style>
+  body { margin: 0; font-family: var(--font-body); background: var(--surface-page); padding: 24px; }
+  .lbl { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 12px; }
+  .stack { display: flex; flex-direction: column; gap: 12px; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+  const { Alert, Dialog, Button } = window.DesignSystem_e5ed69;
+  function Demo() {
+    const [open, setOpen] = React.useState(false);
+    return (
+      <div>
+        <div className="lbl">Alerts</div>
+        <div className="stack">
+          <Alert tone="success" title="You're covered">ProSomnus is in network with your plan.</Alert>
+          <Alert tone="info">Your dentist will confirm the fit at your next visit.</Alert>
+          <Alert tone="warning" onClose={()=>{}}>Your appointment is in 2 days.</Alert>
+          <Alert tone="error">We couldn't verify your insurance. Please try again.</Alert>
+        </div>
+        <div style={{marginTop:20}}>
+          <Button variant="accent" onClick={()=>setOpen(true)}>Open dialog</Button>
+        </div>
+        <Dialog open={open} onClose={()=>setOpen(false)} title="Book a consultation"
+          footer={<><Button variant="ghost" onClick={()=>setOpen(false)}>Cancel</Button><Button variant="accent" onClick={()=>setOpen(false)}>Confirm</Button></>}>
+          Choose a time that works for you and we'll match you with a provider near you.
+        </Dialog>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+</script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!-- @dsCard group="Brand" viewport="700x220" name="Voice & tone" subtitle="Reassuring, warm, human — never clinical." -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; font-family: var(--font-body); background: var(--surface-card); padding: 24px; color: var(--text-body); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .cell { border-radius: var(--radius-md); padding: 16px 18px; }
+  .do { background: var(--cyan-50); }
+  .dont { background: var(--error-bg); }
+  .tag { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+  .do .tag { color: var(--cyan-700); }
+  .dont .tag { color: var(--error); }
+  .line { font-size: 16px; line-height: 1.5; color: var(--text-heading); margin-top: 8px; }
+  .sub { font-size: 13px; color: var(--text-muted); margin-top: 6px; }
+</style>
+</head>
+<body>
+  <div class="grid">
+    <div class="cell do">
+      <div class="tag">✓ We say</div>
+      <div class="line">“Sleep through the night — no mask, no hose, no noise.”</div>
+      <div class="sub">Warm, plain-spoken, focused on how life feels better.</div>
+    </div>
+    <div class="cell dont">
+      <div class="tag">✕ Not</div>
+      <div class="line">“Mandibular advancement device for OSA management.”</div>
+      <div class="sub">Clinical jargon that distances the reader.</div>
+    </div>
+  </div>
+</body>
+</html>

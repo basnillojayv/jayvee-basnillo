@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProSomnus — Typography exploration</title>
+<link rel="stylesheet" href="../styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Archivo:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--surface-page); color: var(--text-body);
+    font-family: 'Archivo', system-ui, sans-serif; padding: 40px 32px 72px;
+  }
+  .page-head { max-width: 1160px; margin: 0 auto 28px; }
+  .page-head h1 { font-family: 'Archivo', sans-serif; font-size: 24px; font-weight: 700; color: var(--text-heading); margin: 0 0 8px; letter-spacing: -0.01em; }
+  .page-head p { font-size: 15px; line-height: 1.6; color: var(--text-muted); margin: 0; max-width: 720px; }
+  .flag { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; font-size: 13px; color: var(--amber-700); background: var(--amber-50); padding: 8px 14px; border-radius: var(--radius-pill); }
+
+  .grid { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+  .panel { background: var(--surface-card); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); overflow: hidden; }
+  .panel-top { padding: 20px 32px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; justify-content: space-between; }
+  .badge { font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 13px; color: #fff; background: var(--blue-700); width: 34px; height: 34px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; }
+  .pair { font-family: 'Archivo', sans-serif; }
+  .pair .name { font-size: 16px; font-weight: 700; color: var(--text-heading); }
+  .pair .sub { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+  .stack { font-family: 'Archivo', sans-serif; font-size: 11px; color: var(--text-muted); text-align: right; line-height: 1.5; }
+  .stack b { color: var(--text-body); font-weight: 600; }
+
+  .body-pad { padding: 32px; }
+  .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+
+  /* ---- Column A tokens: current brand (Utopia≈Source Serif 4 / Univers≈Archivo) ---- */
+  .setA { --ff-head: 'Source Serif 4', Georgia, serif; --ff-body: 'Archivo', system-ui, sans-serif; }
+  /* ---- Column B tokens: modern alternative (Newsreader / Manrope) ---- */
+  .setB { --ff-head: 'Newsreader', Georgia, serif; --ff-body: 'Manrope', system-ui, sans-serif; }
+
+  .spec h2.hl { font-family: var(--ff-head); color: var(--text-heading); font-weight: 600; font-size: 46px; line-height: 1.08; letter-spacing: -0.015em; margin: 10px 0 0; }
+  .spec h3.h2 { font-family: var(--ff-head); color: var(--text-heading); font-weight: 600; font-size: 28px; line-height: 1.15; margin: 26px 0 0; }
+  .spec .eyebrow { color: var(--color-primary); font-family: var(--ff-body); }
+  .spec .lead { font-family: var(--ff-body); font-size: 19px; line-height: 1.6; color: var(--text-body); margin: 16px 0 0; }
+  .spec .body { font-family: var(--ff-body); font-size: 16px; line-height: 1.7; color: var(--text-body); margin: 16px 0 0; max-width: 46ch; }
+  .spec .cap { font-family: var(--ff-body); font-size: 13px; color: var(--text-muted); margin: 14px 0 0; }
+
+  .divider { height: 1px; background: var(--border-subtle); margin: 28px 0; }
+
+  .ui-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .stat { font-family: var(--ff-head); font-weight: 700; font-size: 52px; line-height: 1; color: var(--color-primary-strong); letter-spacing: -0.02em; }
+  .stat small { display: block; font-family: var(--ff-body); font-weight: 500; font-size: 13px; color: var(--text-muted); letter-spacing: 0; margin-top: 6px; }
+  .btn { font-family: var(--ff-body); font-weight: 600; font-size: 15px; padding: 12px 22px; border-radius: var(--radius-sm); border: none; cursor: pointer; }
+  .btn.accent { background: var(--color-accent); color: var(--color-on-accent); box-shadow: var(--shadow-md); }
+  .btn.primary { background: var(--color-primary); color: #fff; }
+  .label { font-family: var(--ff-body); font-size: 14px; font-weight: 500; color: var(--text-heading); }
+  .glyphs { font-family: var(--ff-head); font-size: 26px; color: var(--text-heading); letter-spacing: .04em; margin-top: 6px; }
+  .glyphs .g2 { font-family: var(--ff-body); }
+</style>
+</head>
+<body>
+  <div class="page-head">
+    <h1>Typography — heading / body pairing</h1>
+    <p>Two directions, both serif headline + sans body. <b>1A</b> is your current brand (Utopia + Univers), rendered with the nearest web-available substitutes. <b>1B</b> keeps the same serif/sans contrast but feels more modern. Colors, spacing and components are unchanged — only the type families differ.</p>
+    <span class="flag">⚠︎ Utopia and Univers are not webfonts — 1A uses Source Serif 4 (≈Utopia) and Archivo (≈Univers). Send the licensed files and I'll swap in the real faces.</span>
+  </div>
+
+  <div class="grid">
+    <!-- 1A -->
+    <div class="panel setA">
+      <div class="panel-top">
+        <div style="display:flex;align-items:center;gap:14px">
+          <span class="badge">1A</span>
+          <div class="pair">
+            <div class="name">Utopia + Univers</div>
+            <div class="sub">Current brand · substituted for web</div>
+          </div>
+        </div>
+        <div class="stack"><b>Source Serif 4</b> headings<br><b>Archivo</b> body / UI</div>
+      </div>
+      <div class="body-pad spec">
+        <div class="eyebrow">A CPAP alternative</div>
+        <h2 class="hl">Sleep, restored.</h2>
+        <p class="lead">A comfortable, custom-fit oral appliance — worn like a retainer, with no masks, hoses, or noise.</p>
+        <p class="body">ProSomnus appliances are precision-milled for your mouth and gently reposition the jaw to keep your airway open. 96% of patients prefer them over CPAP, and they're covered by nearly all medical insurance, Medicare, and VA benefits.</p>
+        <p class="cap">Individual results vary. Talk to your dentist or physician.</p>
+
+        <div class="divider"></div>
+        <h3 class="h2">Prescribe with confidence</h3>
+        <div class="ui-row" style="margin-top:20px">
+          <div class="stat">96%<small>prefer it over CPAP</small></div>
+          <div class="stat">200k+<small>patients treated</small></div>
+        </div>
+        <div class="ui-row" style="margin-top:24px">
+          <button class="btn accent">Check my coverage</button>
+          <button class="btn primary">Find a provider</button>
+          <span class="label">Form label</span>
+        </div>
+        <div class="glyphs">Aa Gg Ry 1234567890 &nbsp; <span class="g2">Aa Gg Ry 1234567890</span></div>
+      </div>
+    </div>
+
+    <!-- 1B -->
+    <div class="panel setB">
+      <div class="panel-top">
+        <div style="display:flex;align-items:center;gap:14px">
+          <span class="badge" style="background:var(--cyan-700)">1B</span>
+          <div class="pair">
+            <div class="name">Newsreader + Manrope</div>
+            <div class="sub">Modern · same serif/sans contrast</div>
+          </div>
+        </div>
+        <div class="stack"><b>Newsreader</b> headings<br><b>Manrope</b> body / UI</div>
+      </div>
+      <div class="body-pad spec">
+        <div class="eyebrow">A CPAP alternative</div>
+        <h2 class="hl">Sleep, restored.</h2>
+        <p class="lead">A comfortable, custom-fit oral appliance — worn like a retainer, with no masks, hoses, or noise.</p>
+        <p class="body">ProSomnus appliances are precision-milled for your mouth and gently reposition the jaw to keep your airway open. 96% of patients prefer them over CPAP, and they're covered by nearly all medical insurance, Medicare, and VA benefits.</p>
+        <p class="cap">Individual results vary. Talk to your dentist or physician.</p>
+
+        <div class="divider"></div>
+        <h3 class="h2">Prescribe with confidence</h3>
+        <div class="ui-row" style="margin-top:20px">
+          <div class="stat">96%<small>prefer it over CPAP</small></div>
+          <div class="stat">200k+<small>patients treated</small></div>
+        </div>
+        <div class="ui-row" style="margin-top:24px">
+          <button class="btn accent">Check my coverage</button>
+          <button class="btn primary">Find a provider</button>
+          <span class="label">Form label</span>
+        </div>
+        <div class="glyphs">Aa Gg Ry 1234567890 &nbsp; <span class="g2">Aa Gg Ry 1234567890</span></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

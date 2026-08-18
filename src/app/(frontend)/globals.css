@@ -1768,6 +1768,136 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   background:var(--surface)}
 .designtile figcaption{font-size:.875rem;letter-spacing:var(--track-body);color:var(--muted)}
 
+/* ---------- 9e-0. design system documents ----------
+   The document brings its own colours and type inline, so this styles only the
+   frame: the chapter rail, the stage it scrolls in, and the copy toast. */
+.sysdoc{position:relative;display:grid;grid-template-columns:210px minmax(0,1fr);
+  gap:clamp(20px,3vw,44px);width:100%;max-width:var(--wrap);
+  margin:0 auto clamp(48px,7vw,96px);padding-inline:var(--gutter);align-items:start}
+.sysdoc__head .designs__lede{max-width:62ch}
+.sysdoc__back{margin-top:1.4rem;font-size:.9375rem}
+.sysdoc__back a{color:var(--muted);text-decoration:none}
+.sysdoc__back a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+
+.sysdoc__rail{position:sticky;top:88px;max-height:calc(100svh - 120px);overflow-y:auto;
+  overscroll-behavior:contain}
+.sysdoc__raillist{list-style:none;padding:0;margin:0;
+  border-left:1px solid var(--line);counter-reset:sysdoc}
+.sysdoc__raillink{display:block;padding:.34rem 0 .34rem .9rem;margin-left:-1px;
+  border-left:2px solid transparent;font-size:.8125rem;line-height:1.45;
+  color:var(--muted-light);text-decoration:none;
+  transition:color .16s var(--ease),border-color .16s var(--ease)}
+.sysdoc__raillink::before{counter-increment:sysdoc;content:counter(sysdoc,decimal-leading-zero);
+  font-family:var(--font-mono);font-size:.625rem;opacity:.55;margin-right:.5em}
+.sysdoc__raillink:hover{color:var(--ink)}
+.sysdoc__raillink.is-active{color:var(--ink);border-left-color:var(--brand-dark);font-weight:500}
+
+/* The document is authored against a dark page, so the stage carries that
+   ground rather than letting the site's light background show between blocks. */
+.sysdoc__stage{min-width:0;border-radius:var(--radius);overflow:hidden;
+  background:#0B0B0B;box-shadow:0 1px 0 var(--line)}
+.sysdoc__section{scroll-margin-top:84px}
+.sysdoc__section img{max-width:100%;height:auto}
+
+.sysdoc__toast{position:fixed;left:50%;bottom:26px;translate:-50% 0;z-index:60;
+  pointer-events:none}
+.sysdoc__toast span{display:inline-block;padding:.5rem .9rem;border-radius:var(--radius-pill);
+  background:var(--brand-dark);color:#fff;font-family:var(--font-mono);font-size:.75rem}
+
+@media (max-width:900px){
+  .sysdoc{grid-template-columns:1fr}
+  .sysdoc__rail{position:static;max-height:none;margin-bottom:1rem}
+  .sysdoc__raillist{display:flex;flex-wrap:wrap;gap:.2rem;border-left:0}
+  .sysdoc__raillink{border-left:0;padding:.35rem .7rem;border-radius:var(--radius-pill);
+    background:var(--surface-200)}
+  .sysdoc__raillink.is-active{background:var(--brand-dark);color:#fff}
+}
+
+/* ---------- 9e-i. the category strip ----------
+   Sticky, so it also reports where you are once the headings have scrolled off.
+   top matches the header capsule's resting offset. */
+.dnav{position:sticky;top:0;z-index:20;margin-bottom:clamp(24px,3vw,40px);
+  background:color-mix(in srgb,var(--surface-100) 88%,transparent);
+  backdrop-filter:saturate(160%) blur(10px);
+  -webkit-backdrop-filter:saturate(160%) blur(10px);
+  border-bottom:1px solid var(--line)}
+.dnav__list{display:flex;flex-wrap:wrap;gap:.35rem;
+  width:100%;max-width:var(--wrap);margin-inline:auto;
+  padding:.6rem var(--gutter);list-style:none}
+.dnav__link{display:inline-flex;align-items:center;gap:.45em;
+  padding:.42rem .8rem;border-radius:var(--radius-pill);
+  font-size:.875rem;letter-spacing:var(--track-body);color:var(--muted);
+  text-decoration:none;white-space:nowrap;
+  transition:background .16s var(--ease),color .16s var(--ease)}
+.dnav__link:hover{background:var(--surface-200);color:var(--ink)}
+.dnav__link.is-active{background:var(--brand-dark);color:#fff}
+.dnav__count{font-family:var(--font-mono);font-size:.6875rem;opacity:.62}
+@media (prefers-reduced-motion:reduce){.dnav{position:static}}
+
+/* ---------- 9e-ii. design systems ----------
+   These carry a link, unlike the tiles above, so they DO get a border and a
+   hover state — the affordance is honest here. Wider min than .designs__grid
+   because a palette plus a type list needs the room to stay on one line. */
+.designs__note{margin:-.4rem 0 clamp(20px,2.6vw,30px);font-size:.9375rem;
+  line-height:1.6;color:var(--muted);max-width:48ch}
+.syscards{display:grid;gap:clamp(16px,2vw,22px);
+  grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.syscard{display:flex;flex-direction:column;height:100%;padding:clamp(20px,2.4vw,28px);
+  border:1px solid var(--line);border-radius:var(--radius);background:var(--surface-100);
+  transition:border-color .18s var(--ease),background .18s var(--ease)}
+.syscard:hover{border-color:var(--muted-light);background:#fff}
+/* Capped by HEIGHT, not width: these lockups differ wildly in aspect, and
+   sizing on width would render a horizontal mark tiny beside a stacked one. */
+.syscard__logo{display:flex;align-items:center;min-height:34px;margin-bottom:1.1rem}
+.syscard__logo img{max-height:30px;width:auto;max-width:70%;object-fit:contain}
+.syscard__logo--dark{align-self:flex-start;padding:.5rem .7rem;
+  border-radius:var(--radius-sm);background:var(--brand-dark)}
+.syscard__title{font-family:var(--font-display);font-weight:var(--hero-weight);
+  font-size:1.1875rem;line-height:1.25;letter-spacing:-.005em;color:var(--ink)}
+.syscard__meta{margin-top:.3rem;font-family:var(--font-mono);font-size:.6875rem;
+  letter-spacing:.04em;text-transform:uppercase;color:var(--muted-light)}
+.syscard__summary{margin-top:.9rem;font-size:.9375rem;line-height:1.65;
+  letter-spacing:var(--track-body);color:var(--muted);text-wrap:pretty}
+
+/* The specimen. Chips are square-ish and small — this is evidence of a
+   palette, not a colour picker. */
+.syscard__palette{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.15rem;
+  padding:0;list-style:none}
+.syscard__swatch{display:flex;align-items:center;gap:.45rem;padding:.3rem .55rem .3rem .35rem;
+  border:1px solid var(--line);border-radius:var(--radius-sm);background:#fff}
+.syscard__chip{width:14px;height:14px;border-radius:3px;flex:0 0 auto;
+  /* an inset ring rather than a border, so a near-white swatch is still
+     visible without changing its colour */
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.14)}
+.syscard__chipname{font-size:.75rem;letter-spacing:var(--track-body);color:var(--ink)}
+.syscard__chipvalue{font-family:var(--font-mono);font-size:.6875rem;color:var(--muted-light)}
+
+.syscard__type{margin-top:1.15rem;padding-top:.9rem;border-top:1px solid var(--line)}
+.syscard__typerow{display:flex;gap:.6rem;align-items:baseline;
+  font-size:.8125rem;line-height:1.9}
+.syscard__typerow dt{flex:0 0 7.5rem;font-family:var(--font-mono);font-size:.6875rem;
+  letter-spacing:.04em;text-transform:uppercase;color:var(--muted-light)}
+.syscard__typerow dd{margin:0;color:var(--ink)}
+
+.syscard__scope{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:1rem;padding:0;
+  list-style:none}
+.syscard__scope li{padding:.22rem .5rem;border-radius:var(--radius-sm);
+  background:var(--surface-200);font-size:.6875rem;letter-spacing:.02em;color:var(--muted)}
+
+/* margin-top:auto pins this to the bottom, so two cards of unequal text still
+   line their links up. */
+.syscard__open{display:inline-flex;align-items:center;gap:.45em;margin-top:auto;
+  padding-top:1.15rem;font-size:.9375rem;font-weight:500;color:var(--ink);
+  text-decoration:none}
+.syscard__open .arr{transition:transform .18s var(--ease)}
+.syscard:hover .syscard__open .arr{transform:translateX(3px)}
+.syscard__open:hover{text-decoration:underline;text-underline-offset:3px}
+
+@media (max-width:520px){
+  .syscards{grid-template-columns:1fr}
+  .syscard__typerow dt{flex-basis:6rem}
+}
+
 /* ---------- 9f. the tech-stack line under each service ---------- */
 .whatido__stack{margin-top:.7rem;padding-top:.7rem;border-top:1px solid var(--line);
   font-family:var(--font-mono);font-size:.6875rem;line-height:1.7;letter-spacing:.04em;
@@ -2140,3 +2270,39 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
      everywhere it is still swiped by hand. */
   .rail[data-pinned='true'] .rail__track{scroll-snap-type:none;scroll-behavior:auto}
 }
+
+/* The brand guide arrives client-side; hold its height so the footer does not
+   jump. Its own layout lives in _guide/guide.css, scoped under .psguide. */
+.psguide{width:100%;max-width:var(--wrap);margin:0 auto clamp(48px,7vw,96px);
+  padding-inline:var(--gutter)}
+.psguide .app{height:min(84svh,900px);border:1px solid var(--line);
+  border-radius:var(--radius);overflow:hidden}
+.psguide__loading{display:grid;place-items:center;height:min(84svh,900px);
+  width:100%;max-width:var(--wrap);margin:0 auto clamp(48px,7vw,96px);
+  color:var(--muted-light);font-size:.9375rem}
+
+/* ---------- design systems that ship as specimen cards ----------
+   The stage is light here, not the dark plate SystemDoc uses: these cards are
+   individual panels on a page rather than one continuous dark document. */
+.sysdoc__stage--cards{background:transparent;box-shadow:none;overflow:visible}
+.cardgroup{scroll-margin-top:84px;margin-bottom:clamp(32px,4vw,56px)}
+.cardgroup__title{font-family:var(--font-display);font-weight:var(--hero-weight);
+  font-size:clamp(1.15rem,1.9vw,1.45rem);color:var(--ink);
+  padding-bottom:.7rem;margin-bottom:clamp(14px,2vw,22px);
+  border-bottom:1px solid var(--line)}
+/* Single column until there is room for two FULL-WIDTH specimens.
+   These cards declare a 700px design viewport in their @dsCard comment and
+   lay out fixed-width tiles inside it; squeezed into a 560px column they clip
+   their own logos. A design system that misrepresents its own artwork is
+   worse than one that scrolls. */
+.cardgroup__grid{display:grid;gap:clamp(14px,1.8vw,20px);
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,700px),1fr))}
+.speccard{margin:0;border:1px solid var(--line);border-radius:var(--radius);
+  background:var(--surface-100);overflow:hidden}
+.speccard__cap{display:block;padding:.75rem .95rem .7rem;border-bottom:1px solid var(--line)}
+.speccard__name{display:block;font-size:.875rem;font-weight:500;color:var(--ink)}
+.speccard__sub{display:block;margin-top:.15rem;font-size:.75rem;line-height:1.45;
+  color:var(--muted-light);text-wrap:pretty}
+/* The specimen's own markup lives here and brings its own type and colour. */
+.speccard__body{overflow-x:auto}
+.speccard__body img{max-width:100%;height:auto}

@@ -13,6 +13,7 @@ import { Media } from './collections/Media'
 import { Projects } from './collections/Projects'
 import { CaseStudies } from './collections/CaseStudies'
 import { Explorations } from './collections/Explorations'
+import { DesignSystems } from './collections/DesignSystems'
 import { Homepage } from './globals/Homepage'
 import { WorkPage } from './globals/WorkPage'
 import { Submissions } from './collections/Submissions'
@@ -72,7 +73,7 @@ export default buildConfig({
     importMap: { baseDir: path.resolve(dirname) },
     meta: { titleSuffix: `· ${site.shortName}` },
   },
-  collections: [Users, Media, Projects, CaseStudies, Explorations, Submissions],
+  collections: [Users, Media, Projects, CaseStudies, Explorations, DesignSystems, Submissions],
   globals: [Homepage, WorkPage],
   editor: lexicalEditor(),
   plugins: storagePlugins,

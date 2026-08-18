@@ -1,0 +1,23 @@
+/* ProSomnus — Motion tokens
+   Smooth, gentle. Motion guides attention, never distracts. */
+:root {
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); /* @kind other */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1); /* @kind other */
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1); /* @kind other */
+
+  --duration-fast: 150ms; /* @kind other */
+  --duration-base: 250ms; /* @kind other */
+  --duration-slow: 450ms; /* @kind other */
+
+  /* Hover lift for cards */
+  --lift-hover: translateY(-4px); /* @kind other */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms; /* @kind other */
+    --duration-base: 0ms; /* @kind other */
+    --duration-slow: 0ms; /* @kind other */
+    --lift-hover: none; /* @kind other */
+  }
+}

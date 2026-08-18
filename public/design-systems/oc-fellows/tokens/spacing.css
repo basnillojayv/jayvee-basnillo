@@ -1,0 +1,24 @@
+:root{
+/* 4px base step */
+--space-0:0;--space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;
+--space-6:24px;--space-8:32px;--space-10:40px;--space-12:48px;--space-16:64px;
+--space-20:80px;--space-24:96px;--space-32:128px;
+
+/* Composition */
+--gutter:var(--space-6);
+--stack-tight:var(--space-2);
+--stack:var(--space-4);
+--stack-loose:var(--space-8);
+--section-y:var(--space-24);
+--section-y-compact:var(--space-16);
+--container-max:1180px;
+--container-narrow:760px;
+--container-pad:var(--space-6);
+
+/* Component padding */
+--pad-card:var(--space-6);
+--pad-button-y:14px;--pad-button-x:28px;
+--pad-button-sm-y:9px;--pad-button-sm-x:18px;
+--pad-button-lg-y:18px;--pad-button-lg-x:36px;
+--pad-input-y:12px;--pad-input-x:14px;
+}

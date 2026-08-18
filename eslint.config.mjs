@@ -33,6 +33,18 @@ const eslintConfig = [
       '.next/',
       'src/payload-types.ts',
       'src/app/(payload)/admin/importMap.js',
+      /**
+       * Vendored ProSomnus brand-guide sources — third-party build output,
+       * copied in verbatim so it stays diffable against the delivered bundle.
+       * Linting it reports on code we deliberately do not own (its compiled
+       * components call hooks in ways the rules-of-hooks heuristic cannot
+       * follow). Guide.tsx, the part actually written here, is NOT ignored.
+       */
+      'src/app/(frontend)/design-systems/prosomnus/_guide/*.jsx',
+      'src/app/(frontend)/design-systems/prosomnus/_guide/ds-bundle.js',
+      // Same for the OC Fellows bundle and the four card demos lifted from it.
+      'src/app/(frontend)/design-systems/oc-fellows/_guide/ds-bundle.js',
+      'src/app/(frontend)/design-systems/oc-fellows/_guide/demos/*.jsx',
     ],
   },
 ]

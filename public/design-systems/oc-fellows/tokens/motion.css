@@ -1,0 +1,15 @@
+:root{
+--ease-out:cubic-bezier(.22,.61,.36,1);/* @kind other */
+--ease-in-out:cubic-bezier(.45,.05,.55,.95);/* @kind other */
+--ease-entrance:cubic-bezier(.16,.84,.44,1);/* @kind other */
+--dur-instant:80ms;/* @kind other */
+--dur-fast:140ms;/* @kind other */
+--dur-base:220ms;/* @kind other */
+--dur-slow:420ms;/* @kind other */
+--dur-reveal:700ms;/* @kind other */
+--transition-interactive:background-color var(--dur-fast) var(--ease-out),color var(--dur-fast) var(--ease-out),border-color var(--dur-fast) var(--ease-out),box-shadow var(--dur-base) var(--ease-out),transform var(--dur-fast) var(--ease-out);/* @kind other */
+--transition-reveal:opacity var(--dur-reveal) var(--ease-entrance),transform var(--dur-reveal) var(--ease-entrance);/* @kind other */
+--press-translate:translateY(1px);/* @kind other */
+--lift-translate:translateY(-4px);/* @kind other */
+}
+@media (prefers-reduced-motion:reduce){:root{--dur-fast:0ms;/* @kind other */--dur-base:0ms;/* @kind other */--dur-slow:0ms;/* @kind other */--dur-reveal:0ms;/* @kind other */--lift-translate:none;/* @kind other */--press-translate:none/* @kind other */}}

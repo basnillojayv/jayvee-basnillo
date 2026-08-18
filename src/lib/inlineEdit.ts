@@ -41,6 +41,7 @@ export const COLLECTIONS = {
   projects: 'projects',
   caseStudies: 'case-studies',
   explorations: 'explorations',
+  designSystems: 'design-systems',
 } as const
 
 export type CollectionPrefix = keyof typeof COLLECTIONS

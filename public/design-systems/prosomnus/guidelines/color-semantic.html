@@ -1,0 +1,24 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Semantic — Success & Error" subtitle="Status colors for feedback states." -->
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin: 0; font-family: var(--font-body); background: var(--surface-card); padding: 20px; }
+  .row { display: flex; gap: 14px; }
+  .sw { flex: 1; }
+  .chip { height: 56px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); display:flex; align-items:center; padding: 0 16px; font-weight:600; font-size:14px; }
+  .name { font-size: 13px; font-weight: 600; color: var(--text-heading); margin-top: 10px; }
+  .hex { font-size: 12px; color: var(--text-muted); font-family: ui-monospace, monospace; }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="sw"><div class="chip" style="background:var(--success);color:#fff">Success</div><div class="name">Success</div><div class="hex">#059669</div></div>
+    <div class="sw"><div class="chip" style="background:var(--success-bg);color:var(--success)">Success bg</div><div class="name">Success · soft</div><div class="hex">#ECFDF5</div></div>
+    <div class="sw"><div class="chip" style="background:var(--error);color:#fff">Error</div><div class="name">Error</div><div class="hex">#DC2626</div></div>
+    <div class="sw"><div class="chip" style="background:var(--error-bg);color:var(--error)">Error bg</div><div class="name">Error · soft</div><div class="hex">#FEF2F2</div></div>
+  </div>
+</body>
+</html>

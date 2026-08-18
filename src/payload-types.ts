@@ -72,6 +72,7 @@ export interface Config {
     projects: Project;
     'case-studies': CaseStudy;
     explorations: Exploration;
+    'design-systems': DesignSystem;
     submissions: Submission;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -85,6 +86,7 @@ export interface Config {
     projects: ProjectsSelect<false> | ProjectsSelect<true>;
     'case-studies': CaseStudiesSelect<false> | CaseStudiesSelect<true>;
     explorations: ExplorationsSelect<false> | ExplorationsSelect<true>;
+    'design-systems': DesignSystemsSelect<false> | DesignSystemsSelect<true>;
     submissions: SubmissionsSelect<false> | SubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -409,6 +411,76 @@ export interface Exploration {
   createdAt: string;
 }
 /**
+ * Brand and design systems. The card opens the full system in a new tab.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "design-systems".
+ */
+export interface DesignSystem {
+  id: number;
+  title: string;
+  /**
+   * The URL segment. Not currently routed, but kept unique for when it is.
+   */
+  slug: string;
+  client?: string | null;
+  year?: string | null;
+  /**
+   * Lowest first.
+   */
+  order?: number | null;
+  /**
+   * Path to the brand's lockup, e.g. /design-systems/linehaul/assets/lhs-horz-black.png. Served from the system's own bundle, so it is the same file the system ships.
+   */
+  logo?: string | null;
+  /**
+   * Tick when the lockup is light-on-dark and needs a dark plate behind it to be legible on this page.
+   */
+  logoDark?: boolean | null;
+  /**
+   * One or two sentences. What the system covers and who it is for.
+   */
+  summary: string;
+  /**
+   * Path to the built system, e.g. /design-systems/linehaul/index.html. Opens in a new tab.
+   */
+  href: string;
+  /**
+   * What the system contains — logo, colour, type, components…
+   */
+  scope?:
+    | {
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * The palette shown on the card. Six at most — this is a specimen, not the full ramp.
+   */
+  swatches?:
+    | {
+        name: string;
+        /**
+         * Any CSS colour, e.g. #F07820.
+         */
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  typefaces?:
+    | {
+        /**
+         * Display, Headings, Body…
+         */
+        role: string;
+        name: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * Enquiries sent from the contact form.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -527,6 +599,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'explorations';
         value: number | Exploration;
+      } | null)
+    | ({
+        relationTo: 'design-systems';
+        value: number | DesignSystem;
       } | null)
     | ({
         relationTo: 'submissions';
@@ -785,6 +861,43 @@ export interface ExplorationsSelect<T extends boolean = true> {
   category?: T;
   order?: T;
   image?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "design-systems_select".
+ */
+export interface DesignSystemsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  client?: T;
+  year?: T;
+  order?: T;
+  logo?: T;
+  logoDark?: T;
+  summary?: T;
+  href?: T;
+  scope?:
+    | T
+    | {
+        label?: T;
+        id?: T;
+      };
+  swatches?:
+    | T
+    | {
+        name?: T;
+        value?: T;
+        id?: T;
+      };
+  typefaces?:
+    | T
+    | {
+        role?: T;
+        name?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

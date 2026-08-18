@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ProSomnus — Component reference sheet</title>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font-body); background: var(--surface-page); color: var(--text-body); }
+  .sheet { max-width: 1100px; margin: 0 auto; padding: 48px 40px 72px; }
+  .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border-subtle); }
+  .head img { height: 30px; }
+  .head h1 { font-family: var(--font-heading); font-weight: 600; font-size: 34px; color: var(--text-heading); margin: 14px 0 4px; letter-spacing: -0.015em; }
+  .head p { margin: 0; font-size: 15px; color: var(--text-muted); }
+  .stamp { font-size: 12px; font-weight: 600; color: var(--color-primary); background: var(--blue-50); padding: 8px 14px; border-radius: var(--radius-pill); white-space: nowrap; }
+
+  section.block { margin-top: 44px; }
+  .block > h2 { font-family: var(--font-heading); font-weight: 600; font-size: 20px; color: var(--text-heading); margin: 0 0 4px; }
+  .block > .desc { font-size: 14px; color: var(--text-muted); margin: 0 0 20px; }
+
+  .panel { background: var(--surface-card); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); padding: 28px 32px; }
+  .colhead { display: grid; gap: 24px; margin-bottom: 6px; }
+  .colhead span { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--text-muted); }
+  .btnrow { display: grid; gap: 24px; align-items: center; padding: 16px 0; border-top: 1px solid var(--border-subtle); }
+  .rowlabel { font-size: 14px; font-weight: 600; color: var(--text-heading); }
+  .rowlabel small { display: block; font-weight: 400; color: var(--text-muted); font-size: 12px; margin-top: 2px; }
+  .cell { display: flex; }
+
+  .two { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .duo { display: grid; grid-template-columns: 1.05fr 1fr; gap: 20px; align-items: start; }
+  .statwrap { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+  .fieldcap { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+</style>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script src="../_ds_bundle.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+  const { Button, Input, Card, Testimonial, Stat, Icon } = window.DesignSystem_e5ed69;
+
+  const ButtonRow = ({ label, sub, variant }) => (
+    <div className="btnrow" style={{ gridTemplateColumns: '160px 1fr 1fr 1fr' }}>
+      <div className="rowlabel">{label}<small>{sub}</small></div>
+      <div className="cell"><Button variant={variant} style={{ whiteSpace: 'nowrap' }}>Check my coverage</Button></div>
+      <div className="cell"><Button variant={variant} data-hover="1" style={{ whiteSpace: 'nowrap' }}>Check my coverage</Button></div>
+      <div className="cell"><Button variant={variant} disabled style={{ whiteSpace: 'nowrap' }}>Check my coverage</Button></div>
+    </div>
+  );
+
+  function Sheet() {
+    React.useEffect(() => {
+      // Force hover state on the "hover" column buttons
+      document.querySelectorAll('button[data-hover]').forEach((b) => {
+        b.dispatchEvent(new MouseEvent('mouseenter', { bubbles: true }));
+      });
+      // Force focus state on the focus-demo input
+      const f = document.getElementById('focus-demo');
+      if (f) f.querySelector('input').focus({ preventScroll: true });
+    }, []);
+
+    return (
+      <div className="sheet">
+        <div className="head">
+          <div>
+            <img src="../assets/prosomnus-logo.svg" alt="ProSomnus" />
+            <h1>Component reference</h1>
+            <p>Core components &amp; states — please approve before we design pages.</p>
+          </div>
+          <span className="stamp">Newsreader / Manrope · royal + cyan · amber CTA</span>
+        </div>
+
+        {/* BUTTONS */}
+        <section className="block">
+          <h2>Buttons</h2>
+          <p className="desc">Amber accent is reserved for the primary action. Secondary and ghost carry lower-emphasis actions.</p>
+          <div className="panel">
+            <div className="colhead" style={{ gridTemplateColumns: '160px 1fr 1fr 1fr' }}>
+              <span></span><span>Default</span><span>Hover</span><span>Disabled</span>
+            </div>
+            <ButtonRow label="Primary" sub="amber accent" variant="accent" />
+            <ButtonRow label="Secondary" sub="outlined" variant="secondary" />
+            <ButtonRow label="Ghost" sub="text only" variant="ghost" />
+          </div>
+        </section>
+
+        {/* INPUT */}
+        <section className="block">
+          <h2>Text input</h2>
+          <p className="desc">8px radius, soft focus ring in royal blue, inline error messaging.</p>
+          <div className="panel">
+            <div className="two">
+              <div>
+                <div className="fieldcap">Default</div>
+                <Input label="Email" type="email" placeholder="you@example.com" iconLeft={<Icon name="mail" size={16} />} />
+              </div>
+              <div id="focus-demo">
+                <div className="fieldcap">Focus</div>
+                <Input label="Email" type="email" defaultValue="dana@" iconLeft={<Icon name="mail" size={16} />} />
+              </div>
+              <div>
+                <div className="fieldcap">Error</div>
+                <Input label="Email" type="email" defaultValue="dana@sleep" error="Please enter a valid email address" iconLeft={<Icon name="mail" size={16} />} />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CARDS */}
+        <section className="block">
+          <h2>Cards</h2>
+          <p className="desc">The default surface (12px radius, soft shadow) and the testimonial variant.</p>
+          <div className="duo">
+            <Card padding={28}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+                <span style={{ width: 44, height: 44, borderRadius: 'var(--radius-md)', background: 'var(--blue-50)', color: 'var(--color-primary)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon name="moon" size={22} />
+                </span>
+                <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 20, color: 'var(--text-heading)' }}>Custom-fit comfort</span>
+              </div>
+              <p style={{ margin: 0, fontSize: 15, lineHeight: 1.65, color: 'var(--text-body)' }}>
+                Worn like a retainer and precision-milled for your mouth — no masks, hoses, or noise. Just a quiet night's sleep.
+              </p>
+            </Card>
+            <Testimonial rating={5}
+              quote="I finally sleep through the night — and so does my husband. I stopped dreading bedtime."
+              name="Dana R." role="Patient · 2 years" />
+          </div>
+        </section>
+
+        {/* STATS */}
+        <section className="block">
+          <h2>Stat block</h2>
+          <p className="desc">Big serif figure that counts up when it scrolls into view. Reload to replay.</p>
+          <div className="panel">
+            <div className="statwrap">
+              <Stat value={96} suffix="%" label="of patients prefer ProSomnus over CPAP" />
+              <Stat value={200000} suffix="+" label="patients treated and counting" />
+              <Stat value={98} suffix="%" label="covered by insurance, Medicare & VA" />
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<Sheet />);
+</script>
+</body>
+</html>

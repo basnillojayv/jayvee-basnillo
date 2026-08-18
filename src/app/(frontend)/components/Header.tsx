@@ -104,16 +104,43 @@ export function Header({ contactHref }: { contactHref?: string } = {}) {
         </div>
       </header>
 
+      {/*
+        The way out.
+
+        The drawer sits above the header, so the button that opened it is
+        underneath it and cannot be pressed again — without this, opening the
+        menu on a phone was a one-way door. Two exits now, because people reach
+        for both: the panel's own close button, and the page behind it.
+      */}
+      <button
+        className="scrim"
+        data-open={open}
+        hidden={!open}
+        tabIndex={-1}
+        aria-hidden="true"
+        onClick={close}
+      />
+
       <div className="mobile-menu" id="mobileMenu" data-open={open} inert={!open}>
+        <button className="mobile-menu__close" onClick={close} aria-label="Close menu">
+          <span aria-hidden="true">×</span>
+        </button>
+
         <nav aria-label="Mobile">
-          {site.nav.map((n) => (
+          {/* navRight as well as nav. It renders inline in the header on a wide
+              screen, which is hidden at this size — so without it here,
+              Projects had no route in on a phone at all. */}
+          {[...site.nav, ...site.navRight].map((n) => (
             <Link key={n.href} href={n.href} onClick={close}>
               {n.label}
             </Link>
           ))}
         </nav>
+
         <div className="mobile-menu__cta">
-          <a className="btn btn--accent btn--block" href={cta} onClick={close}>
+          {/* White, not the accent: `btn--accent` is --brand-dark, which on this
+              near-black panel was a dark button on a dark ground. */}
+          <a className="btn btn--white btn--block" href={cta} onClick={close}>
             {site.headerCta.label}
           </a>
         </div>

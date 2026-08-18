@@ -1,3 +1,5 @@
+import { site } from '@/site.config'
+
 /** Build a tel: href from a display phone number, e.g. "(555) 010-0100" -> "tel:5550100100". */
 export function telHref(phone: string): string {
   return 'tel:' + (phone || '').replace(/[^0-9+]/g, '')
@@ -36,7 +38,11 @@ export function toSameOriginPath(url: string): string {
   if (url.startsWith('/')) return url
   try {
     const parsed = new URL(url)
-    const base = new URL(process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000')
+    // `site.url`, not the raw environment variable. This comparison only works
+    // while it is the *same* value Payload stamped onto the URL being tested —
+    // resolve one and read the other and every uploaded image silently stops
+    // matching, which turns them all back into absolute remote URLs.
+    const base = new URL(site.url)
     if (parsed.host === base.host) return parsed.pathname + parsed.search
     return url
   } catch {

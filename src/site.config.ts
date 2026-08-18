@@ -9,6 +9,78 @@
  * server components and the Payload config.
  */
 
+/**
+ * THE BASE URL, AND WHY IT IS RESOLVED RATHER THAN READ.
+ *
+ * Every absolute address the site emits about itself comes from here: the
+ * canonical link, `og:url`, the `og:image`, the sitemap, the structured data,
+ * and — through `payload.config.ts` — the `serverURL` Payload stamps onto
+ * uploaded media. One environment variable decides all of it.
+ *
+ * WHAT WENT WRONG, so it is not repeated. `NEXT_PUBLIC_SERVER_URL` was set to
+ * the deployment's *generated* hostname — the `project-scope.vercel.app` form
+ * that Vercel prints in the dashboard next to the deployment. Vercel's default
+ * Deployment Protection covers those hostnames, so opening one redirects to a
+ * Vercel login. The site itself was fine and its own domain served normally,
+ * but every page told the world its address was the protected one. Anyone
+ * following a shared link, a search result, or a link-preview card landed on
+ * "Log in to Vercel", and every preview thumbnail 302'd to the same place.
+ * The people who reported it as broken were right; the people who could not
+ * reproduce it were signed in to Vercel.
+ *
+ * So a hostname that cannot serve the public is not accepted here, even when
+ * it is what the environment says. Two are rejected:
+ *
+ * · a `*.vercel.app` host that is not the project's production domain — that
+ *   is, by elimination, one of the generated protected ones
+ * · `localhost`, which is what a committed `.env` supplies if the deployment
+ *   is missing the variable altogether
+ *
+ * In both cases `VERCEL_PROJECT_PRODUCTION_URL` stands in. It is Vercel's own
+ * answer to "what is this project's public address" — the custom domain when
+ * one is attached, the clean `project.vercel.app` alias otherwise, and never a
+ * protected URL. Off Vercel it is absent and the configured value is used as
+ * it always was, so local development and other hosts are untouched.
+ */
+function resolveUrl(): string {
+  const clean = (value?: string) => (value ?? '').trim().replace(/\/+$/, '')
+
+  const configured = clean(process.env.NEXT_PUBLIC_SERVER_URL)
+  // Vercel exposes this to the browser bundle as NEXT_PUBLIC_VERCEL_* while
+  // "Automatically expose System Environment Variables" is on, which is the
+  // default. Absent, the branch below falls through to `configured` and the
+  // behaviour is exactly what it was before this function existed.
+  // Both spellings, and the order matters. Vercel sets the bare name on the
+  // server always, and the NEXT_PUBLIC_ twin only while "Automatically expose
+  // System Environment Variables" is on — the default, but a setting somebody
+  // can turn off. The client bundle can only ever see the prefixed one, so it
+  // is tried first; the bare name is what keeps the *metadata* correct, which
+  // is server-rendered, even on a project where the twin is missing.
+  const productionHost =
+    clean(process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL) ||
+    clean(process.env.VERCEL_PROJECT_PRODUCTION_URL)
+  const production = productionHost && `https://${productionHost}`
+
+  if (!production) return configured || 'http://localhost:3000'
+  if (!configured) return production
+
+  let host: string
+  try {
+    host = new URL(configured).host
+  } catch {
+    // Not a URL at all — a bare domain, or a typo. Either way it cannot be
+    // parsed into a canonical, and Vercel's answer can.
+    return production
+  }
+
+  const unreachable =
+    host === productionHost
+      ? false
+      : host.endsWith('.vercel.app') || /^(localhost|127\.0\.0\.1)(:|$)/.test(host)
+
+  return unreachable ? production : configured
+}
+
 export const site = {
   /** Legal / display name. Used in metadata, alt text, and the footer. */
   name: 'Jayvee Basnillo',
@@ -26,8 +98,14 @@ export const site = {
   description:
     'A designer with 10+ years in graphic and web design, specialising in website design and development with WordPress and Elementor, and AI-assisted workflows.',
 
-  /** Absolute base URL. Set NEXT_PUBLIC_SERVER_URL in the environment. */
-  url: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
+  /**
+   * Absolute base URL. Set NEXT_PUBLIC_SERVER_URL in the environment.
+   *
+   * Resolved rather than read, because getting this wrong does not look like a
+   * bug — it looks like the site being down for everyone except you. See
+   * `resolveUrl` below.
+   */
+  url: resolveUrl(),
 
   /**
    * Where you work, as a city and region — e.g. 'Orange County, California'.

@@ -2347,6 +2347,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .sticky-cta{display:none}
 @media (max-width:700px){
   .sticky-cta{display:block;position:fixed;left:0;right:0;bottom:0;z-index:190;
+    /* Transform and opacity only — a fixed bar animating its height would
+       reflow the page behind it on every frame. */
+    translate:0 100%;opacity:0;pointer-events:none;
+    transition:translate .28s var(--ease-out-expo),opacity .2s var(--ease);
     padding:10px 12px calc(10px + env(safe-area-inset-bottom));
     background:color-mix(in srgb,var(--surface-100) 86%,transparent);
     -webkit-backdrop-filter:blur(12px) saturate(160%);
@@ -2356,13 +2360,11 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
     width:100%;min-height:50px;border-radius:var(--radius-pill);
     background:var(--brand-dark);color:#fff;text-decoration:none;
     font-size:1rem;font-weight:500;letter-spacing:var(--track-body)}
+  .sticky-cta[data-shown="true"]{translate:0 0;opacity:1;pointer-events:auto}
   .sticky-cta__btn:active{scale:.985}
   /* The bar covers the foot of every page, so give the document room to scroll
      past it — otherwise the last line of the footer sits underneath. */
   body{padding-bottom:72px}
-  /* body padding does not reach inside a 100svh hero, whose own buttons are
-     laid out against the viewport — without this the bar sits on top of them. */
-  .hero__inner{padding-bottom:calc(clamp(24px,4vh,44px) + 72px)}
   /* The drawer and its scrim are above it; the bar must not float over them. */
   .mobile-menu[data-open="true"] ~ .sticky-cta,
   .scrim[data-open="true"] ~ .sticky-cta{display:none}
@@ -2403,3 +2405,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .skeleton--short{max-width:28ch}
 @keyframes skeletonPulse{0%,100%{opacity:1}50%{opacity:.55}}
 @media (prefers-reduced-motion:reduce){.skeleton{animation:none}}
+
+/* The bar still appears, it just stops sliding. */
+@media (prefers-reduced-motion:reduce){.sticky-cta{transition:none}}

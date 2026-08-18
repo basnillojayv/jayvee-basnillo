@@ -1177,7 +1177,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
      a narrow one the portrait cannot rise that far — it would have to be wider
      than the window — so the type comes down instead, and the pair of auto
      margins is what centres it in the space left over. Without this the hero
-     is a band of type, a void, and a picture. */
+     is a band of type, a void, and a picture.
+     Below 640px the picture is lifted into the type instead — see there. */
   /* No bleed on a phone. The lines are already fitted to the full width of the
      column here, so they are as large as they can be set without losing
      letters — and 6% a side is enough to cut the first and last glyph in half,
@@ -1234,8 +1235,47 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   .hero__line{--fit:clamp(2.25rem,13.5vw,4.5rem)}
   .whero__title{max-width:none}
   .hero__inner{padding-top:clamp(96px,14vh,128px)}
-  .hero__actions{width:100%}
-  .hero__actions .btn{flex:1;justify-content:center}
+
+  /* ---- the phone composition: the type crosses the face ----
+     Above this width the picture stands below the two display lines and the
+     hero reads as a band of type, a void, and a photograph. The desktop does
+     not do that — the head breaks the solid line and the shoulders break the
+     outline, and that overlap is the whole picture. These four rules are what
+     it takes to get the same overlap into a 390px column. */
+
+  /* 1. The greeting is measured down from the top of the column rather than
+        centred in it. Centred, the type lands wherever the copy below it
+        happens to end — a different place on every phone, and only some of
+        them have a face there. */
+  .hero__greet{margin-top:clamp(10px,3.5vh,34px);margin-bottom:clamp(56px,13.5vh,124px)}
+
+  /* 2. LIFTED, NOT ENLARGED. The picture has to be high enough for the type to
+        cross it, and there are two ways to get there: make it taller, or move
+        it up. Taller is what the desktop does, and in this column it ends with
+        a head two thirds the width of the line — the words vanish behind it
+        and the effect eats the sentence it was meant to decorate. Lifting it
+        keeps the head at a size the line survives.
+     3. Anchored to the top, not bled off the foot. Anchored to the bottom the
+        head lands wherever the window happens to be tall, and on a 640px-tall
+        one that is halfway through the greeting. Measured down from the top it
+        clears the greeting and meets the type on every phone, which is the one
+        relationship this composition needs to hold. */
+  .hero__portrait{height:max(400px,min(74vh,112vw));
+    top:clamp(148px,23vh,236px);bottom:auto;
+    /* 4. THE FADE CLEARS THE COPY, NOT THE FACE. Lifted, the head sits in the
+          upper half of the picture, so the 24% dissolve the wider phones use
+          would take the face with it. This one holds past the chin and gives
+          way where the tagline and the stats begin. */
+    -webkit-mask-image:linear-gradient(180deg,#000 60%,rgba(0,0,0,.2) 78%,transparent 94%);
+    mask-image:linear-gradient(180deg,#000 60%,rgba(0,0,0,.2) 78%,transparent 94%)}
+
+  /* ONE PER ROW. Side by side in a 350px column each label wrapped onto two
+     lines, so the pair read as one four-line block rather than as two choices.
+     Stacked, each label sits on one line and each button is a full-width
+     target. "See the work" stays first: it is the thing most of them came
+     for, and the order is the only ranking a phone can express. */
+  .hero__actions{width:100%;flex-direction:column;align-items:stretch;gap:12px}
+  .hero__actions .btn{width:100%;justify-content:center}
   .hero{padding:8px 8px 0}
   .hero__frame{border-radius:24px;padding:110px 22px 26px}
   .hero__inner{padding-inline:12px}
@@ -1253,6 +1293,18 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   .footer__top{grid-template-columns:1fr}
   .footer__social{flex-direction:row}
   .footer__base{flex-direction:column;align-items:flex-start;gap:.6rem}
+}
+
+/* A 568px-tall phone has to fit the same six things — greeting, two display
+   lines, tagline, stats and now two stacked buttons — and the second button
+   was the one that fell off the bottom. Everything given back here is spacing
+   rather than content: the gap under the greeting, the pad above it, and the
+   lift on the portrait, which comes down with the type so the two still meet. */
+@media (max-width:640px) and (max-height:620px){
+  .hero__inner{padding-top:clamp(84px,12vh,110px)}
+  .hero__greet{margin-top:clamp(6px,2vh,20px);margin-bottom:clamp(30px,7vh,64px)}
+  .hero__portrait{height:max(340px,min(72vh,106vw));top:clamp(132px,26vh,190px)}
+  .hero__actions{gap:10px}
 }
 
 /* =========================================================================

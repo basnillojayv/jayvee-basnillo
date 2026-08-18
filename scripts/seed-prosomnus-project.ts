@@ -22,10 +22,22 @@ const COVER = path.resolve(process.cwd(), 'scripts/source/assets/thumbnails/pros
 const seed = async () => {
   const payload = await getPayload({ config })
 
-  // ---- cover ----
+  /**
+   * ---- cover ----
+   *
+   * Matched on a PREFIX, not an exact filename.
+   *
+   * Payload de-duplicates upload filenames, and against the production store it
+   * saved this as `prosomnus-1.jpg` — every existing cover there carries the
+   * same `-1`. An exact match on `prosomnus.jpg` therefore never finds the file
+   * it just uploaded, and each re-run would quietly add `prosomnus-2.jpg`,
+   * `-3`, and so on. Idempotence that only holds on a fresh database is not
+   * idempotence.
+   */
   const existingMedia = await payload.find({
     collection: 'media',
-    where: { filename: { equals: 'prosomnus.jpg' } },
+    where: { filename: { like: 'prosomnus%' } },
+    sort: 'id',
     limit: 1,
   })
 

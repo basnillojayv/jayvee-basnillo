@@ -1205,7 +1205,16 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
    which is why this is not folded into the 1120px rule. */
 @media (max-width:700px){
   .header-actions .btn,.header-login{display:none}
+  /*
+   * The footer's links were 16px tall with a 10px gap — a 26px pitch, well
+   * under what a thumb needs, and close enough together to mis-tap the one
+   * above. Full-height rows with no gap keep the same visual rhythm and turn
+   * each link into a real target.
+   */
+  .footer__nav ul{gap:0}
+  .footer__nav a{display:flex;align-items:center;min-height:44px}
 }
+
 @media (max-width:640px){
   body{font-size:16px}
   /* Only ever seen before the measurement lands, or if it never does — FitLine
@@ -2433,3 +2442,32 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
 /* The bar still appears, it just stops sliding. */
 @media (prefers-reduced-motion:reduce){.sticky-cta{transition:none}}
+
+/* ---------- mobile touch targets ----------
+   Placed at the end of the file on purpose: `.rail__dots{display:flex}` and the
+   nav rules are defined further down than the breakpoint blocks above, so an
+   earlier media query loses the cascade at equal specificity. */
+
+/*
+ * The rail's dots are a desktop control.
+ *
+ * Below 769px the rail's pinning is off (see ProjectRail) and `.rail__track`
+ * is a plain horizontal scroller with `scroll-snap-type: x mandatory` — you
+ * swipe the cards. The dots proxy a behaviour that no longer exists here, and
+ * they were 9x9 buttons: a fifth of the 44px a thumb needs, nine in a row,
+ * with no room to grow at this width. Every card is still reachable by
+ * swiping, so nothing is lost by removing them.
+ */
+@media (max-width:768px){
+  .rail__dots{display:none}
+
+  /* Standalone links that are a page's only way back. Inline links inside a
+     paragraph are left alone — they live in the text flow and enlarging them
+     would break the line box. These do not. */
+  .sysdoc__back a,.detail__foot a{display:inline-flex;align-items:center;min-height:44px}
+
+  /* The category strip and the design-system rail read as buttons, so they
+     should be the size of one. */
+  .dnav__link,.sysdoc__raillink{min-height:44px}
+  .sysdoc__raillink{display:flex;align-items:center}
+}

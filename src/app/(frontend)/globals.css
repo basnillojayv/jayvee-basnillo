@@ -354,14 +354,20 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .site-header[data-state="pill"] .btn--invert:hover{background:var(--surface)}
 .site-header[data-state="pill"] .menu-toggle{background:rgba(255,255,255,.14)}
 .site-header[data-state="pill"] .menu-toggle__dots i{background:#fff}
-.site-header[data-state="scrolled"] .menu-toggle span{background:var(--brand-dark)}
 
-/* hamburger → X */
-.menu-toggle{display:none;width:44px;height:44px;flex-direction:column;justify-content:center;gap:5px;align-items:center;border-radius:10px}
-.menu-toggle span{width:24px;height:2px;background:#fff;border-radius:2px;transition:transform .28s var(--ease),opacity .2s}
-.menu-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-.menu-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
-.menu-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+/*
+ * REMOVED: a "hamburger → X" block from an earlier version of this button.
+ *
+ * It was not dead code, which is why it survived. The button renders
+ * `<span class="menu-toggle__dots">` around nine `<i>`s — and that wrapper is
+ * a `span`, so `.menu-toggle span{width:24px;height:2px;background:#fff}`
+ * matched it and painted a 24x2 white bar straight through the mark, while the
+ * block's `flex-direction:column` overrode the grid centring above and pushed
+ * the dots off-centre. The `[aria-expanded]` rules targeted `:nth-child` spans
+ * that no longer exist.
+ *
+ * The nine-dot rules above are the whole button. Nothing replaces this.
+ */
 
 .mobile-menu{position:fixed;top:0;right:0;z-index:230;height:100dvh;width:min(360px,88vw);
   background:var(--brand-dark);color:#fff;padding:84px 30px max(34px,env(safe-area-inset-bottom));
@@ -1125,8 +1131,27 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 /* Collapse the inline nav to the drawer once the labels stop fitting. */
 @media (max-width:1120px){
   .nav-primary,.header-actions .btn--pill{display:none}
+  /*
+   * THE GRID HAS TO LOSE A COLUMN WHEN IT LOSES AN ITEM.
+   *
+   * `.pill` is `1fr auto 1fr` with three children — nav, brand, actions — and
+   * the comment on `.brand` says the wordmark sits in the centre column. That
+   * stops being true here: a `display:none` grid item is removed from the grid
+   * entirely, so the two survivors slide left into columns 1 and 2 and the
+   * third 1fr is left empty. On a 390px bar that stranded the menu toggle at
+   * x175 — the middle of the screen — with 131px of dead space to its right.
+   *
+   * Two items, two columns. The brand takes its own width, the actions take
+   * the rest and stay end-aligned via their own `justify-self`.
+   */
+  .pill{grid-template-columns:auto 1fr}
+  .brand{justify-content:flex-start}
   .header-actions{margin-left:auto}
-  .menu-toggle{display:flex;margin-right:-4px}
+  /* `grid`, not `flex`. The button's own rule is `display:grid; place-items:
+     center`, and switching it to flex here silently dropped the horizontal
+     half of that — `justify-items` does nothing in a flex container — so the
+     nine dots sat flush against the left edge of a 44px circle. */
+  .menu-toggle{display:grid;margin-right:-4px}
   .call-fab{display:grid}
   .hero__ghost{display:none}
 }

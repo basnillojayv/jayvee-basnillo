@@ -21,7 +21,11 @@ import { LogoLockup } from './LogoLockup'
  * mean nothing happens on a short viewport, and the transform is the first
  * thing the page does.
  */
-export function Header({ contactHref }: { contactHref?: string } = {}) {
+export function Header({
+  contactHref,
+  email,
+  linkedin,
+}: { contactHref?: string; email?: string | null; linkedin?: string | null } = {}) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   // The homepage hands down the address from Payload; every other page falls
@@ -104,23 +108,6 @@ export function Header({ contactHref }: { contactHref?: string } = {}) {
         </div>
       </header>
 
-      {/*
-        The way out.
-
-        The drawer sits above the header, so the button that opened it is
-        underneath it and cannot be pressed again — without this, opening the
-        menu on a phone was a one-way door. Two exits now, because people reach
-        for both: the panel's own close button, and the page behind it.
-      */}
-      <button
-        className="scrim"
-        data-open={open}
-        hidden={!open}
-        tabIndex={-1}
-        aria-hidden="true"
-        onClick={close}
-      />
-
       <div className="mobile-menu" id="mobileMenu" data-open={open} inert={!open}>
         <button className="mobile-menu__close" onClick={close} aria-label="Close menu">
           <span aria-hidden="true">×</span>
@@ -143,6 +130,37 @@ export function Header({ contactHref }: { contactHref?: string } = {}) {
           <a className="btn btn--white btn--block" href={cta} onClick={close}>
             {site.headerCta.label}
           </a>
+
+          {/*
+            The two direct ways to reach a person, under the button that opens a
+            form. Rendered only when the CMS has them, so a site with neither
+            field filled in shows a button and nothing else rather than a rule
+            under empty space.
+
+            The address is written out rather than labelled "Email": on a phone
+            this is also the thing you long-press to copy.
+          */}
+          {(linkedin || email) && (
+            <ul className="mobile-menu__contact">
+              {linkedin && (
+                <li>
+                  <a href={linkedin} target="_blank" rel="noopener noreferrer" onClick={close}>
+                    LinkedIn
+                    <span className="arr" aria-hidden="true">
+                      ↗
+                    </span>
+                  </a>
+                </li>
+              )}
+              {email && (
+                <li>
+                  <a href={`mailto:${email}`} onClick={close}>
+                    {email}
+                  </a>
+                </li>
+              )}
+            </ul>
+          )}
         </div>
       </div>
 

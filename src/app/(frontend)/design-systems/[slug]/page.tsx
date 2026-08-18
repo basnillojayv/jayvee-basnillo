@@ -110,7 +110,7 @@ export default async function DesignSystemPage({
 
   return (
     <>
-      <Header contactHref={mailto} />
+      <Header contactHref={mailto} email={home.email} linkedin={home.contactLinkedin} />
 
       <main id="main">
         <section className="section page-head sysdoc__head">

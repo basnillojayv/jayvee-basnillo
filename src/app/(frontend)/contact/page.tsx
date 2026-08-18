@@ -34,7 +34,7 @@ export default async function ContactPage() {
   return (
     <>
       <RevealObserver />
-      <Header contactHref="/contact" />
+      <Header contactHref="/contact" email={home.email} linkedin={home.contactLinkedin} />
 
       <main id="main">
         <section className="section enquiry-page" id="contact">

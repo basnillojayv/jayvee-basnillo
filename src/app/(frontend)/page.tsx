@@ -54,7 +54,7 @@ export default async function HomePage() {
       <PointerFX />
       <RefreshRouteOnSave />
 
-      <Header contactHref={data.email ? `mailto:${data.email}` : undefined} />
+      <Header contactHref={data.email ? `mailto:${data.email}` : undefined} email={data.email} linkedin={data.contactLinkedin} />
 
       <main id="main">
         <Hero data={data} />

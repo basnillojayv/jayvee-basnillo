@@ -95,7 +95,7 @@ export default async function WorkPageRoute() {
       <PointerFX />
       <RefreshRouteOnSave />
 
-      <Header contactHref={mailto} />
+      <Header contactHref={mailto} email={home.email} linkedin={home.contactLinkedin} />
 
       <main id="main">
         <WorkHero data={work} ctaHref={mailto} />

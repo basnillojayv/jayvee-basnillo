@@ -20,7 +20,7 @@ export default async function CaseStudiesIndex() {
   return (
     <>
       <RevealObserver />
-      <Header />
+      <Header email={data.email} linkedin={data.contactLinkedin} />
       <main id="main">
         <section className="section page-head">
           <div className="wrap">

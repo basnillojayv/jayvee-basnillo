@@ -65,7 +65,7 @@ export default async function DesignsPage() {
   return (
     <>
       <RevealObserver />
-      <Header contactHref={mailto} />
+      <Header contactHref={mailto} email={home.email} linkedin={home.contactLinkedin} />
 
       <main id="main">
         <section className="section page-head">

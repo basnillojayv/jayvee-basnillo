@@ -28,7 +28,7 @@ export async function LegalPage({
 
   return (
     <>
-      <Header contactHref={mailto} />
+      <Header contactHref={mailto} email={home.email} linkedin={home.contactLinkedin} />
 
       <main id="main">
         <section className="section page-head">

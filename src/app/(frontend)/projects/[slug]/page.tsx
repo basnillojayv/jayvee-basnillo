@@ -68,7 +68,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   return (
     <>
       <RevealObserver />
-      <Header />
+      <Header email={data.email} linkedin={data.contactLinkedin} />
 
       <main id="main">
         <article className="section detail">

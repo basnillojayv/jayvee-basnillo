@@ -2535,3 +2535,18 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
    */
   .menu-toggle{margin-right:0}
 }
+
+/* ---------- the drawer's contact links ----------
+   Under the CTA, separated by a rule rather than a heading: two links do not
+   need a label to explain that they are ways to get in touch. 44px rows,
+   because everything else a thumb reaches for in this panel is 44px. */
+.mobile-menu__contact{list-style:none;padding:0;margin:1rem 0 0;
+  border-top:1px solid rgba(255,255,255,.12)}
+.mobile-menu__contact a{display:flex;align-items:center;gap:.5em;min-height:44px;
+  font-size:.9375rem;letter-spacing:var(--track-body);
+  color:rgba(255,255,255,.7);text-decoration:none;
+  transition:color .16s var(--ease)}
+.mobile-menu__contact a:hover{color:#fff}
+/* The address can be long; let it shrink rather than push the panel wide. */
+.mobile-menu__contact a{overflow-wrap:anywhere}
+.mobile-menu__contact .arr{font-size:.85em;opacity:.6}

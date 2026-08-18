@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getPayload } from 'payload'
 import config from '@payload-config'
@@ -22,7 +23,13 @@ import { readSystemCards, readSystemDoc } from '@/lib/designSystemDoc'
  * (`linehaul` vs `linehaul-station`). BUNDLES maps one to the other and is the
  * only place that mapping is written down.
  */
-export const dynamic = 'force-static'
+/**
+ * Deliberately NOT `force-static`. Every real page here still prerenders from
+ * generateStaticParams; dropping the flag only changes what happens to a slug
+ * that does not exist — `notFound()` can then return a genuine 404 instead of
+ * a prerendered 200. Keeping on-demand rendering also means a project added in
+ * the CMS works before the next deploy rather than 404ing until one.
+ */
 
 /**
  * Route segment → where the content comes from and which CMS entry describes it.
@@ -68,7 +75,16 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params
   const found = await getSystem(slug)
-  if (!found) return {}
+  /**
+   * A slug that does not exist renders the 404 page, but Next caches that
+   * render and serves it with a 200 — a soft 404. `dynamicParams = false`
+   * would give a hard 404, at the cost of a project added in the CMS 404ing
+   * until the next deploy, which is the worse trade for a site whose content
+   * is edited live. So the status stays 200 and this makes sure a crawler is
+   * told not to index it; without it the page inherits the layout's
+   * `index, follow` and a typo'd URL becomes an indexable page.
+   */
+  if (!found) return { title: 'Not found', robots: { index: false, follow: false } }
 
   return {
     title: `${found.system.title} — design system`,
@@ -106,7 +122,7 @@ export default async function DesignSystemPage({
             <h1 className="designs__title">{system.title}</h1>
             <p className="designs__lede">{system.summary}</p>
             <p className="sysdoc__back">
-              <a href="/designs#systems">← All design work</a>
+              <Link href="/designs#systems">← All design work</Link>
             </p>
           </div>
         </section>

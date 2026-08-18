@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
@@ -6,6 +7,18 @@ import { Hero } from './components/Hero'
 import { Intro } from './components/Intro'
 import { PointerFX } from './components/PointerFX'
 import { RefreshRouteOnSave } from './components/RefreshRouteOnSave'
+
+/**
+ * The homepage keeps the layout's title — `title.default` — because a
+ * template would render it as "Jayvee Basnillo — Jayvee Basnillo". The
+ * description is stated here so the root's generic one is never what a
+ * search result shows for the page that matters most.
+ */
+export const metadata: Metadata = {
+  description:
+    'Strategic designer and web architect. Brand systems, websites and design systems for teams who need the work to hold up after handover.',
+  alternates: { canonical: '/' },
+}
 
 /**
  * THE HOMEPAGE IS ONE SCREEN.

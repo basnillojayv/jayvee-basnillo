@@ -29,6 +29,17 @@ export const site = {
   /** Absolute base URL. Set NEXT_PUBLIC_SERVER_URL in the environment. */
   url: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
 
+  /**
+   * Where you work, as a city and region — e.g. 'Orange County, California'.
+   *
+   * DELIBERATELY EMPTY. A location is a trust signal, and a wrong one is the
+   * opposite; nothing in this repo records where you are, so it is not being
+   * guessed. Fill it in and it appears in the footer and on the contact page,
+   * and is used for the LocalBusiness structured data. Left blank, all three
+   * simply omit it — nothing renders half-finished.
+   */
+  location: '',
+
   /** Browser UI colour — keep in sync with --brand-dark in globals.css. */
   themeColor: '#18181B',
 

@@ -31,6 +31,8 @@ export function Footer({ data }: { data: Homepage }) {
     { label: 'Designs', href: '/designs' },
     { label: 'About', href: '/projects#about' },
     { label: 'Tools', href: '/projects#tools' },
+    { label: 'Privacy', href: '/privacy' },
+    { label: 'Terms', href: '/terms' },
   ]
 
   return (

@@ -10,7 +10,13 @@ import { Footer } from '../../components/Footer'
 import { RevealObserver } from '../../components/Reveal'
 import { toSameOriginPath } from '../../components/util'
 
-export const dynamic = 'force-static'
+/**
+ * Deliberately NOT `force-static`. Every real page here still prerenders from
+ * generateStaticParams; dropping the flag only changes what happens to a slug
+ * that does not exist — `notFound()` can then return a genuine 404 instead of
+ * a prerendered 200. Keeping on-demand rendering also means a project added in
+ * the CMS works before the next deploy rather than 404ing until one.
+ */
 
 async function getProject(slug: string) {
   const payload = await getPayload({ config })
@@ -37,7 +43,16 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params
   const project = await getProject(slug)
-  if (!project) return {}
+  /**
+   * A slug that does not exist renders the 404 page, but Next caches that
+   * render and serves it with a 200 — a soft 404. `dynamicParams = false`
+   * would give a hard 404, at the cost of a project added in the CMS 404ing
+   * until the next deploy, which is the worse trade for a site whose content
+   * is edited live. So the status stays 200 and this makes sure a crawler is
+   * told not to index it; without it the page inherits the layout's
+   * `index, follow` and a typo'd URL becomes an indexable page.
+   */
+  if (!project) return { title: 'Not found', robots: { index: false, follow: false } }
   return { title: project.title, description: project.description ?? undefined }
 }
 

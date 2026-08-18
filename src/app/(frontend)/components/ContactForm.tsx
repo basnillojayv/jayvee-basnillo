@@ -1,6 +1,7 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { submitContact, type ContactState } from '../actions/contact'
 import { SUBMISSION_OPTIONS as O } from '@/collections/Submissions'
 
@@ -33,6 +34,21 @@ const EMPTY: ContactState = { ok: false, message: '' }
 export function ContactForm() {
   const [state, action, pending] = useActionState(submitContact, EMPTY)
   const err = state.errors ?? {}
+  const router = useRouter()
+
+  /**
+   * A sent enquiry gets its own page.
+   *
+   * Navigated from here rather than with `redirect()` in the action, because
+   * the action's success return sits inside a try/catch and `redirect` works by
+   * throwing — it would be swallowed by the very handler that reports failures.
+   *
+   * The inline message below stays as the fallback: if this never runs, the
+   * visitor is still told the enquiry went, which is the part that matters.
+   */
+  useEffect(() => {
+    if (state.ok) router.push('/thank-you')
+  }, [state.ok, router])
 
   return (
     <form className="enquiry" action={action} noValidate>

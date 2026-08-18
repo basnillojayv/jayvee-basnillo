@@ -2481,3 +2481,57 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   .dnav__link,.sysdoc__raillink{min-height:44px}
   .sysdoc__raillink{display:flex;align-items:center}
 }
+
+/* ---------- mobile: the services page, the drawer, the toggle ---------- */
+@media (max-width:700px){
+  /*
+   * The designer band's service items match "What I do" now.
+   *
+   * That section already stacks its icon above centred copy on a phone, and
+   * these sat beside a left-hand icon in a 44px column — two lists of the same
+   * kind of thing, aligned two different ways on the same page. The grid
+   * becomes one column so the icon sits above the words rather than beside
+   * them, which is what centring a two-column row actually requires.
+   */
+  .designer__points li{grid-template-columns:1fr;justify-items:center;
+    text-align:center;gap:.75rem}
+  /* The whole band, not just the items — a centred list under a left-aligned
+     heading reads as a mistake rather than a choice. `.designer__rule` is the
+     short underline beneath the name, which has to move with the text it
+     underlines. (An earlier pass here guessed `.designer__head` and
+     `.designer__intro`; neither class exists, so it did nothing.) */
+  .designer__who,.designer__copy{text-align:center}
+  /* `text-align` alone was not enough: `.designer__who` and `.designer__roles`
+     are flex columns, so their children keep their own narrower boxes and the
+     centred text inside a left-placed box still reads left. The cross-axis has
+     to be centred too. */
+  .designer__who,.designer__roles{align-items:center}
+  .designer__portrait,.designer__rule{margin-inline:auto}
+  .designer__copy .kicker{justify-content:center}
+
+  /*
+   * The drawer takes the whole screen.
+   *
+   * At `min(360px,88vw)` it left a 47px strip of the page showing down one
+   * side — enough to read as a panel sitting on top of the site, not enough to
+   * be useful. Full width makes it a screen of its own, which is what a menu
+   * with the page scroll locked behind it already was.
+   */
+  .mobile-menu{width:100%;max-width:none;
+    /* Opaque at full width. The frosted 82% background was designed for a
+       panel with the page beside it; stretched across the screen it banded —
+       near-black where the dark header sat behind it, grey over the white page
+       below. Nothing shows through a full-screen menu, so nothing should. */
+    background:var(--brand-dark);
+    -webkit-backdrop-filter:none;backdrop-filter:none}
+
+  /*
+   * The toggle sits on the gutter, not past it.
+   *
+   * The -4px was optical alignment for a button with no fill — this one has a
+   * visible plate, so the overhang read as the button being 4px closer to the
+   * edge than the wordmark is on the other side. Zero puts both on the same
+   * gutter.
+   */
+  .menu-toggle{margin-right:0}
+}

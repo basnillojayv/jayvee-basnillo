@@ -422,6 +422,21 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
    what renders before the measurement lands, and what renders forever if the
    script never does.
    ========================================================================= */
+/* ---------- the moving field ----------
+   Behind everything, inside the section that clips. The canvas carries a CSS
+   gradient of its own as well as the shader: a canvas with no WebGL context is
+   transparent, and this is what shows through when the context is refused —
+   the same field, minus the movement, rather than a flat white rectangle.
+   `alpha:false` means the shader paints over it whenever it does run, so the
+   two never blend and the gradient costs nothing when it is not needed. */
+.flowfield{position:absolute;inset:0;z-index:0;display:block;
+  width:100%;height:100%;pointer-events:none;border:0}
+.flowfield--haze{
+  background:radial-gradient(120% 90% at 20% 10%,#f2f5fa 0%,transparent 60%),
+             radial-gradient(100% 80% at 85% 80%,#eef1f7 0%,transparent 55%),
+             var(--white)}
+.flowfield--silk{background:linear-gradient(140deg,#141416 0%,#2b2830 50%,#141416 100%)}
+
 .hero{position:relative;overflow:clip;background:var(--white);
   /* No rounded foot and no dark panel: this hero is the page, not a block
      laid on it. The header's resting state is a white bar over a white hero,
@@ -1463,8 +1478,17 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .struck__body p:last-child{color:var(--ink)}
 
 /* ---------- 8d. the dark rail of projects ---------- */
-.rail{background:var(--brand-dark);color:#fff;
+/* `position:relative` so the silk field has something to fill. The stage is
+   `display:contents` until the pin engages, so unpinned the canvas resolves
+   against this section and covers the whole band; pinned, the stage becomes
+   `position:sticky` and the canvas fills that instead — which is what keeps
+   the field under the cards for the length of the pin rather than scrolling
+   away behind them. The dark background stays as the colour underneath: it is
+   what shows if WebGL is refused, and what the field is painted over. */
+.rail{position:relative;background:var(--brand-dark);color:#fff;
   padding-block:clamp(56px,8vw,96px);overflow:clip}
+/* Everything the band shows sits over the field. */
+.rail__stage > *{position:relative;z-index:1}
 .rail__head{display:flex;align-items:center;justify-content:space-between;gap:2rem;
   margin-bottom:clamp(24px,3.5vw,40px)}
 .rail__title{font-family:var(--font-display);font-weight:var(--hero-weight);

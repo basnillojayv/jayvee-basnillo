@@ -3,6 +3,7 @@ import Link from 'next/link'
 import type { Homepage } from '@/payload-types'
 import { mediaUrl } from './util'
 import { MorphLine } from './MorphLine'
+import { FlowField } from './FlowField'
 
 /**
  * THE WHOLE HOMEPAGE, NOW. Header and this.
@@ -47,6 +48,13 @@ export function Hero({ data }: { data: Homepage }) {
 
   return (
     <section className="hero" id="top">
+      {/* The page used to be flat white behind all of this. It is a slow
+          domain-warped field now — near-white throughout, because the headline
+          is near-black type over it and the portrait is a cut-out with no
+          plate behind it, and anything with real contrast in it would be
+          competing with both. See FlowField. */}
+      <FlowField variant="haze" />
+
       <div className="hero__inner wrap">
         {/* One statement rather than a greeting built out of the name. It is
             set in caps by CSS, not typed in caps, so the CMS value stays

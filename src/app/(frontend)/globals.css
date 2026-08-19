@@ -1755,8 +1755,12 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
    of them read as one rack instead of fifteen floating logos. The dividers are
    borders on the cells, so they wrap with them instead of stranding. */
 .tools{padding-block:clamp(48px,7vw,88px);background:var(--surface-100)}
+/* `start`, not `center`. The rack was three rows when this was written and
+   centring the copy against it read as a pair. At thirty-three tools it is
+   seven rows, and centred copy floats in the middle of an empty column with
+   the heading a long way below where the rack starts. */
 .tools__inner{display:grid;grid-template-columns:minmax(0,360px) minmax(0,1fr);
-  gap:clamp(28px,5vw,72px);align-items:center}
+  gap:clamp(28px,5vw,72px);align-items:start}
 .tools__title{font-family:var(--font-display);font-weight:var(--hero-weight);
   font-size:clamp(1.6rem,2.7vw,2.15rem);line-height:1.12;letter-spacing:-.008em;
   color:var(--ink);margin-top:1rem;text-wrap:balance}

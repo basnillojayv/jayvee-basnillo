@@ -1817,13 +1817,25 @@ main#main{animation:pageIn .52s var(--ease-out-expo) both}
 .tools__lede{margin-top:.9rem;font-size:.9375rem;line-height:1.6;
   letter-spacing:var(--track-body);color:var(--muted);max-width:34ch;text-wrap:pretty}
 
-.tools__rack{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
-.tools__cell{display:flex;flex-direction:column;align-items:center;gap:.75rem;
-  padding:clamp(18px,2.4vw,28px) .5rem;text-align:center;
-  border-left:1px solid var(--line);border-bottom:1px solid var(--line)}
-.tools__cell:nth-child(5n+1){border-left:none}
-.tools__name{font-size:.8125rem;letter-spacing:var(--track-body);color:var(--muted);
-  line-height:1.35}
+/* THE RACK IS NOW A SET OF NAMED COLUMNS, NOT A WALL OF MARKS.
+   At fifteen tools the ruled grid of logos was right. At forty it is a texture
+   — and most of the forty have no mark to show, so it was a texture made of
+   initials in boxes, which reads as a logo wall that failed to load. Six short
+   lists under six headings answer "do you work in my stack?" by letting
+   someone scan the headings instead of all of it.
+
+   `auto-fill` rather than a fixed count: the groups are different lengths and
+   a fixed three columns leaves a hole where the short ones land. */
+.tools__rack{display:grid;gap:clamp(20px,2.6vw,36px) clamp(20px,3vw,48px);
+  grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+.toolgroup{min-width:0}
+.toolgroup__heading{font-family:var(--font-cond,inherit);font-weight:700;
+  font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
+  margin:0 0 .6rem;padding-bottom:.5rem;border-bottom:1px solid var(--line)}
+.toolgroup__list{display:flex;flex-direction:column;gap:.28rem;margin:0;padding:0;
+  list-style:none}
+.toolgroup__list li{font-size:.875rem;line-height:1.45;
+  letter-spacing:var(--track-body);color:var(--muted)}
 /* Monochrome. Fifteen brand palettes in one row is a fruit salad, and this
    page has exactly one accent colour. */
 .toolmark{width:38px;height:38px;display:grid;place-items:center;color:var(--ink)}
@@ -1879,9 +1891,10 @@ main#main{animation:pageIn .52s var(--ease-out-expo) both}
   .whatido__item:nth-child(n+3){padding-top:2.5rem;border-top:1px solid var(--line)}
 }
 @media (max-width:1000px){
-  .tools__rack{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .tools__cell:nth-child(5n+1){border-left:1px solid var(--line)}
-  .tools__cell:nth-child(3n+1){border-left:none}
+  /* The rack sizes itself now — `auto-fill` with a 190px floor already gives
+     three columns here and two below. The old fixed counts and their
+     border-resetting nth-child rules went with the cells they were resetting. */
+  .tools__rack{gap:clamp(18px,2.4vw,28px)}
 }
 @media (max-width:860px){
   .tools__inner{grid-template-columns:1fr;gap:2rem}
@@ -1891,9 +1904,9 @@ main#main{animation:pageIn .52s var(--ease-out-expo) both}
   .rail__head{flex-direction:column;align-items:flex-start;gap:1.5rem}
 }
 @media (max-width:560px){
-  .tools__rack{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .tools__cell:nth-child(3n+1){border-left:1px solid var(--line)}
-  .tools__cell:nth-child(2n+1){border-left:none}
+  /* Two columns of names still scan on a phone; one would make this section
+     twice as tall as anything else on the page. */
+  .tools__rack{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 16px}
   .whatido__grid{grid-template-columns:1fr}
   .whatido__item{border-left:none !important;padding-inline:0}
   .whatido__item + .whatido__item{border-top:1px solid var(--line);padding-top:2rem}

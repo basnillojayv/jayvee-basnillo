@@ -689,6 +689,35 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .intro ~ .site-header{animation:riseIn .8s var(--ease-out-expo) calc(var(--hero-t0) + .1s) both}
 
 /* =========================================================================
+   THE INNER PAGES' ENTRANCE.
+   The homepage has the curtain and a 3.15s clock behind it. Every other page
+   had nothing at all — it simply existed, fully formed, the instant it was
+   asked for, which after the homepage reads less like speed and more like a
+   different site.
+
+   This is the short version of the same idea: the bar and the page arrive
+   about a tenth of a second apart and are done inside half a second. Quick
+   enough that nobody waits for it, and small enough — twelve pixels and an
+   opacity — that nobody watching for it twice sees it the second time.
+
+   NO CURTAIN. A panel wiping over the page is the obvious way to do this and
+   it costs the thing it is decorating: on a real navigation the visitor is
+   already looking at the new page's first paint, and a curtain hides that
+   paint to announce itself. This animates what has already arrived instead.
+
+   WHY IT IS SELECTED BY A SIBLING RATHER THAN A CLASS
+   `.intro` only renders on the homepage, so `.intro ~ main` is exactly "the
+   homepage's main" and nothing else. Selecting it that way means a new page is
+   a file with a `<main>` in it and nothing to remember to add — the entrance
+   is a property of being an inner page, not a class somebody has to apply. */
+@keyframes pageIn{from{opacity:0;transform:translate3d(0,12px,0)}}
+main#main{animation:pageIn .52s var(--ease-out-expo) both}
+.site-header{animation:pageIn .52s var(--ease-out-expo) .06s both}
+/* The homepage opts out of both: it has the curtain, and the rules above
+   would fight the entrance that is already choreographed against it. */
+.intro ~ main#main{animation:none}
+
+/* =========================================================================
    4e. THE POINTER — drift only.
 
    The custom cursor and the magnetic buttons that used to live here are gone.
@@ -1340,7 +1369,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   .intro{display:none}
   .morph__disc{display:none}
   .hero__greet,.hero__line-text,.hero__portrait img,.hero__foot,.hero__actions,
-  .intro ~ .site-header{animation:none !important;opacity:1 !important}
+  .intro ~ .site-header,
+  main#main,.site-header{animation:none !important;opacity:1 !important}
   /* Pointer drift off. The portrait's centring lives in the same transform as
      its drift, so it is reset to the centring rather than to none — `none`
      here would shunt the picture half its own width to the right. */

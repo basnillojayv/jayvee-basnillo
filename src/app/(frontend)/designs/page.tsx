@@ -24,23 +24,7 @@ export const metadata: Metadata = {
  * has been rendering nowhere since the homepage was cut back. This is a route
  * for it, not an import.
  *
- * THE LAYOUT IS A SPLIT, NOT A STACK, AND THAT IS THE POINT.
- * It used to be a page head, then a filter bar, then a heading, then three
- * columns of tiles — the arrangement every portfolio grid arrives at, which
- * means it says nothing about the work in it. Now the page is two columns:
- * the title and the filters hold still on the left while the work scrolls
- * past them on the right, two tiles wide.
- *
- * WHAT THAT BUYS BEYOND LOOKING DIFFERENT
- * · The filters are always reachable. In a strip above the grid they are gone
- *   after the first screen, which on a page of twenty-two pieces is exactly
- *   when someone decides they want to narrow it down.
- * · The heading stays with the work it names, rather than scrolling away and
- *   leaving an unlabelled wall of pictures.
- * · Two wide tiles read as pieces of work. Three narrow ones read as a
- *   contact sheet, and these images are dense screenshots that need the width.
- *
- * WHY IT IS STILL GROUPED BY CATEGORY
+ * WHY IT IS GROUPED BY CATEGORY RATHER THAN ONE LONG GRID
  * Twenty-two pieces in a single wall is a texture, and someone scanning for
  * "does he do social campaigns?" has to read all of it to find out. Two named
  * groups answer that from the headings alone.
@@ -84,17 +68,8 @@ export default async function DesignsPage() {
       <Header contactHref={mailto} email={home.email} linkedin={home.contactLinkedin} />
 
       <main id="main">
-        <div className="showcase">
-          {/* The word behind everything, at two per cent. It is set enormous and
-              cropped by the edge of the screen on purpose: legible enough to
-              register as a word, faint enough that nobody reads it twice. It
-              lives in the rail because the rail is what holds still — mounted
-              in the stream it would scroll away, and mounted `fixed` it would
-              still be there over the footer. */}
-          <aside className="showcase__rail">
-            <p className="showcase__ghost" aria-hidden="true">
-              Designs
-            </p>
+        <section className="section page-head">
+          <div className="wrap">
             <p className="kicker reveal">
               <span className="kicker__rule" aria-hidden="true" />
               Design showcase
@@ -106,29 +81,30 @@ export default async function DesignsPage() {
                 `, plus ${systems.docs.length} brand ${systems.docs.length === 1 ? 'system' : 'systems'} you can open`}
               .
             </p>
-            {/* Same component, same scroll-spy. Only the direction changed, and
-                that is a stylesheet's business rather than this file's. */}
-            <DesignsNav categories={categories} />
-          </aside>
+          </div>
+        </section>
 
-          <div className="showcase__stream">
-            {GROUPS.map(({ key, heading }) => {
-              const items = docs.filter((d) => d.category === key)
-              if (items.length === 0) return null
-              return (
-                <section className="showcase__group" key={key} id={key}>
-                  <h2 className="showcase__heading reveal">{heading}</h2>
-                  <DesignViewer
-                    shots={items.map((e) => ({
-                      id: e.id,
-                      src: mediaUrl(e.image, '/media/placeholder-tile.jpg'),
-                      title: e.title,
-                      editKey: `explorations.${e.id}.image`,
-                    }))}
-                  />
-                </section>
-              )
-            })}
+        <DesignsNav categories={categories} />
+
+        {GROUPS.map(({ key, heading }) => {
+          const items = docs.filter((d) => d.category === key)
+          if (items.length === 0) return null
+          return (
+            <section className="section designs__group" key={key} id={key}>
+              <div className="wrap">
+                <h2 className="designs__heading reveal">{heading}</h2>
+                <DesignViewer
+                  shots={items.map((e) => ({
+                    id: e.id,
+                    src: mediaUrl(e.image, '/media/placeholder-tile.jpg'),
+                    title: e.title,
+                    editKey: `explorations.${e.id}.image`,
+                  }))}
+                />
+              </div>
+            </section>
+          )
+        })}
 
         {/*
           LAST, AND DELIBERATELY UNLIKE THE GROUPS ABOVE.
@@ -143,23 +119,23 @@ export default async function DesignsPage() {
           heaviest to read. Someone scanning for campaign work should not have
           to scroll past two brand systems to reach it.
         */}
-            {systems.docs.length > 0 && (
-              <section className="showcase__group" id="systems">
-                <h2 className="showcase__heading reveal">Design systems</h2>
-                <p className="designs__note reveal">
-                  Built to be handed over and used — each one opens in full.
-                </p>
-                <div className="syscards">
-                  {systems.docs.map((system) => (
-                    <div className="reveal" key={system.id}>
-                      <SystemCard system={system} editKeyPrefix={`designSystems.${system.id}`} />
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
-          </div>
-        </div>
+        {systems.docs.length > 0 && (
+          <section className="section designs__group" id="systems">
+            <div className="wrap">
+              <h2 className="designs__heading reveal">Design systems</h2>
+              <p className="designs__note reveal">
+                Built to be handed over and used — each one opens in full.
+              </p>
+              <div className="syscards">
+                {systems.docs.map((system) => (
+                  <div className="reveal" key={system.id}>
+                    <SystemCard system={system} editKeyPrefix={`designSystems.${system.id}`} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
       </main>
 
       <Footer data={home} />

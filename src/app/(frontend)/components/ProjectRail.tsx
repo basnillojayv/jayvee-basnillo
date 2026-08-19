@@ -5,7 +5,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { Project } from '@/payload-types'
 import { mediaUrl } from './util'
-import { FlowField } from './FlowField'
 import { AccentStop } from './AccentStop'
 
 /**
@@ -224,12 +223,6 @@ export function ProjectRail({
 
   return (
     <section className="rail" id="work" ref={pin} data-pinned={pinned}>
-      {/* Silk: two interfering sine fields, in the graphite and mauve this band
-          is already built from. It sits inside the stage rather than the
-          section because the stage is what sticks — mounted on the section it
-          would scroll out from under the cards during the pin, which is most
-          of the time anyone spends looking at this band. See FlowField. */}
-      <FlowField variant="silk" />
       {/* Everything the section shows lives in the stage, which is what sticks.
           The section itself only supplies the extra height that the pin is
           measured against. */}

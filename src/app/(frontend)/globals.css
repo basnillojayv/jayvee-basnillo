@@ -422,21 +422,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
    what renders before the measurement lands, and what renders forever if the
    script never does.
    ========================================================================= */
-/* ---------- the moving field ----------
-   Behind everything, inside the section that clips. The canvas carries a CSS
-   gradient of its own as well as the shader: a canvas with no WebGL context is
-   transparent, and this is what shows through when the context is refused —
-   the same field, minus the movement, rather than a flat white rectangle.
-   `alpha:false` means the shader paints over it whenever it does run, so the
-   two never blend and the gradient costs nothing when it is not needed. */
-.flowfield{position:absolute;inset:0;z-index:0;display:block;
-  width:100%;height:100%;pointer-events:none;border:0}
-.flowfield--haze{
-  background:radial-gradient(120% 90% at 20% 10%,#f2f5fa 0%,transparent 60%),
-             radial-gradient(100% 80% at 85% 80%,#eef1f7 0%,transparent 55%),
-             var(--white)}
-.flowfield--silk{background:linear-gradient(140deg,#141416 0%,#2b2830 50%,#141416 100%)}
-
 .hero{position:relative;overflow:clip;background:var(--white);
   /* No rounded foot and no dark panel: this hero is the page, not a block
      laid on it. The header's resting state is a white bar over a white hero,
@@ -687,35 +672,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 /* Scoped by the sibling selector so the header only makes an entrance on the
    page that has an intro. Every other page renders it at rest. */
 .intro ~ .site-header{animation:riseIn .8s var(--ease-out-expo) calc(var(--hero-t0) + .1s) both}
-
-/* =========================================================================
-   THE INNER PAGES' ENTRANCE.
-   The homepage has the curtain and a 3.15s clock behind it. Every other page
-   had nothing at all — it simply existed, fully formed, the instant it was
-   asked for, which after the homepage reads less like speed and more like a
-   different site.
-
-   This is the short version of the same idea: the bar and the page arrive
-   about a tenth of a second apart and are done inside half a second. Quick
-   enough that nobody waits for it, and small enough — twelve pixels and an
-   opacity — that nobody watching for it twice sees it the second time.
-
-   NO CURTAIN. A panel wiping over the page is the obvious way to do this and
-   it costs the thing it is decorating: on a real navigation the visitor is
-   already looking at the new page's first paint, and a curtain hides that
-   paint to announce itself. This animates what has already arrived instead.
-
-   WHY IT IS SELECTED BY A SIBLING RATHER THAN A CLASS
-   `.intro` only renders on the homepage, so `.intro ~ main` is exactly "the
-   homepage's main" and nothing else. Selecting it that way means a new page is
-   a file with a `<main>` in it and nothing to remember to add — the entrance
-   is a property of being an inner page, not a class somebody has to apply. */
-@keyframes pageIn{from{opacity:0;transform:translate3d(0,12px,0)}}
-main#main{animation:pageIn .52s var(--ease-out-expo) both}
-.site-header{animation:pageIn .52s var(--ease-out-expo) .06s both}
-/* The homepage opts out of both: it has the curtain, and the rules above
-   would fight the entrance that is already choreographed against it. */
-.intro ~ main#main{animation:none}
 
 /* =========================================================================
    4e. THE POINTER — drift only.
@@ -1369,8 +1325,7 @@ main#main{animation:pageIn .52s var(--ease-out-expo) both}
   .intro{display:none}
   .morph__disc{display:none}
   .hero__greet,.hero__line-text,.hero__portrait img,.hero__foot,.hero__actions,
-  .intro ~ .site-header,
-  main#main,.site-header{animation:none !important;opacity:1 !important}
+  .intro ~ .site-header{animation:none !important;opacity:1 !important}
   /* Pointer drift off. The portrait's centring lives in the same transform as
      its drift, so it is reset to the centring rather than to none — `none`
      here would shunt the picture half its own width to the right. */
@@ -1508,17 +1463,8 @@ main#main{animation:pageIn .52s var(--ease-out-expo) both}
 .struck__body p:last-child{color:var(--ink)}
 
 /* ---------- 8d. the dark rail of projects ---------- */
-/* `position:relative` so the silk field has something to fill. The stage is
-   `display:contents` until the pin engages, so unpinned the canvas resolves
-   against this section and covers the whole band; pinned, the stage becomes
-   `position:sticky` and the canvas fills that instead — which is what keeps
-   the field under the cards for the length of the pin rather than scrolling
-   away behind them. The dark background stays as the colour underneath: it is
-   what shows if WebGL is refused, and what the field is painted over. */
-.rail{position:relative;background:var(--brand-dark);color:#fff;
+.rail{background:var(--brand-dark);color:#fff;
   padding-block:clamp(56px,8vw,96px);overflow:clip}
-/* Everything the band shows sits over the field. */
-.rail__stage > *{position:relative;z-index:1}
 .rail__head{display:flex;align-items:center;justify-content:space-between;gap:2rem;
   margin-bottom:clamp(24px,3.5vw,40px)}
 .rail__title{font-family:var(--font-display);font-weight:var(--hero-weight);
@@ -1817,25 +1763,13 @@ main#main{animation:pageIn .52s var(--ease-out-expo) both}
 .tools__lede{margin-top:.9rem;font-size:.9375rem;line-height:1.6;
   letter-spacing:var(--track-body);color:var(--muted);max-width:34ch;text-wrap:pretty}
 
-/* THE RACK IS NOW A SET OF NAMED COLUMNS, NOT A WALL OF MARKS.
-   At fifteen tools the ruled grid of logos was right. At forty it is a texture
-   — and most of the forty have no mark to show, so it was a texture made of
-   initials in boxes, which reads as a logo wall that failed to load. Six short
-   lists under six headings answer "do you work in my stack?" by letting
-   someone scan the headings instead of all of it.
-
-   `auto-fill` rather than a fixed count: the groups are different lengths and
-   a fixed three columns leaves a hole where the short ones land. */
-.tools__rack{display:grid;gap:clamp(20px,2.6vw,36px) clamp(20px,3vw,48px);
-  grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
-.toolgroup{min-width:0}
-.toolgroup__heading{font-family:var(--font-cond,inherit);font-weight:700;
-  font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);
-  margin:0 0 .6rem;padding-bottom:.5rem;border-bottom:1px solid var(--line)}
-.toolgroup__list{display:flex;flex-direction:column;gap:.28rem;margin:0;padding:0;
-  list-style:none}
-.toolgroup__list li{font-size:.875rem;line-height:1.45;
-  letter-spacing:var(--track-body);color:var(--muted)}
+.tools__rack{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
+.tools__cell{display:flex;flex-direction:column;align-items:center;gap:.75rem;
+  padding:clamp(18px,2.4vw,28px) .5rem;text-align:center;
+  border-left:1px solid var(--line);border-bottom:1px solid var(--line)}
+.tools__cell:nth-child(5n+1){border-left:none}
+.tools__name{font-size:.8125rem;letter-spacing:var(--track-body);color:var(--muted);
+  line-height:1.35}
 /* Monochrome. Fifteen brand palettes in one row is a fruit salad, and this
    page has exactly one accent colour. */
 .toolmark{width:38px;height:38px;display:grid;place-items:center;color:var(--ink)}
@@ -1891,10 +1825,9 @@ main#main{animation:pageIn .52s var(--ease-out-expo) both}
   .whatido__item:nth-child(n+3){padding-top:2.5rem;border-top:1px solid var(--line)}
 }
 @media (max-width:1000px){
-  /* The rack sizes itself now — `auto-fill` with a 190px floor already gives
-     three columns here and two below. The old fixed counts and their
-     border-resetting nth-child rules went with the cells they were resetting. */
-  .tools__rack{gap:clamp(18px,2.4vw,28px)}
+  .tools__rack{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .tools__cell:nth-child(5n+1){border-left:1px solid var(--line)}
+  .tools__cell:nth-child(3n+1){border-left:none}
 }
 @media (max-width:860px){
   .tools__inner{grid-template-columns:1fr;gap:2rem}
@@ -1904,9 +1837,9 @@ main#main{animation:pageIn .52s var(--ease-out-expo) both}
   .rail__head{flex-direction:column;align-items:flex-start;gap:1.5rem}
 }
 @media (max-width:560px){
-  /* Two columns of names still scan on a phone; one would make this section
-     twice as tall as anything else on the page. */
-  .tools__rack{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 16px}
+  .tools__rack{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tools__cell:nth-child(3n+1){border-left:1px solid var(--line)}
+  .tools__cell:nth-child(2n+1){border-left:none}
   .whatido__grid{grid-template-columns:1fr}
   .whatido__item{border-left:none !important;padding-inline:0}
   .whatido__item + .whatido__item{border-top:1px solid var(--line);padding-top:2rem}
@@ -1956,87 +1889,6 @@ main#main{animation:pageIn .52s var(--ease-out-expo) both}
   color:var(--ink);padding-bottom:.9rem;margin-bottom:clamp(20px,2.6vw,32px);
   border-bottom:1px solid var(--line)}
 /* auto-fit, so the count of pieces in a group never has to be known here */
-/* =========================================================================
-   THE SHOWCASE SPLIT — a rail that holds still, and work that moves past it.
-
-   Two columns, and the left one is `sticky` rather than `fixed`. Fixed is what
-   the reference does and it is wrong here for one reason: this page ends in a
-   footer, and a fixed rail sits over it. Sticky pins the rail for exactly the
-   length of its own container and then releases it, so the footer arrives to a
-   clear screen without a single line of script deciding when.
-   ========================================================================= */
-.showcase{position:relative;display:grid;
-  grid-template-columns:minmax(0,34%) minmax(0,1fr);
-  gap:clamp(24px,4vw,72px);
-  padding-inline:clamp(20px,5vw,88px);
-  padding-block:clamp(88px,13vh,150px) clamp(56px,8vh,110px)}
-
-.showcase__rail{position:sticky;top:0;align-self:start;
-  /* Full height and centred, so the rail sits against the middle of the screen
-     rather than riding under the header bar. */
-  height:100svh;display:flex;flex-direction:column;justify-content:center;
-  gap:.9rem;z-index:1}
-.showcase__rail .designs__title{margin:0}
-.showcase__rail .designs__lede{margin:0;max-width:34ch}
-
-/* THE GHOST WORD. Absolutely positioned inside the sticky rail, which is what
-   makes it hold still without being `fixed`; oversized and cropped by the left
-   edge on purpose. `2%` is not a placeholder — above about four it stops being
-   texture and starts being a word the eye tries to read behind the work. */
-.showcase__ghost{position:absolute;left:-.06em;top:50%;transform:translateY(-50%);
-  margin:0;pointer-events:none;user-select:none;z-index:0;
-  font-family:var(--font-display);font-weight:var(--hero-weight);
-  font-size:clamp(7rem,15vw,15rem);line-height:.8;letter-spacing:-.02em;
-  text-transform:uppercase;white-space:nowrap;color:var(--ink);opacity:.035}
-
-.showcase__stream{position:relative;z-index:1;min-width:0;
-  display:flex;flex-direction:column;gap:clamp(56px,9vh,120px)}
-.showcase__group{scroll-margin-top:96px}
-.showcase__heading{font-family:var(--font-display);font-weight:var(--hero-weight);
-  font-size:clamp(1.4rem,2.2vw,2rem);line-height:1.1;letter-spacing:-.01em;
-  margin:0 0 clamp(16px,2.4vh,28px);
-  padding-bottom:.5rem;border-bottom:1px solid var(--line)}
-
-/* Two wide tiles, not three narrow ones. These are dense screenshots and the
-   width is what makes them legible as work rather than as swatches. */
-.showcase__stream .designs__grid{grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:clamp(14px,1.6vw,24px)}
-
-/* THE TINT, AND WHY IT IS ON BY DEFAULT.
-   Every tile carries a slight wash until it is pointed at, which is what stops
-   twenty-two full-colour screenshots reading as noise — the one being looked
-   at is the only one at full strength. It is a filter rather than an overlay
-   element so it costs no extra node and cannot intercept the click. */
-.showcase__stream .designtile__media img{
-  filter:saturate(.82) contrast(.96) brightness(.97);
-  transition:transform .6s var(--ease-out-expo),filter .45s var(--ease-out-expo)}
-.showcase__stream .designtile:hover .designtile__media img,
-.showcase__stream .designtile:focus-visible .designtile__media img{
-  filter:none}
-
-/* The filters, vertical in the rail. Same component and the same scroll-spy —
-   only the direction changed. */
-.showcase__rail .dnav{position:static;margin-top:.6rem;padding:0;border:0;background:none}
-.showcase__rail .dnav__list{flex-direction:column;align-items:flex-start;gap:.15rem}
-.showcase__rail .dnav__link{width:100%;justify-content:flex-start;gap:.6rem;
-  padding-block:.5rem;min-height:44px}
-
-@media (max-width:900px){
-  /* Stacked. A 34% rail on a narrow screen is a column of broken words, and a
-     sticky one costs a screen of height before the work starts. */
-  .showcase{grid-template-columns:1fr;gap:clamp(28px,5vh,52px);
-    padding-block:clamp(72px,11vh,110px) clamp(40px,6vh,72px)}
-  .showcase__rail{position:static;height:auto;display:block}
-  .showcase__rail .designs__lede{max-width:none}
-  .showcase__ghost{display:none}
-  .showcase__stream{gap:clamp(40px,7vh,72px)}
-}
-@media (max-width:640px){
-  .showcase{padding-inline:20px}
-  /* One tile wide. Two of these on a 390px column is a contact sheet again. */
-  .showcase__stream .designs__grid{grid-template-columns:1fr}
-}
-
 .designs__grid{display:grid;gap:clamp(14px,2vw,22px);
   grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
 /* No border, no chip, no hover arrow: these have no page to go to, and a card
